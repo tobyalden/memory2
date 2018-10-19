@@ -44,8 +44,8 @@ class MainScene extends Scene {
     }
 
     private function placeSegments() {
-        for(tileX in 0...mapBlueprint.columns) {
-            for(tileY in 0...mapBlueprint.rows) {
+        for(tileX in -1...mapBlueprint.columns + 1) {
+            for(tileY in -1...mapBlueprint.rows + 1) {
                 if(
                     mapBlueprint.getTile(tileX, tileY)
                     && !map.getTile(tileX, tileY)
@@ -92,6 +92,14 @@ class MainScene extends Scene {
                             add(segment);
                         }
                     }
+                }
+                else if(!mapBlueprint.getTile(tileX, tileY)) {
+                    var segment = new Segment(
+                        tileX * Segment.MIN_SEGMENT_WIDTH,
+                        tileY * Segment.MIN_SEGMENT_HEIGHT
+                    );
+                    segment.makeSolid1x1();
+                    add(segment);
                 }
             }
         }

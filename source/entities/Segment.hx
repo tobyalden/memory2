@@ -59,6 +59,14 @@ class Segment extends Entity {
         }
     }
 
+    public function makeSolid1x1() {
+        walls = new Grid(
+            MIN_SEGMENT_WIDTH, MIN_SEGMENT_HEIGHT, TILE_SIZE, TILE_SIZE
+        );
+        walls.setRect(0, 0, walls.columns, walls.rows);
+        updateGraphic();
+    }
+
     public function fillLeft(offsetY:Int) {
         for(tileY in 0...MIN_SEGMENT_HEIGHT_IN_TILES) {
             walls.setTile(0, tileY + offsetY * MIN_SEGMENT_HEIGHT_IN_TILES);
