@@ -22,6 +22,7 @@ class Segment extends Entity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        type = "walls";
         loadSegment(Random.randInt(NUMBER_OF_SEGMENTS));
         updateGraphic();
         mask = walls;

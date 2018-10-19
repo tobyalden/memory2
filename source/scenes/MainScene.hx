@@ -16,7 +16,8 @@ class MainScene extends Scene {
 	override public function begin() {
         loadMap(1);
         placeSegments();
-        camera.scale = 0.2;
+        add(new Player(100, 100));
+        trace('added player');
 	}
 
     private function loadMap(mapNumber:Int) {
@@ -139,5 +140,6 @@ class MainScene extends Scene {
         if(Key.check(Key.D)) {
             camera.x += 4;
         }
+        super.update();
     }
 }
