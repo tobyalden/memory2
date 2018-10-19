@@ -1,0 +1,15 @@
+<project> 
+	<name>Memory</name> 
+	<settings> 
+		<defaultWidth>640</defaultWidth> 
+		<defaultHeight>352</defaultHeight> 
+		<maxWidth>6400</maxWidth> 
+		<maxHeight>3600</maxHeight> 
+		<workingDirectory>.</workingDirectory> 
+	</settings> 
+	<layers> 
+		<grid name="walls" gridSize="16" exportAsObjects="true"/>
+		<grid name="optionalWalls" gridSize="16" exportAsObjects="true" color="#FFFF0000"/>
+	</layers> 
+</project>
+
