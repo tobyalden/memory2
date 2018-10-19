@@ -78,16 +78,39 @@ class MainScene extends Scene {
                             }
                         }
                         if(canPlace) {
-                            add(segment);
                             for(checkX in 0...segmentWidth) {
                                 for(checkY in 0...segmentHeight) {
-                                    map.setTile(tileX + checkX, tileY + checkY);
+                                    map.setTile(
+                                        tileX + checkX, tileY + checkY
+                                    );
+                                    sealSegment(
+                                        segment, tileX, tileY, checkX, checkY
+                                    );
                                 }
                             }
+                            segment.updateGraphic();
+                            add(segment);
                         }
                     }
                 }
             }
+        }
+    }
+
+    private function sealSegment(
+        segment:Segment, tileX:Int, tileY:Int, checkX:Int, checkY:Int
+    ) {
+        if(!mapBlueprint.getTile(tileX + checkX - 1, tileY + checkY)) {
+            segment.fillLeft(checkY);
+        }
+        if(!mapBlueprint.getTile(tileX + checkX + 1, tileY + checkY)) {
+            segment.fillRight(checkY);
+        }
+        if(!mapBlueprint.getTile(tileX + checkX, tileY + checkY - 1)) {
+            segment.fillTop(checkX);
+        }
+        if(!mapBlueprint.getTile(tileX + checkX, tileY + checkY + 1)) {
+            segment.fillBottom(checkX);
         }
     }
 

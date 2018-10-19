@@ -13,6 +13,8 @@ class Segment extends Entity {
     public static inline var NUMBER_OF_SEGMENTS = 3;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
+    public static inline var MIN_SEGMENT_WIDTH_IN_TILES = 40;
+    public static inline var MIN_SEGMENT_HEIGHT_IN_TILES = 22;
     public static inline var TILE_SIZE = 16;
 
     private var walls:Grid;
@@ -57,7 +59,36 @@ class Segment extends Entity {
         }
     }
 
-    private function updateGraphic() {
+    public function fillLeft(offsetY:Int) {
+        for(tileY in 0...MIN_SEGMENT_HEIGHT_IN_TILES) {
+            walls.setTile(0, tileY + offsetY * MIN_SEGMENT_HEIGHT_IN_TILES);
+        }
+    }
+
+    public function fillRight(offsetY:Int) {
+        for(tileY in 0...MIN_SEGMENT_HEIGHT_IN_TILES) {
+            walls.setTile(
+                walls.columns - 1,
+                tileY + offsetY * MIN_SEGMENT_HEIGHT_IN_TILES);
+        }
+    }
+
+    public function fillTop(offsetX:Int) {
+        for(tileX in 0...MIN_SEGMENT_WIDTH_IN_TILES) {
+            walls.setTile(tileX + offsetX * MIN_SEGMENT_WIDTH_IN_TILES, 0);
+        }
+    }
+
+    public function fillBottom(offsetX:Int) {
+        for(tileX in 0...MIN_SEGMENT_WIDTH_IN_TILES) {
+            walls.setTile(
+                tileX + offsetX * MIN_SEGMENT_WIDTH_IN_TILES,
+                walls.rows - 1
+            );
+        }
+    }
+
+    public function updateGraphic() {
         tiles = new Tilemap(
             'graphics/tiles.png',
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
