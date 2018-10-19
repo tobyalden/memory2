@@ -10,6 +10,7 @@ import openfl.Assets;
 import scenes.*;
 
 class Segment extends Entity {
+    public static inline var NUMBER_OF_SEGMENTS = 3;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var TILE_SIZE = 16;
@@ -19,7 +20,7 @@ class Segment extends Entity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
-        loadSegment(1);
+        loadSegment(Random.randInt(NUMBER_OF_SEGMENTS));
         updateGraphic();
         mask = walls;
     }
@@ -41,16 +42,18 @@ class Segment extends Entity {
                 Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
             );
         }
-        for (r in fastXml.node.optionalWalls.nodes.rect) {
-            if(Random.random < 0.5) {
-                continue;
+        if(fastXml.hasNode.optionalWalls) {
+            for (r in fastXml.node.optionalWalls.nodes.rect) {
+                if(Random.random < 0.5) {
+                    continue;
+                }
+                walls.setRect(
+                    Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
+                    Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
+                );
             }
-            walls.setRect(
-                Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
-                Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
-                Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
-                Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
-            );
         }
     }
 
@@ -63,12 +66,4 @@ class Segment extends Entity {
         graphic = tiles;
     }
 
-    override public function update() {
-        if(Key.pressed(Key.R)) {
-            loadSegment(1);
-        }
-        if(Key.pressed(Key.ANY)) {
-            updateGraphic();
-        }
-    }
 }

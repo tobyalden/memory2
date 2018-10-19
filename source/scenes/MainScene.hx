@@ -10,11 +10,13 @@ import haxepunk.math.*;
 import openfl.Assets;
 
 class MainScene extends Scene {
+    private var mapBlueprint:Grid;
     private var map:Grid;
 
 	override public function begin() {
         loadMap(1);
         placeSegments();
+        camera.scale = 0.2;
 	}
 
     private function loadMap(mapNumber:Int) {
@@ -25,11 +27,14 @@ class MainScene extends Scene {
         var mapWidth = Std.parseInt(fastXml.node.width.innerData);
         var mapHeight = Std.parseInt(fastXml.node.height.innerData);
 
+        mapBlueprint = new Grid(
+            mapWidth, mapHeight, Segment.TILE_SIZE, Segment.TILE_SIZE
+        );
         map = new Grid(
             mapWidth, mapHeight, Segment.TILE_SIZE, Segment.TILE_SIZE
         );
         for (r in fastXml.node.walls.nodes.rect) {
-            map.setRect(
+            mapBlueprint.setRect(
                 Std.int(Std.parseInt(r.att.x) / Segment.TILE_SIZE),
                 Std.int(Std.parseInt(r.att.y) / Segment.TILE_SIZE),
                 Std.int(Std.parseInt(r.att.w) / Segment.TILE_SIZE),
@@ -39,16 +44,69 @@ class MainScene extends Scene {
     }
 
     private function placeSegments() {
-        for(tileX in 0...map.columns) {
-            for(tileY in 0...map.rows) {
-                if(map.getTile(tileX, tileY)) {
-                    add(new Segment(
-                        tileX * Segment.MIN_SEGMENT_WIDTH,
-                        tileY * Segment.MIN_SEGMENT_HEIGHT
-                    ));
+        for(tileX in 0...mapBlueprint.columns) {
+            for(tileY in 0...mapBlueprint.rows) {
+                if(
+                    mapBlueprint.getTile(tileX, tileY)
+                    && !map.getTile(tileX, tileY)
+                ) {
+                    var canPlace = false;
+                    while(!canPlace) {
+                        var segment = new Segment(
+                            tileX * Segment.MIN_SEGMENT_WIDTH,
+                            tileY * Segment.MIN_SEGMENT_HEIGHT
+                        );
+                        var segmentWidth = Std.int(
+                            segment.width / Segment.MIN_SEGMENT_WIDTH
+                        );
+                        var segmentHeight = Std.int(
+                            segment.height / Segment.MIN_SEGMENT_HEIGHT
+                        );
+                        canPlace = true;
+                        for(checkX in 0...segmentWidth) {
+                            for(checkY in 0...segmentHeight) {
+                                if(
+                                    map.getTile(
+                                        tileX + checkX, tileY + checkY
+                                    )
+                                    || !mapBlueprint.getTile(
+                                        tileX + checkX, tileY + checkY
+                                    )
+                                ) {
+                                    canPlace = false;
+                                }
+                            }
+                        }
+                        if(canPlace) {
+                            add(segment);
+                            for(checkX in 0...segmentWidth) {
+                                for(checkY in 0...segmentHeight) {
+                                    map.setTile(tileX + checkX, tileY + checkY);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
+    override public function update() {
+        if(Key.pressed(Key.R)) {
+            loadMap(1);
+            placeSegments();
+        }
+        if(Key.check(Key.W)) {
+            camera.y -= 4;
+        }
+        if(Key.check(Key.S)) {
+            camera.y += 4;
+        }
+        if(Key.check(Key.A)) {
+            camera.x -= 4;
+        }
+        if(Key.check(Key.D)) {
+            camera.x += 4;
+        }
+    }
 }
