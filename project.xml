@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<meta title="memory" package="com.example.app" version="1.0.0" company=""/>
+
+	<app file="Main" main="Main" path="export"/>
+	<icon path="HaxePunk-icon.svg"/>
+	<window fps="60" background="0x333333"/>
+	<window width="640" height="480" resizable="true" unless="mobile"/>
+	<window width="0" height="0" fullscreen="true" if="mobile"/>
+	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp"/>
+
+	<source path="source"/>
+
+	<haxelib name="HaxePunk"/>
+
+	<haxedef name="hxp_debug" unless="release" />
+
+	<assets path="assets/graphics" rename="graphics" include="*.png|*.jpg"/>
+	<assets path="assets/audio" rename="audio" include="*.wav|*.ogg"/>
+	<assets path="assets/font" rename="font" include="*.ttf"/>
+</project>
