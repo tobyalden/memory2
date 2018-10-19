@@ -19,4 +19,5 @@
 	<assets path="assets/audio" rename="audio" include="*.wav|*.ogg"/>
 	<assets path="assets/font" rename="font" include="*.ttf"/>
 	<assets path="assets/segments" rename="segments" include="*.oel"/>
+	<assets path="assets/maps" rename="maps" include="*.oel"/>
 </project>

@@ -9,7 +9,9 @@ import haxepunk.math.*;
 import openfl.Assets;
 import scenes.*;
 
-class Level extends Entity {
+class Segment extends Entity {
+    public static inline var MIN_SEGMENT_WIDTH = 640;
+    public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var TILE_SIZE = 16;
 
     private var walls:Grid;
@@ -17,13 +19,9 @@ class Level extends Entity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
-        generate();
+        loadSegment(1);
         updateGraphic();
         mask = walls;
-    }
-
-    private function generate() {
-        loadSegment(1);
     }
 
     private function loadSegment(segmentNumber:Int) {
@@ -67,7 +65,7 @@ class Level extends Entity {
 
     override public function update() {
         if(Key.pressed(Key.R)) {
-            generate();
+            loadSegment(1);
         }
         if(Key.pressed(Key.ANY)) {
             updateGraphic();
