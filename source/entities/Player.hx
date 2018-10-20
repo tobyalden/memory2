@@ -117,6 +117,7 @@ class Player extends MemoryEntity {
         collisions();
         if(canMove) {
             movement();
+            shooting();
         }
         animation();
         super.update();
@@ -247,6 +248,16 @@ class Player extends MemoryEntity {
         moveBy(
             velocity.x * Main.getDelta(), velocity.y * Main.getDelta(), "walls"
         );
+    }
+
+    private function shooting() {
+        if(Main.inputPressed("act")) {
+            var arrowDirection = new Vector2(
+                sprite.flipX ? -1: 1, -Arrow.INITIAL_LIFT
+            );
+            var arrow = new Arrow(centerX, centerY, arrowDirection);
+            scene.add(arrow);
+        }
     }
 
     private function animation() {
