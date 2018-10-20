@@ -13,11 +13,12 @@ import haxepunk.utils.*;
 import openfl.Assets;
 
 class MainScene extends Scene {
-    public static inline var CAMERA_FOLLOW_SPEED = 5;
+    public static inline var CAMERA_FOLLOW_SPEED = 4.5;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
+    private var cameraInverse:Vector2;
 
 	override public function begin() {
         loadMap(1);
@@ -26,6 +27,10 @@ class MainScene extends Scene {
         player = new Player(100, 100);
         add(player);
         camera.pixelSnapping = true;
+        cameraInverse = new Vector2(
+            player.x - HXP.width/2,
+            player.y - HXP.height/2
+        );
     }
 
     private function loadMap(mapNumber:Int) {
@@ -146,10 +151,12 @@ class MainScene extends Scene {
         var targetY = player.y - HXP.height/2;
         var cameraTarget = new Vector2(targetX, targetY);
         MathUtil.stepTowards(
-            camera, cameraTarget.x, cameraTarget.y,
+            cameraInverse, cameraTarget.x, cameraTarget.y,
             Main.getDelta() * CAMERA_FOLLOW_SPEED
         );
-        camera.x = Math.floor(camera.x);
-        camera.y = Math.floor(camera.y);
+        var inverseToCamera = cameraTarget.clone();
+        inverseToCamera.subtract(cameraInverse);
+        camera.x = Math.floor(targetX + inverseToCamera.x);
+        camera.y = Math.floor(targetY + inverseToCamera.y);
     }
 }

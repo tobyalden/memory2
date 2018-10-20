@@ -312,10 +312,10 @@ class Player extends MemoryEntity {
             sprite.play("idle");
         }
 
-        if(Input.check("left") && !isTurning) {
+        if(Main.inputCheck("left") && !(isOnGround() && isTurning)) {
             sprite.flipX = true;
         }
-        else if(Input.check("right") && !isTurning) {
+        else if(Main.inputCheck("right") && !(isOnGround() && isTurning)) {
             sprite.flipX = false;
         }
     }
