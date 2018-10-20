@@ -53,7 +53,7 @@ class Player extends MemoryEntity {
     public function new(x:Float, y:Float) {
 	    super(x, y);
         type = "player";
-        sprite = new Spritemap("graphics/player.png", 8, 12);
+        sprite = new Spritemap("graphics/player.png", 16, 24);
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 10);
         sprite.add("jump", [4]);
@@ -63,7 +63,7 @@ class Player extends MemoryEntity {
         graphic = sprite;
 
         velocity = new Vector2(0, 0);
-        setHitbox(6, 12, -1, 0);
+        setHitbox(12, 24, -2, 0);
         isTurning = false;
         canDoubleJump = false;
         wasOnGround = false;

@@ -17,7 +17,6 @@ class MainScene extends Scene {
         loadMap(1);
         placeSegments();
         add(new Player(100, 100));
-        trace('added player');
 	}
 
     private function loadMap(mapNumber:Int) {
