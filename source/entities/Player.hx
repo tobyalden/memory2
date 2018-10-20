@@ -10,18 +10,18 @@ import haxepunk.utils.*;
 
 class Player extends MemoryEntity {
     // Movement constants
-    public static inline var RUN_ACCEL = 0.15;
+    public static inline var RUN_ACCEL = 0.25;
     public static inline var RUN_DECCEL = 0.3;
-    public static inline var AIR_ACCEL = 0.26;
+    public static inline var AIR_ACCEL = 0.2;
     public static inline var AIR_DECCEL = 0.1;
-    public static inline var MAX_RUN_VELOCITY = 3.2;
-    public static inline var MAX_AIR_VELOCITY = 4;
-    public static inline var JUMP_POWER = 4.8;
-    public static inline var WALL_JUMP_POWER_X = 4;
-    public static inline var WALL_JUMP_POWER_Y = 4.5;
+    public static inline var MAX_RUN_VELOCITY = 3.5;
+    public static inline var MAX_AIR_VELOCITY = 4.3;
+    public static inline var JUMP_POWER = 5;
+    public static inline var WALL_JUMP_POWER_X = 3;
+    public static inline var WALL_JUMP_POWER_Y = 5;
     public static inline var JUMP_CANCEL_POWER = 1;
-    public static inline var GRAVITY = 0.26;
-    public static inline var WALL_GRAVITY = 0.16;
+    public static inline var GRAVITY = 0.2;
+    public static inline var WALL_GRAVITY = 0.1;
     public static inline var MAX_FALL_VELOCITY = 6;
     public static inline var MAX_WALL_VELOCITY = 4;
     public static inline var WALL_STICK_VELOCITY = 2;
@@ -312,10 +312,10 @@ class Player extends MemoryEntity {
             sprite.play("idle");
         }
 
-        if(velocity.x < 0) {
+        if(Input.check("left") && !isTurning) {
             sprite.flipX = true;
         }
-        else if(velocity.x > 0) {
+        else if(Input.check("right") && !isTurning) {
             sprite.flipX = false;
         }
     }
