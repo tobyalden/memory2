@@ -1,0 +1,8 @@
+- main menu
+- music
+- sound effects
+- bow & arrow
+- enemies & traps
+- final boss
+- ending
+- death
