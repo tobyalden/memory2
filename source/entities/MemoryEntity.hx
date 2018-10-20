@@ -11,11 +11,13 @@ class MemoryEntity extends Entity
 
     public function setGraphic(newGraphic:Graphic) {
         newGraphic.smooth = false;
+        newGraphic.pixelSnapping = true;
         graphic = newGraphic;
     }
 
     override public function addGraphic(newGraphic:Graphic) {
         newGraphic.smooth = false;
+        newGraphic.pixelSnapping = true;
         super.addGraphic(newGraphic);
         return newGraphic;
     }

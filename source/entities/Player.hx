@@ -60,7 +60,8 @@ class Player extends MemoryEntity {
         sprite.add("wall", [5]);
         sprite.add("skid", [6]);
         sprite.play("idle");
-        graphic = sprite;
+        sprite.pixelSnapping = true;
+        setGraphic(sprite);
 
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -2, 0);

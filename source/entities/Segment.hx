@@ -9,7 +9,7 @@ import haxepunk.math.*;
 import openfl.Assets;
 import scenes.*;
 
-class Segment extends Entity {
+class Segment extends MemoryEntity {
     public static inline var NUMBER_OF_SEGMENTS = 4;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
@@ -103,7 +103,7 @@ class Segment extends Entity {
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
         );
         tiles.loadFromString(walls.saveToString(',', '\n', '1', '0'));
-        graphic = tiles;
+        setGraphic(tiles);
     }
 
 }

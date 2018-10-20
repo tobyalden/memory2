@@ -7,9 +7,14 @@ import haxepunk.graphics.tile.*;
 import haxepunk.input.*;
 import haxepunk.masks.*;
 import haxepunk.math.*;
+import haxepunk.Tween;
+import haxepunk.tweens.misc.*;
+import haxepunk.utils.*;
 import openfl.Assets;
 
 class MainScene extends Scene {
+    public static inline var CAMERA_FOLLOW_SPEED = 5;
+
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
@@ -20,6 +25,7 @@ class MainScene extends Scene {
         fillEmptySegments();
         player = new Player(100, 100);
         add(player);
+        camera.pixelSnapping = true;
     }
 
     private function loadMap(mapNumber:Int) {
@@ -135,8 +141,15 @@ class MainScene extends Scene {
             loadMap(1);
             placeSegments();
         }
-        camera.x = player.centerX - HXP.width/2;
-        camera.y = player.centerY - HXP.height/2;
         super.update();
+        var targetX = player.x - HXP.width/2;
+        var targetY = player.y - HXP.height/2;
+        var cameraTarget = new Vector2(targetX, targetY);
+        MathUtil.stepTowards(
+            camera, cameraTarget.x, cameraTarget.y,
+            Main.getDelta() * CAMERA_FOLLOW_SPEED
+        );
+        camera.x = Math.floor(camera.x);
+        camera.y = Math.floor(camera.y);
     }
 }
