@@ -14,18 +14,18 @@ class Player extends MemoryEntity {
     public static inline var RUN_DECCEL = 0.3;
     public static inline var AIR_ACCEL = 0.13;
     public static inline var AIR_DECCEL = 0.1;
-    public static inline var MAX_RUN_VELOCITY = 1.6;
-    public static inline var MAX_AIR_VELOCITY = 2;
-    public static inline var JUMP_POWER = 2.4;
-    public static inline var DOUBLE_JUMP_POWER = 2;
-    public static inline var WALL_JUMP_POWER_X = 3;
-    public static inline var WALL_JUMP_POWER_Y = 2.1;
-    public static inline var JUMP_CANCEL_POWER = 0.5;
-    public static inline var GRAVITY = 0.13;
-    public static inline var WALL_GRAVITY = 0.08;
-    public static inline var MAX_FALL_VELOCITY = 3;
-    public static inline var MAX_WALL_VELOCITY = 2;
-    public static inline var WALL_STICK_VELOCITY = 1;
+    public static inline var MAX_RUN_VELOCITY = 3.2;
+    public static inline var MAX_AIR_VELOCITY = 4;
+    public static inline var JUMP_POWER = 4.8;
+    public static inline var DOUBLE_JUMP_POWER = 4;
+    public static inline var WALL_JUMP_POWER_X = 6;
+    public static inline var WALL_JUMP_POWER_Y = 4.2;
+    public static inline var JUMP_CANCEL_POWER = 1;
+    public static inline var GRAVITY = 0.26;
+    public static inline var WALL_GRAVITY = 0.16;
+    public static inline var MAX_FALL_VELOCITY = 6;
+    public static inline var MAX_WALL_VELOCITY = 4;
+    public static inline var WALL_STICK_VELOCITY = 2;
 
     // Animation constants
     public static inline var LAND_SQUASH = 0.5;

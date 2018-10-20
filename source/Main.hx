@@ -1,4 +1,5 @@
 import haxepunk.*;
+import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
 import scenes.*;
@@ -16,6 +17,7 @@ class Main extends Engine {
 	}
 
 	override public function init() {
+        Console.enable();
 		HXP.scene = new MainScene();
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);

@@ -12,12 +12,15 @@ import openfl.Assets;
 class MainScene extends Scene {
     private var mapBlueprint:Grid;
     private var map:Grid;
+    private var player:Player;
 
 	override public function begin() {
         loadMap(1);
         placeSegments();
-        add(new Player(100, 100));
-	}
+        fillEmptySegments();
+        player = new Player(100, 100);
+        add(player);
+    }
 
     private function loadMap(mapNumber:Int) {
         var mapPath = 'maps/${mapNumber}.oel';
@@ -44,8 +47,8 @@ class MainScene extends Scene {
     }
 
     private function placeSegments() {
-        for(tileX in -1...mapBlueprint.columns + 1) {
-            for(tileY in -1...mapBlueprint.rows + 1) {
+        for(tileX in 0...mapBlueprint.columns) {
+            for(tileY in 0...mapBlueprint.rows) {
                 if(
                     mapBlueprint.getTile(tileX, tileY)
                     && !map.getTile(tileX, tileY)
@@ -93,18 +96,23 @@ class MainScene extends Scene {
                         }
                     }
                 }
-                else if(!mapBlueprint.getTile(tileX, tileY)) {
-                    var segment = new Segment(
+            }
+        }
+    }
+
+    private function fillEmptySegments() {
+        for(tileX in -1...mapBlueprint.columns + 1) {
+            for(tileY in -1...mapBlueprint.rows + 1) {
+                if(!map.getTile(tileX, tileY)) {
+                    var segment = new SolidSegment(
                         tileX * Segment.MIN_SEGMENT_WIDTH,
                         tileY * Segment.MIN_SEGMENT_HEIGHT
                     );
-                    segment.makeSolid1x1();
                     add(segment);
                 }
             }
         }
     }
-
     private function sealSegment(
         segment:Segment, tileX:Int, tileY:Int, checkX:Int, checkY:Int
     ) {
@@ -127,18 +135,8 @@ class MainScene extends Scene {
             loadMap(1);
             placeSegments();
         }
-        if(Key.check(Key.W)) {
-            camera.y -= 4;
-        }
-        if(Key.check(Key.S)) {
-            camera.y += 4;
-        }
-        if(Key.check(Key.A)) {
-            camera.x -= 4;
-        }
-        if(Key.check(Key.D)) {
-            camera.x += 4;
-        }
+        camera.x = player.centerX - HXP.width/2;
+        camera.y = player.centerY - HXP.height/2;
         super.update();
     }
 }

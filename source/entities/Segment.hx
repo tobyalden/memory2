@@ -10,7 +10,7 @@ import openfl.Assets;
 import scenes.*;
 
 class Segment extends Entity {
-    public static inline var NUMBER_OF_SEGMENTS = 3;
+    public static inline var NUMBER_OF_SEGMENTS = 4;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var MIN_SEGMENT_WIDTH_IN_TILES = 40;
@@ -45,19 +45,19 @@ class Segment extends Entity {
                 Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
             );
         }
-        if(fastXml.hasNode.optionalWalls) {
-            for (r in fastXml.node.optionalWalls.nodes.rect) {
-                if(Random.random < 0.5) {
-                    continue;
-                }
-                walls.setRect(
-                    Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
-                    Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
-                );
-            }
-        }
+        //if(fastXml.hasNode.optionalWalls) {
+            //for (r in fastXml.node.optionalWalls.nodes.rect) {
+                //if(Random.random < 0.5) {
+                    //continue;
+                //}
+                //walls.setRect(
+                    //Std.int(Std.parseInt(r.att.x) / TILE_SIZE),
+                    //Std.int(Std.parseInt(r.att.y) / TILE_SIZE),
+                    //Std.int(Std.parseInt(r.att.w) / TILE_SIZE),
+                    //Std.int(Std.parseInt(r.att.h) / TILE_SIZE)
+                //);
+            //}
+        //}
     }
 
     public function makeSolid1x1() {
