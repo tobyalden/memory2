@@ -144,9 +144,9 @@ class Player extends MemoryEntity {
         if(isOnGround()) {
             accel = RUN_ACCEL;
             deccel = RUN_DECCEL;
-            if(isOnWall()) {
-                velocity.x = 0;
-            }
+        }
+        if(isOnWall()) {
+            velocity.x = 0;
         }
 
         if(isOnCeiling()) {
