@@ -12,14 +12,13 @@ class Player extends MemoryEntity {
     // Movement constants
     public static inline var RUN_ACCEL = 0.15;
     public static inline var RUN_DECCEL = 0.3;
-    public static inline var AIR_ACCEL = 0.13;
+    public static inline var AIR_ACCEL = 0.26;
     public static inline var AIR_DECCEL = 0.1;
     public static inline var MAX_RUN_VELOCITY = 3.2;
     public static inline var MAX_AIR_VELOCITY = 4;
     public static inline var JUMP_POWER = 4.8;
-    public static inline var DOUBLE_JUMP_POWER = 4;
-    public static inline var WALL_JUMP_POWER_X = 6;
-    public static inline var WALL_JUMP_POWER_Y = 4.2;
+    public static inline var WALL_JUMP_POWER_X = 4;
+    public static inline var WALL_JUMP_POWER_Y = 4.5;
     public static inline var JUMP_CANCEL_POWER = 1;
     public static inline var GRAVITY = 0.26;
     public static inline var WALL_GRAVITY = 0.16;
@@ -33,13 +32,11 @@ class Player extends MemoryEntity {
     public static inline var HORIZONTAL_SQUASH_RECOVERY = 0.08;
     public static inline var AIR_SQUASH_RECOVERY = 0.03;
     public static inline var JUMP_STRETCH = 1.5;
-    public static inline var DOUBLE_JUMP_STRETCH = 1.4;
     public static inline var WALL_SQUASH = 0.5;
     public static inline var WALL_JUMP_STRETCH_X = 1.4;
     public static inline var WALL_JUMP_STRETCH_Y = 1.4;
 
     private var isTurning:Bool;
-    private var canDoubleJump:Bool;
     private var wasOnGround:Bool;
     private var wasOnWall:Bool;
     private var lastWallWasRight:Bool;
@@ -66,7 +63,6 @@ class Player extends MemoryEntity {
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -2, 0);
         isTurning = false;
-        canDoubleJump = false;
         wasOnGround = false;
         wasOnWall = false;
         lastWallWasRight = false;
@@ -110,7 +106,7 @@ class Player extends MemoryEntity {
     }
 
     private function makeDustAtFeet() {
-        var dust = new Dust(x, bottom - 4, "ground");
+        var dust = new Dust(x, bottom - 8, "ground");
         if(sprite.flipX) {
             dust.x += 0.5;
         }
@@ -141,9 +137,6 @@ class Player extends MemoryEntity {
         var accelMultiplier = 1.0;
         if(velocity.x == 0 && isOnGround()) {
             accelMultiplier = 3;
-        }
-        else if(Main.inputPressed("jump") && canDoubleJump) {
-            accelMultiplier = 2;
         }
 
         var accel:Float = AIR_ACCEL;
@@ -186,7 +179,6 @@ class Player extends MemoryEntity {
         // Check if the player is jumping or falling
         if(isOnGround()) {
             velocity.y = 0;
-            canDoubleJump = true;
             if(Main.inputPressed("jump")) {
                 velocity.y = -JUMP_POWER;
                 scaleY(JUMP_STRETCH);
@@ -217,12 +209,6 @@ class Player extends MemoryEntity {
         }
         else {
             velocity.y += gravity;
-            if(Main.inputPressed("jump") && canDoubleJump) {
-                velocity.y = Math.min(velocity.y, -DOUBLE_JUMP_POWER);
-                scaleY(DOUBLE_JUMP_STRETCH);
-                makeDustAtFeet();
-                canDoubleJump = false;
-            }
             if(Main.inputReleased("jump")) {
                 velocity.y = Math.max(-JUMP_CANCEL_POWER, velocity.y);
             }
