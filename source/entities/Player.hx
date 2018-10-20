@@ -252,10 +252,21 @@ class Player extends MemoryEntity {
 
     private function shooting() {
         if(Main.inputPressed("act")) {
-            var arrowDirection = new Vector2(
-                sprite.flipX ? -1: 1, -Arrow.INITIAL_LIFT
-            );
-            var arrow = new Arrow(centerX, centerY, arrowDirection);
+            var arrow:Arrow;
+            if(Main.inputCheck("up")) {
+                var direction = new Vector2(0, -1);
+                arrow = new Arrow(centerX, centerY, direction, true);
+            }
+            else if(Main.inputCheck("down")) {
+                var direction = new Vector2(0, 1);
+                arrow = new Arrow(centerX, centerY, direction, true);
+            }
+            else {
+                var direction = new Vector2(
+                    sprite.flipX ? -1: 1, -Arrow.INITIAL_LIFT
+                );
+                arrow = new Arrow(centerX, centerY, direction, false);
+            }
             scene.add(arrow);
         }
     }

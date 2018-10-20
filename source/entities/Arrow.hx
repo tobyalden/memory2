@@ -17,9 +17,11 @@ class Arrow extends MemoryEntity {
     private var sprite:Image;
     private var velocity:Vector2;
     private var landed:Bool;
+    private var isVertical:Bool;
 
-    public function new(x:Float, y:Float, direction:Vector2) {
+    public function new(x:Float, y:Float, direction:Vector2, isVertical:Bool) {
 	    super(x, y);
+        this.isVertical = isVertical;
         type = "arrow";
         velocity = direction;
         velocity.normalize(INITIAL_VELOCITY);
@@ -28,13 +30,21 @@ class Arrow extends MemoryEntity {
         var angle = MathUtil.angle(0, 0, velocity.x, velocity.y);
         sprite.angle = angle;
         setGraphic(sprite);
-        setHitbox(16, 3, 8, 1);
+        if(isVertical) {
+            setHitbox(3, 16, 1, 8);
+        }
+        else {
+            setHitbox(16, 3, 8, 1);
+        }
         landed = false;
     }
 
     public override function update() {
         if(!landed) {
             var gravity = GRAVITY * Main.getDelta();
+            if(isVertical) {
+                gravity *= 3;
+            }
             velocity.y += gravity;
             var angle = MathUtil.angle(0, 0, velocity.x, velocity.y);
             sprite.angle = angle;

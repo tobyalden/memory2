@@ -22,6 +22,8 @@ class Main extends Engine {
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
         Key.define("right", [Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
+        Key.define("up", [Key.UP]);
+        Key.define("down", [Key.DOWN]);
         Key.define("jump", [Key.Z]);
         Key.define("act", [Key.X]);
 
@@ -84,6 +86,18 @@ class Main extends Engine {
             return (
                 gamepad.getAxis(0) > 0.5
                 || gamepad.check(XboxGamepad.DPAD_RIGHT)
+            );
+        }
+        if(inputName == "up") {
+            return (
+                gamepad.getAxis(1) < -0.5
+                || gamepad.check(XboxGamepad.DPAD_UP)
+            );
+        }
+        if(inputName == "down") {
+            return (
+                gamepad.getAxis(1) > 0.5
+                || gamepad.check(XboxGamepad.DPAD_DOWN)
             );
         }
         return false;
