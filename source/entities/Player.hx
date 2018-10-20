@@ -255,10 +255,24 @@ class Player extends MemoryEntity {
             var arrow:Arrow;
             if(Main.inputCheck("up")) {
                 var direction = new Vector2(0, -1);
+                if(Main.inputCheck("left")) {
+                    direction.x = -1;
+                }
+                else if(Main.inputCheck("right")) {
+                    direction.x = 1;
+                }
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
             else if(Main.inputCheck("down")) {
                 var direction = new Vector2(0, 1);
+                if(Main.inputCheck("left")) {
+                    direction.x = -1;
+                    direction.y = 0.75;
+                }
+                else if(Main.inputCheck("right")) {
+                    direction.x = 1;
+                    direction.y = 0.75;
+                }
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
             else {

@@ -49,9 +49,8 @@ class Arrow extends MemoryEntity {
             var angle = MathUtil.angle(0, 0, velocity.x, velocity.y);
             sprite.angle = angle;
             moveBy(
-                velocity.x * Main.getDelta(),
-                velocity.y * Main.getDelta(),
-                "walls"
+                velocity.x * Main.getDelta(), velocity.y * Main.getDelta(),
+                "walls", true
             );
         }
         super.update();
