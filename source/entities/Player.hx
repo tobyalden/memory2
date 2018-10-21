@@ -147,6 +147,7 @@ class Player extends MemoryEntity {
             deccel = RUN_DECCEL;
         }
         if(isOnWall()) {
+            sprite.flipX = isOnLeftWall();
             velocity.x = 0;
         }
 
