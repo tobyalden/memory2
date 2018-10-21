@@ -2,6 +2,7 @@ import haxepunk.*;
 import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
+import haxepunk.utils.*;
 import scenes.*;
 
 class Main extends Engine {
@@ -20,7 +21,8 @@ class Main extends Engine {
 #if debug
         Console.enable();
 #end
-		HXP.scene = new MainMenu();
+        HXP.screen.color = Color.Black;
+        HXP.scene = new GameScene();
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
         Key.define("right", [Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);

@@ -8,13 +8,14 @@ class Curtain extends MemoryEntity
 {
     public static inline var FADE_SPEED = 0.019;
 
-    private var isFadingIn:Bool;
+    public var isFadingIn(default, null):Bool;
     private var isFadingOut:Bool;
     private var fadeSpeed:Float;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         graphic = new ColoredRect(HXP.width, HXP.height, 0x000000);
+        graphic.alpha = 1;
         layer = -99999;
         isFadingIn = false;
         isFadingOut = false;
@@ -40,11 +41,17 @@ class Curtain extends MemoryEntity
             graphic.alpha = Math.max(
                 0, graphic.alpha - fadeSpeed * Main.getDelta()
             );
+            if(graphic.alpha == 0) {
+                isFadingIn = false;
+            }
         }
         else if(isFadingOut) {
             graphic.alpha = Math.min(
                 1, graphic.alpha + fadeSpeed * Main.getDelta()
             );
+            if(graphic.alpha == 1) {
+                isFadingOut = false;
+            }
         }
         super.update();
     }

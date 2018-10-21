@@ -14,6 +14,7 @@ class Follower extends MemoryEntity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        type = "enemy";
         sprite = new Spritemap("graphics/follower.png", 24, 24);
         sprite.add("idle", [0]);
         setGraphic(sprite);

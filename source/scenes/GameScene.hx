@@ -11,6 +11,7 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import openfl.Assets;
+import scenes.*;
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
@@ -18,6 +19,7 @@ class GameScene extends Scene {
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
+    private var curtain:Curtain;
 
 	override public function begin() {
         loadMap(1);
@@ -26,7 +28,19 @@ class GameScene extends Scene {
         player = new Player(100, 100);
         add(player);
         add(new Follower(300, 100));
+        curtain = new Curtain(0, 0);
+        add(curtain);
+        curtain.fadeIn();
         camera.pixelSnapping = true;
+    }
+
+    public function onDeath() {
+        curtain.fadeOut();
+        var resetTimer = new Alarm(1.5, TweenType.OneShot);
+        resetTimer.onComplete.bind(function() {
+            HXP.scene = new MainMenu();
+        });
+        addTween(resetTimer, true);
     }
 
     private function loadMap(mapNumber:Int) {
@@ -141,8 +155,17 @@ class GameScene extends Scene {
         if(Key.pressed(Key.R)) {
             HXP.scene = new GameScene();
         }
+        if(curtain.graphic.alpha > 0.95) {
+            camera.x = Math.floor(player.x - HXP.width/2);
+            camera.y = Math.floor(player.y - HXP.height/2);
+        }
         super.update();
-        camera.x = Math.floor(player.x - HXP.width/2);
-        camera.y = Math.floor(player.y - HXP.height/2);
+        if(curtain.graphic.alpha <= 0.95) {
+            // This screwy code duplication is because of a weird issue
+            // where setting the camera before super.update() causes
+            // jitter, but setting it after screws up the fade in
+            camera.x = Math.floor(player.x - HXP.width/2);
+            camera.y = Math.floor(player.y - HXP.height/2);
+        }
     }
 }
