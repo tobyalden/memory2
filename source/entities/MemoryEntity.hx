@@ -3,8 +3,7 @@ package entities;
 import haxepunk.*;
 import haxepunk.graphics.*;
 
-class MemoryEntity extends Entity
-{
+class MemoryEntity extends Entity {
     public function new(x:Float, y:Float) {
         super(x, y);
     }

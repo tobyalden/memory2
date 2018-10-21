@@ -25,6 +25,7 @@ class MainScene extends Scene {
         fillEmptySegments();
         player = new Player(100, 100);
         add(player);
+        add(new Follower(300, 100));
         camera.pixelSnapping = true;
     }
 
