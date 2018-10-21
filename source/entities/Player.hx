@@ -252,9 +252,10 @@ class Player extends MemoryEntity {
 
     private function shooting() {
         if(Main.inputPressed("act")) {
+            var direction:Vector2;
             var arrow:Arrow;
             if(Main.inputCheck("up")) {
-                var direction = new Vector2(0, -1);
+                direction = new Vector2(0, -1);
                 if(Main.inputCheck("left")) {
                     direction.x = -1;
                 }
@@ -264,7 +265,7 @@ class Player extends MemoryEntity {
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
             else if(Main.inputCheck("down")) {
-                var direction = new Vector2(0, 1);
+                direction = new Vector2(0, 1);
                 if(Main.inputCheck("left")) {
                     direction.x = -1;
                     direction.y = 0.75;
@@ -276,11 +277,18 @@ class Player extends MemoryEntity {
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
             else {
-                var direction = new Vector2(
+                direction = new Vector2(
                     sprite.flipX ? -1: 1, -Arrow.INITIAL_LIFT
                 );
                 arrow = new Arrow(centerX, centerY, direction, false);
             }
+            var kickback = direction.clone();
+            kickback.scale(0.2);
+            kickback.y = kickback.y/2;
+            if(isOnGround()) {
+                kickback.scale(0.75);
+            }
+            velocity.subtract(kickback);
             scene.add(arrow);
         }
     }
