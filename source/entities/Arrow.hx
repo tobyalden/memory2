@@ -19,9 +19,14 @@ class Arrow extends MemoryEntity {
     private var landed:Bool;
     private var isVertical:Bool;
 
+    public function setLanded(newLanded:Bool) {
+        landed = newLanded;
+    }
+
     public function new(x:Float, y:Float, direction:Vector2, isVertical:Bool) {
 	    super(x, y);
         this.isVertical = isVertical;
+        layer = 1;
         type = "arrow";
         velocity = direction;
         velocity.normalize(INITIAL_VELOCITY);
@@ -50,7 +55,7 @@ class Arrow extends MemoryEntity {
             sprite.angle = angle;
             moveBy(
                 velocity.x * Main.getDelta(), velocity.y * Main.getDelta(),
-                "walls", true
+                ["walls", "enemy"], true
             );
         }
         super.update();
@@ -58,11 +63,29 @@ class Arrow extends MemoryEntity {
 
     public override function moveCollideX(e:Entity) {
         landed = true;
+        if(e.type == "enemy") {
+            setAnchor(e);
+            var towardsEnemy = new Vector2(
+                e.centerX - centerX, e.centerY - centerY
+            );
+            towardsEnemy.normalize(4);
+            x += towardsEnemy.x;
+            y += towardsEnemy.y;
+        }
         return true;
     }
 
     public override function moveCollideY(e:Entity) {
         landed = true;
+        if(e.type == "enemy") {
+            setAnchor(e);
+            var towardsEnemy = new Vector2(
+                e.centerX - centerX, e.centerY - centerY
+            );
+            towardsEnemy.normalize(4);
+            x += towardsEnemy.x;
+            y += towardsEnemy.y;
+        }
         return true;
     }
 }
