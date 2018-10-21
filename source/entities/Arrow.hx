@@ -71,6 +71,8 @@ class Arrow extends MemoryEntity {
             towardsEnemy.normalize(4);
             x += towardsEnemy.x;
             y += towardsEnemy.y;
+            collidable = false;
+            cast(e, MemoryEntity).takeHit();
         }
         return true;
     }
@@ -85,6 +87,8 @@ class Arrow extends MemoryEntity {
             towardsEnemy.normalize(4);
             x += towardsEnemy.x;
             y += towardsEnemy.y;
+            collidable = false;
+            cast(e, MemoryEntity).takeHit();
         }
         return true;
     }

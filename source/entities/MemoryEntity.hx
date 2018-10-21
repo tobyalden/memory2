@@ -3,15 +3,36 @@ package entities;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.math.*;
+import haxepunk.Tween;
+import haxepunk.tweens.misc.*;
 
 class MemoryEntity extends Entity {
     private var anchor:Entity;
     private var anchorPosition:Vector2;
+    private var isFlashing:Bool;
+    private var flasher:Alarm;
+    private var stopFlasher:Alarm;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         anchor = null;
         anchorPosition = new Vector2();
+
+        isFlashing = false;
+        flasher = new Alarm(0.05, TweenType.Looping);
+        flasher.onComplete.bind(function() {
+            if(isFlashing) {
+                visible = !visible;
+            }
+        });
+        addTween(flasher, true);
+
+        stopFlasher = new Alarm(0.12, TweenType.Persist);
+        stopFlasher.onComplete.bind(function() {
+            visible = true;
+            isFlashing = false;
+        });
+        addTween(stopFlasher, false);
     }
 
     public function setGraphic(newGraphic:Graphic) {
@@ -30,6 +51,12 @@ class MemoryEntity extends Entity {
     public override function update() {
         updateAnchor();
         super.update();
+    }
+
+    public function takeHit() {
+        visible = false;
+        isFlashing = true;
+        stopFlasher.start();
     }
 
     public function updateAnchor() {
