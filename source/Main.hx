@@ -17,8 +17,10 @@ class Main extends Engine {
 	}
 
 	override public function init() {
-        //Console.enable();
-		HXP.scene = new MainScene();
+#if debug
+        Console.enable();
+#end
+		HXP.scene = new MainMenu();
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
         Key.define("right", [Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);

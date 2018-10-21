@@ -12,7 +12,7 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 import openfl.Assets;
 
-class MainScene extends Scene {
+class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
 
     private var mapBlueprint:Grid;
@@ -139,7 +139,7 @@ class MainScene extends Scene {
 
     override public function update() {
         if(Key.pressed(Key.R)) {
-            HXP.scene = new MainScene();
+            HXP.scene = new GameScene();
         }
         super.update();
         camera.x = Math.floor(player.x - HXP.width/2);
