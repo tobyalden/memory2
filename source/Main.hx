@@ -68,6 +68,12 @@ class Main extends Engine {
 
     public static function inputCheck(inputName:String) {
         if(gamepad == null || Input.check(inputName)) {
+            if(inputName == "left" && Input.check("right")) {
+                return false;
+            }
+            if(inputName == "right" && Input.check("left")) {
+                return false;
+            }
             return Input.check(inputName);
         }
         if(inputName == "jump") {
