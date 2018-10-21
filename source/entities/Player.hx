@@ -50,6 +50,7 @@ class Player extends MemoryEntity {
     public function new(x:Float, y:Float) {
 	    super(x, y);
         type = "player";
+        name = "player";
         sprite = new Spritemap("graphics/player.png", 16, 24);
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 10);
