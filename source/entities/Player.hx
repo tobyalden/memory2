@@ -279,9 +279,16 @@ class Player extends MemoryEntity {
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
             else {
-                direction = new Vector2(
-                    sprite.flipX ? -1: 1, -Arrow.INITIAL_LIFT
-                );
+                direction = new Vector2(0, -Arrow.INITIAL_LIFT);
+                if(Main.inputCheck("left")) {
+                    direction.x = -1;
+                }
+                else if(Main.inputCheck("right")) {
+                    direction.x = 1;
+                }
+                else {
+                    direction.x = sprite.flipX ? -1: 1;
+                }
                 arrow = new Arrow(centerX, centerY, direction, false);
             }
             var kickback = direction.clone();
