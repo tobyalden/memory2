@@ -7,7 +7,7 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
 class MemoryEntity extends Entity {
-    private var anchor:Entity;
+    private var anchor(default, null):Entity;
     private var anchorPosition:Vector2;
     private var isFlashing:Bool;
     private var flasher:Alarm;
@@ -39,6 +39,19 @@ class MemoryEntity extends Entity {
 
     private function die() {
         scene.remove(this);
+        var arrows = new Array<Entity>();
+        scene.getType("arrow", arrows);
+        for(_arrow in arrows) {
+            var arrow = cast(_arrow, Arrow);
+            if(arrow.anchor == this) {
+                arrow.anchor = null;
+                arrow.setLanded(false);
+                arrow.setVelocity(
+                    new Vector2(Math.random() * -5, Math.random() * -5)
+                );
+                arrow.collidable = true;
+            }
+        }
         var numExplosions = 15;
         var directions = new Array<Vector2>();
         for(i in 0...numExplosions) {

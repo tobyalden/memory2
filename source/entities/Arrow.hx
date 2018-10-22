@@ -23,6 +23,10 @@ class Arrow extends MemoryEntity {
         landed = newLanded;
     }
 
+    public function setVelocity(newVelocity:Vector2) {
+        velocity = newVelocity;
+    }
+
     public function new(x:Float, y:Float, direction:Vector2, isVertical:Bool) {
 	    super(x, y);
         this.isVertical = isVertical;
