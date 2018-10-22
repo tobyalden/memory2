@@ -14,6 +14,31 @@ class MemoryEntity extends Entity {
     private var stopFlasher:Alarm;
     private var health:Int;
 
+    static public var sfxQueue(default, null):Array<String> = (
+        new Array<String>()
+    );
+    static public var allSfx(default, null):Map<String, Sfx> = (
+        new Map<String, Sfx>()
+    );
+
+    static public function loadSfx(sfxNames:Array<String>) {
+        for(sfxName in sfxNames) {
+            allSfx[sfxName] = new Sfx('audio/${sfxName}.wav');
+        }
+    }
+
+    static public function queueSfx(sfxName:String) {
+        if(sfxQueue.indexOf(sfxName) == -1) {
+            sfxQueue.push(sfxName);
+        }
+    }
+
+    static public function clearSfxQueue() {
+        for(sfxName in sfxQueue) {
+            sfxQueue.remove(sfxName);
+        }
+    }
+
     public function new(x:Float, y:Float) {
         super(x, y);
         anchor = null;

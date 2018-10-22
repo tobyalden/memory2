@@ -160,6 +160,14 @@ class GameScene extends Scene {
             camera.y = Math.floor(player.y - HXP.height/2);
         }
         super.update();
+
+        for(sfxName in MemoryEntity.sfxQueue) {
+            if(MemoryEntity.allSfx.exists(sfxName)) {
+                MemoryEntity.allSfx[sfxName].play();
+            }
+        }
+
+        MemoryEntity.clearSfxQueue();
         if(curtain.graphic.alpha <= 0.95 && player.visible) {
             // This screwy code duplication is because of a weird issue
             // where setting the camera before super.update() causes

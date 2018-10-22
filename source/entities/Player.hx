@@ -49,6 +49,7 @@ class Player extends MemoryEntity {
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
+        MemoryEntity.loadSfx(["arrowshoot"]);
         type = "player";
         name = "player";
         sprite = new Spritemap("graphics/player.png", 16, 24);
@@ -338,6 +339,7 @@ class Player extends MemoryEntity {
             }
             velocity.subtract(kickback);
             scene.add(arrow);
+            MemoryEntity.allSfx["arrowshoot"].play();
         }
     }
 
