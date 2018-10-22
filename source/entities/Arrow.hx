@@ -14,8 +14,8 @@ class Arrow extends MemoryEntity {
     public static inline var INITIAL_LIFT = 0.1;
     public static inline var GRAVITY = 0.2;
 
+    public var velocity(default, null):Vector2;
     private var sprite:Image;
-    private var velocity:Vector2;
     private var landed:Bool;
     private var isVertical:Bool;
 
@@ -72,7 +72,7 @@ class Arrow extends MemoryEntity {
             x += towardsEnemy.x;
             y += towardsEnemy.y;
             collidable = false;
-            cast(e, MemoryEntity).takeHit();
+            cast(e, MemoryEntity).takeHit(this);
         }
         return true;
     }
@@ -88,7 +88,7 @@ class Arrow extends MemoryEntity {
             x += towardsEnemy.x;
             y += towardsEnemy.y;
             collidable = false;
-            cast(e, MemoryEntity).takeHit();
+            cast(e, MemoryEntity).takeHit(this);
         }
         return true;
     }

@@ -27,7 +27,7 @@ class MemoryEntity extends Entity {
         });
         addTween(flasher, true);
 
-        stopFlasher = new Alarm(0.12, TweenType.Persist);
+        stopFlasher = new Alarm(0.2, TweenType.Persist);
         stopFlasher.onComplete.bind(function() {
             visible = true;
             isFlashing = false;
@@ -53,7 +53,7 @@ class MemoryEntity extends Entity {
         super.update();
     }
 
-    public function takeHit() {
+    public function takeHit(arrow:Arrow) {
         visible = false;
         isFlashing = true;
         stopFlasher.start();

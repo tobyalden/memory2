@@ -8,6 +8,7 @@ class Follower extends MemoryEntity {
     public static inline var ACCEL = 0.1;
     public static inline var MAX_SPEED = 3;
     public static inline var BOUNCE_FACTOR = 0.85;
+    public static inline var HIT_KNOCKBACK = 5;
 
     var sprite:Spritemap;
     var velocity:Vector2;
@@ -49,5 +50,12 @@ class Follower extends MemoryEntity {
     public override function moveCollideY(e:Entity) {
         velocity.y = -velocity.y * BOUNCE_FACTOR;
         return true;
+    }
+
+    override public function takeHit(arrow:Arrow) {
+        var knockback = arrow.velocity.clone();
+        knockback.normalize(HIT_KNOCKBACK);
+        velocity.add(knockback);
+        super.takeHit(arrow);
     }
 }
