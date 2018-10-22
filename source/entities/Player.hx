@@ -164,7 +164,7 @@ class Player extends MemoryEntity {
 #if desktop
         Sys.sleep(0.02);
 #end
-        scene.camera.shake(0.1, 2);
+        scene.camera.shake(2, 8);
     }
 
     private function movement() {
