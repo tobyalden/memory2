@@ -12,6 +12,7 @@ class MemoryEntity extends Entity {
     private var isFlashing:Bool;
     private var flasher:Alarm;
     private var stopFlasher:Alarm;
+    private var health:Int;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -33,6 +34,36 @@ class MemoryEntity extends Entity {
             isFlashing = false;
         });
         addTween(stopFlasher, false);
+        health = 3;
+    }
+
+    private function die() {
+        scene.remove(this);
+        var numExplosions = 15;
+        var directions = new Array<Vector2>();
+        for(i in 0...numExplosions) {
+            var angle = (2/numExplosions) * i;
+            directions.push(new Vector2(Math.cos(angle), Math.sin(angle)));
+            directions.push(new Vector2(-Math.cos(angle), Math.sin(angle)));
+            directions.push(new Vector2(Math.cos(angle), -Math.sin(angle)));
+            directions.push(new Vector2(-Math.cos(angle), -Math.sin(angle)));
+        }
+        var count = 0;
+        for(direction in directions) {
+            direction.scale(0.4 * Math.random());
+            direction.normalize(
+                Math.max(0.1 + 0.2 * Math.random(), direction.length)
+            );
+            var explosion = new DeathParticle(
+                centerX, centerY, directions[count], true
+            );
+            explosion.layer = -99;
+            scene.add(explosion);
+            count++;
+        }
+#if desktop
+        Sys.sleep(0.02);
+#end
     }
 
     public function setGraphic(newGraphic:Graphic) {
@@ -57,6 +88,10 @@ class MemoryEntity extends Entity {
         visible = false;
         isFlashing = true;
         stopFlasher.start();
+        health -= 1;
+        if(health <= 0) {
+            die();
+        }
     }
 
     public function updateAnchor() {

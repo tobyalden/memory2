@@ -160,7 +160,7 @@ class GameScene extends Scene {
             camera.y = Math.floor(player.y - HXP.height/2);
         }
         super.update();
-        if(curtain.graphic.alpha <= 0.95) {
+        if(curtain.graphic.alpha <= 0.95 && player.visible) {
             // This screwy code duplication is because of a weird issue
             // where setting the camera before super.update() causes
             // jitter, but setting it after screws up the fade in

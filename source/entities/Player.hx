@@ -42,7 +42,6 @@ class Player extends MemoryEntity {
     private var wasOnWall:Bool;
     private var lastWallWasRight:Bool;
 
-    private var isDying:Bool;
     private var canMove:Bool;
 
     private var sprite:Spritemap;
@@ -131,7 +130,7 @@ class Player extends MemoryEntity {
         }
     }
 
-    private function die() {
+    override private function die() {
         visible = false;
         collidable = false;
         canMove = false;
