@@ -30,6 +30,7 @@ class GameScene extends Scene {
         player = new Player(100, 100);
         add(player);
         add(new Follower(300, 100));
+        addKeyAndDoor();
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
@@ -67,6 +68,29 @@ class GameScene extends Scene {
                 Std.int(Std.parseInt(r.att.h) / Segment.TILE_SIZE)
             );
         }
+    }
+
+    private function addKeyAndDoor() {
+        var keyPoint = getRandomOpenGroundPoint();
+        var doorPoint = getRandomOpenGroundPoint();
+        var playerPoint = new Vector2(player.x, player.y);
+        for (i in 0...250) {
+            var newKeyPoint = getRandomOpenGroundPoint();
+            var newDoorPoint = getRandomOpenGroundPoint();
+            if(
+                newKeyPoint.distance(newDoorPoint) > keyPoint.distance(doorPoint)
+                && newKeyPoint.distance(playerPoint) > keyPoint.distance(playerPoint)
+                && newDoorPoint.distance(playerPoint) > doorPoint.distance(playerPoint)
+            ) {
+                keyPoint = newKeyPoint;
+                doorPoint = newDoorPoint;
+            }
+        }
+        var key = new DoorKey(keyPoint.x, keyPoint.y);
+        var door = new Door(doorPoint.x, doorPoint.y);
+        door.y += Segment.TILE_SIZE - door.height;
+        add(key);
+        add(door);
     }
 
     private function getRandomOpenPoint() {

@@ -79,7 +79,7 @@ class Segment extends MemoryEntity {
         var randomTileX = Random.randInt(walls.columns);
         var randomTileY = Random.randInt(walls.rows);
         for(checkX in -1...2) {
-            for(checkY in -1...1) {
+            for(checkY in -2...1) {
                 if(
                     walls.getTile(randomTileX + checkX, randomTileY + checkY)
                 ) {
