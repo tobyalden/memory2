@@ -20,9 +20,11 @@ class GameScene extends Scene {
     private var map:Grid;
     private var player:Player;
     private var curtain:Curtain;
+    private var allSegments:Array<Segment>;
 
 	override public function begin() {
         loadMap(1);
+        allSegments = new Array<Segment>();
         placeSegments();
         fillEmptySegments();
         player = new Player(100, 100);
@@ -65,6 +67,32 @@ class GameScene extends Scene {
                 Std.int(Std.parseInt(r.att.h) / Segment.TILE_SIZE)
             );
         }
+    }
+
+    private function getRandomOpenPoint() {
+        var segment = allSegments[Random.randInt(allSegments.length)];
+        var randomTile = segment.getRandomOpenTile();
+        while(randomTile == null) {
+            segment = allSegments[Random.randInt(allSegments.length)];
+            randomTile = segment.getRandomOpenTile();
+        }
+        return new Vector2(
+            segment.x + randomTile.tileX * Segment.TILE_SIZE,
+            segment.y + randomTile.tileY * Segment.TILE_SIZE
+        );
+    }
+
+    private function getRandomOpenGroundPoint() {
+        var segment = allSegments[Random.randInt(allSegments.length)];
+        var randomTile = segment.getRandomOpenGroundTile();
+        while(randomTile == null) {
+            segment = allSegments[Random.randInt(allSegments.length)];
+            randomTile = segment.getRandomOpenGroundTile();
+        }
+        return new Vector2(
+            segment.x + randomTile.tileX * Segment.TILE_SIZE,
+            segment.y + randomTile.tileY * Segment.TILE_SIZE
+        );
     }
 
     private function placeSegments() {
@@ -114,6 +142,7 @@ class GameScene extends Scene {
                             }
                             segment.updateGraphic();
                             add(segment);
+                            allSegments.push(segment);
                         }
                     }
                 }
@@ -130,6 +159,7 @@ class GameScene extends Scene {
                         tileY * Segment.MIN_SEGMENT_HEIGHT
                     );
                     add(segment);
+                    allSegments.push(segment);
                 }
             }
         }

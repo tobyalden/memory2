@@ -60,6 +60,41 @@ class Segment extends MemoryEntity {
         }
     }
 
+    public function getRandomOpenTile() {
+        var randomTileX = Random.randInt(walls.columns);
+        var randomTileY = Random.randInt(walls.rows);
+        for(checkX in -1...2) {
+            for(checkY in -1...2) {
+                if(
+                    walls.getTile(randomTileX + checkX, randomTileY + checkY)
+                ) {
+                    return null;
+                }
+            }
+        }
+        return {tileX: randomTileX, tileY: randomTileY};
+    }
+
+    public function getRandomOpenGroundTile() {
+        var randomTileX = Random.randInt(walls.columns);
+        var randomTileY = Random.randInt(walls.rows);
+        for(checkX in -1...2) {
+            for(checkY in -1...1) {
+                if(
+                    walls.getTile(randomTileX + checkX, randomTileY + checkY)
+                ) {
+                    return null;
+                }
+            }
+        }
+        for(checkX in -1...2) {
+            if(!walls.getTile(randomTileX + checkX, randomTileY + 1)) {
+                return null;
+            }
+        }
+        return {tileX: randomTileX, tileY: randomTileY};
+    }
+
     public function makeSolid1x1() {
         walls = new Grid(
             MIN_SEGMENT_WIDTH, MIN_SEGMENT_HEIGHT, TILE_SIZE, TILE_SIZE
