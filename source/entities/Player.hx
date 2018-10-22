@@ -305,7 +305,7 @@ class Player extends MemoryEntity {
                 }
                 arrow = new Arrow(centerX, centerY, direction, true);
             }
-            else if(Main.inputCheck("down")) {
+            else if(Main.inputCheck("down") && !isOnGround()) {
                 direction = new Vector2(0, 1);
                 if(Main.inputCheck("left")) {
                     direction.x = -1;

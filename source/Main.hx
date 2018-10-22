@@ -51,7 +51,7 @@ class Main extends Engine {
         if(inputName == "jump") {
             return gamepad.pressed(XboxGamepad.A_BUTTON);
         }
-        if(inputName == "flip") {
+        if(inputName == "act") {
             return gamepad.pressed(XboxGamepad.X_BUTTON);
         }
         return false;
@@ -64,7 +64,7 @@ class Main extends Engine {
         if(inputName == "jump") {
             return gamepad.released(XboxGamepad.A_BUTTON);
         }
-        if(inputName == "flip") {
+        if(inputName == "act") {
             return gamepad.released(XboxGamepad.X_BUTTON);
         }
         return false;
@@ -83,7 +83,7 @@ class Main extends Engine {
         if(inputName == "jump") {
             return gamepad.check(XboxGamepad.A_BUTTON);
         }
-        if(inputName == "flip") {
+        if(inputName == "act") {
             return gamepad.check(XboxGamepad.X_BUTTON);
         }
         if(inputName == "left") {
