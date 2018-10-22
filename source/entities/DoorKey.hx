@@ -10,12 +10,23 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 
 class DoorKey extends MemoryEntity {
+    public static inline var BOB_AMOUNT = 0.2;
+
     private var sprite:Image;
+    private var bob:NumTween;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         sprite = new Image("graphics/key.png");
         setGraphic(sprite);
         setHitbox(16, 16);
+        bob = new NumTween(TweenType.PingPong);
+        bob.tween(-BOB_AMOUNT, BOB_AMOUNT, 1, Ease.sineInOut);
+        addTween(bob, true);
+    }
+
+    public override function update() {
+        y += bob.value;
+        super.update();
     }
 } 

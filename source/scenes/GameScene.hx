@@ -29,7 +29,6 @@ class GameScene extends Scene {
         fillEmptySegments();
         player = new Player(100, 100);
         add(player);
-        add(new Follower(300, 100));
         addKeyAndDoor();
         curtain = new Curtain(0, 0);
         add(curtain);
@@ -74,7 +73,7 @@ class GameScene extends Scene {
         var keyPoint = getRandomOpenGroundPoint();
         var doorPoint = getRandomOpenGroundPoint();
         var playerPoint = new Vector2(player.x, player.y);
-        for (i in 0...250) {
+        for (i in 0...500) {
             var newKeyPoint = getRandomOpenGroundPoint();
             var newDoorPoint = getRandomOpenGroundPoint();
             if(
@@ -87,6 +86,7 @@ class GameScene extends Scene {
             }
         }
         var key = new DoorKey(keyPoint.x, keyPoint.y);
+        key.y -= Segment.TILE_SIZE;
         var door = new Door(doorPoint.x, doorPoint.y);
         door.y += Segment.TILE_SIZE - door.height;
         add(key);
