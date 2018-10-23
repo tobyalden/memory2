@@ -77,7 +77,13 @@ class MemoryEntity extends Entity {
                 arrow.collidable = true;
             }
         }
-        var numExplosions = 15;
+        explode();
+#if desktop
+        Sys.sleep(0.02);
+#end
+    }
+
+    private function explode(numExplosions:Int = 15, speed:Float = 0.4) {
         var directions = new Array<Vector2>();
         for(i in 0...numExplosions) {
             var angle = (2/numExplosions) * i;
@@ -88,7 +94,7 @@ class MemoryEntity extends Entity {
         }
         var count = 0;
         for(direction in directions) {
-            direction.scale(0.4 * Math.random());
+            direction.scale(speed * Math.random());
             direction.normalize(
                 Math.max(0.1 + 0.2 * Math.random(), direction.length)
             );
@@ -99,9 +105,6 @@ class MemoryEntity extends Entity {
             scene.add(explosion);
             count++;
         }
-#if desktop
-        Sys.sleep(0.02);
-#end
     }
 
     public function setGraphic(newGraphic:Graphic) {

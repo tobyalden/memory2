@@ -10,13 +10,24 @@ import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
 
 class Door extends MemoryEntity {
-    private var sprite:Image;
+    public var isOpen(default, null):Bool;
+    private var sprite:Spritemap;
 
     public function new(x:Float, y:Float) {
         super(x, y);
-        sprite = new Image("graphics/door.png");
+        type = "door";
+        sprite = new Spritemap("graphics/door.png", 24, 36);
+        sprite.add("closed", [0]);
+        sprite.add("open", [1]);
+        sprite.play("closed");
         setGraphic(sprite);
-        setHitbox(24, 24);
+        setHitbox(24, 36);
+        isOpen = false;
+    }
+
+    public function open() {
+        sprite.play("open");
+        isOpen = true;
     }
 } 
 

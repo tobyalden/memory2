@@ -27,6 +27,15 @@ class DoorKey extends MemoryEntity {
 
     public override function update() {
         y += bob.value;
+        if(collide("player", x, y) != null) {
+            var doors = new Array<Entity>();
+            scene.getType("door", doors);
+            for(door in doors) {
+                cast(door, Door).open();
+            }
+            scene.remove(this);
+            explode(5, 0.2);
+        }
         super.update();
     }
 } 
