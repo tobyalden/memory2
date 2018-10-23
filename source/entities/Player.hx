@@ -37,6 +37,8 @@ class Player extends MemoryEntity {
     public static inline var WALL_JUMP_STRETCH_X = 1.4;
     public static inline var WALL_JUMP_STRETCH_Y = 1.4;
 
+    public static inline var MAX_ARROWS = 5;
+
     private var isTurning:Bool;
     private var wasOnGround:Bool;
     private var wasOnWall:Bool;
@@ -46,6 +48,8 @@ class Player extends MemoryEntity {
 
     private var sprite:Spritemap;
     private var velocity:Vector2;
+    private var quiver:Int;
+    private var quiverDisplay:Graphiclist;
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
@@ -60,7 +64,7 @@ class Player extends MemoryEntity {
         sprite.add("skid", [6]);
         sprite.play("idle");
         sprite.pixelSnapping = true;
-        setGraphic(sprite);
+        addGraphic(sprite);
 
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -2, 0);
@@ -69,6 +73,24 @@ class Player extends MemoryEntity {
         wasOnWall = false;
         lastWallWasRight = false;
         canMove = true;
+        quiver = MAX_ARROWS;
+        quiverDisplay = new Graphiclist();
+        quiverDisplay.y = -20;
+        addGraphic(quiverDisplay);
+        updateQuiverDisplay();
+    }
+
+    private function updateQuiverDisplay() {
+        quiverDisplay.removeAll();
+        for(i in 0...quiver) {
+            var arrowDisplay = new Image("graphics/arrowdisplay.png");
+            arrowDisplay.smooth = false;
+            arrowDisplay.pixelSnapping = true;
+            arrowDisplay.x = i * arrowDisplay.width;
+            quiverDisplay.add(arrowDisplay);
+        }
+        var arrowDisplay = new Image("graphics/arrowdisplay.png");
+        quiverDisplay.x = width/2 - (quiver * arrowDisplay.width / 2) + 2.5;
     }
 
     private function scaleX(newScaleX:Float, toLeft:Bool) {
@@ -306,6 +328,9 @@ class Player extends MemoryEntity {
 
     private function shooting() {
         if(Main.inputPressed("act")) {
+            if(quiver <= 0) {
+                return;
+            }
             var direction:Vector2;
             var arrow:Arrow;
             if(Main.inputCheck("up")) {
@@ -352,6 +377,8 @@ class Player extends MemoryEntity {
             velocity.subtract(kickback);
             scene.add(arrow);
             MemoryEntity.allSfx["arrowshoot"].play();
+            quiver--;
+            updateQuiverDisplay();
         }
     }
 
