@@ -27,7 +27,9 @@ class GameScene extends Scene {
         allSegments = new Array<Segment>();
         placeSegments();
         fillEmptySegments();
-        player = new Player(100, 100);
+        var playerStart = getRandomOpenGroundPoint();
+        player = new Player(playerStart.x, playerStart.y);
+        player.y += Segment.TILE_SIZE - player.height;
         add(player);
         addKeyAndDoor();
         curtain = new Curtain(0, 0);

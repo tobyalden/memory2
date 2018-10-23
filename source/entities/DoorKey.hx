@@ -34,7 +34,7 @@ class DoorKey extends MemoryEntity {
                 cast(door, Door).open();
             }
             scene.remove(this);
-            explode(5, 0.2);
+            explode(2, 0.1);
         }
         super.update();
     }
