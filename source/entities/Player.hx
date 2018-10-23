@@ -126,8 +126,11 @@ class Player extends MemoryEntity {
     }
 
     private function collisions() {
-        if(collide("door", x, y) != null) {
-            enterDoor();
+        var door = collide("door", x, y);
+        if(door != null) {
+            if(cast(door, Door).isOpen) {
+                enterDoor();
+            }
         }
         if(collide("enemy", x, y) != null) {
             die();
