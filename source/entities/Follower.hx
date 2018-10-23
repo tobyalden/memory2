@@ -9,9 +9,11 @@ class Follower extends MemoryEntity {
     public static inline var MAX_SPEED = 3;
     public static inline var BOUNCE_FACTOR = 0.85;
     public static inline var HIT_KNOCKBACK = 5;
+    public static inline var ACTIVATE_DISTANCE = 150;
 
     var sprite:Spritemap;
     var velocity:Vector2;
+    var isActive:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -21,10 +23,14 @@ class Follower extends MemoryEntity {
         setGraphic(sprite);
         velocity = new Vector2(0, 0);
         setHitbox(24, 24);
+        isActive = false;
     }
 
     override public function update() {
         var player = scene.getInstance("player");
+        if(distanceFrom(player, true) < ACTIVATE_DISTANCE) {
+            isActive = true;
+        }
         var towardsPlayer = new Vector2(
             player.centerX - centerX, player.centerY - centerY
         );
@@ -37,9 +43,13 @@ class Follower extends MemoryEntity {
         if(velocity.length > MAX_SPEED) {
             velocity.normalize(MAX_SPEED);
         }
-        moveBy(
-            velocity.x * Main.getDelta(), velocity.y * Main.getDelta(), "walls"
-        );
+        if(isActive) {
+            moveBy(
+                velocity.x * Main.getDelta(), velocity.y * Main.getDelta(),
+                ["walls", "enemy"]
+            );
+        }
+        super.update();
     }
 
     public override function moveCollideX(e:Entity) {
@@ -53,6 +63,7 @@ class Follower extends MemoryEntity {
     }
 
     override public function takeHit(arrow:Arrow) {
+        isActive = true;
         var knockback = arrow.velocity.clone();
         knockback.normalize(HIT_KNOCKBACK);
         velocity.add(knockback);
