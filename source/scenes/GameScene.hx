@@ -15,6 +15,8 @@ import scenes.*;
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var MIN_ENEMY_DISTANCE = 350;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -27,11 +29,11 @@ class GameScene extends Scene {
         allSegments = new Array<Segment>();
         placeSegments();
         fillEmptySegments();
-        var playerStart = getRandomOpenGroundPoint();
-        player = new Player(playerStart.x, playerStart.y);
-        player.y += Segment.TILE_SIZE - player.height;
-        add(player);
+
+        addPlayer();
         addKeyAndDoor();
+        addEnemies();
+
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
@@ -71,6 +73,13 @@ class GameScene extends Scene {
         }
     }
 
+    private function addPlayer() {
+        var playerStart = getRandomOpenGroundPoint();
+        player = new Player(playerStart.x, playerStart.y);
+        player.y += Segment.TILE_SIZE - player.height;
+        add(player);
+    }
+
     private function addKeyAndDoor() {
         var keyPoint = getRandomOpenGroundPoint();
         var doorPoint = getRandomOpenGroundPoint();
@@ -93,6 +102,22 @@ class GameScene extends Scene {
         door.y += Segment.TILE_SIZE - door.height;
         add(key);
         add(door);
+    }
+
+    private function addEnemies() {
+        var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
+        var playerPoint = new Vector2(player.x, player.y);
+        var enemyPoints = new Array<Vector2>();
+        for(i in 0...numberOfEnemies) {
+            var enemyPoint = getRandomOpenPoint();
+            while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+                enemyPoint = getRandomOpenPoint();
+            }
+            enemyPoints.push(enemyPoint);
+        }
+        for(enemyPoint in enemyPoints) {
+            add(new Follower(enemyPoint.x, enemyPoint.y));
+        }
     }
 
     private function getRandomOpenPoint() {
