@@ -126,9 +126,18 @@ class Player extends MemoryEntity {
     }
 
     private function collisions() {
+        if(collide("door", x, y) != null) {
+            enterDoor();
+        }
         if(collide("enemy", x, y) != null) {
             die();
         }
+    }
+
+    public function enterDoor() {
+        collidable = false;
+        canMove = false;
+        cast(scene, GameScene).descend();
     }
 
     override private function die() {

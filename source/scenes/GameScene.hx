@@ -49,6 +49,15 @@ class GameScene extends Scene {
         addTween(resetTimer, true);
     }
 
+    public function descend() {
+        curtain.fadeOut();
+        var resetTimer = new Alarm(1.5, TweenType.OneShot);
+        resetTimer.onComplete.bind(function() {
+            HXP.scene = new GameScene();
+        });
+        addTween(resetTimer, true);
+    }
+
     private function loadMap(mapNumber:Int) {
         var mapPath = 'maps/${mapNumber}.oel';
         var xml = Xml.parse(Assets.getText(mapPath));
@@ -121,6 +130,7 @@ class GameScene extends Scene {
     }
 
     private function getRandomOpenPoint() {
+        // TODO: If it becomes a problem, weight larger rooms
         var segment = allSegments[Random.randInt(allSegments.length)];
         var randomTile = segment.getRandomOpenTile();
         while(randomTile == null) {
