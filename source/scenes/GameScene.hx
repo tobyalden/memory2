@@ -129,12 +129,26 @@ class GameScene extends Scene {
         }
     }
 
+    private function getWeightedSegments() {
+        var weightedSegments = new Array<Segment>();
+        for(segment in allSegments) {
+            var weightX = Std.int(segment.width / Segment.MIN_SEGMENT_WIDTH);
+            var weightY = Std.int(segment.height / Segment.MIN_SEGMENT_HEIGHT);
+            for(i in 0...weightX) {
+                for(j in 0...weightY) {
+                    weightedSegments.push(segment);
+                }
+            }
+        }
+        return weightedSegments;
+    }
+
     private function getRandomOpenPoint() {
-        // TODO: If it becomes a problem, weight larger rooms
-        var segment = allSegments[Random.randInt(allSegments.length)];
+        var weightedSegments = getWeightedSegments();
+        var segment = weightedSegments[Random.randInt(weightedSegments.length)];
         var randomTile = segment.getRandomOpenTile();
         while(randomTile == null) {
-            segment = allSegments[Random.randInt(allSegments.length)];
+            segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenTile();
         }
         return new Vector2(
@@ -144,10 +158,11 @@ class GameScene extends Scene {
     }
 
     private function getRandomOpenGroundPoint() {
-        var segment = allSegments[Random.randInt(allSegments.length)];
+        var weightedSegments = getWeightedSegments();
+        var segment = weightedSegments[Random.randInt(weightedSegments.length)];
         var randomTile = segment.getRandomOpenGroundTile();
         while(randomTile == null) {
-            segment = allSegments[Random.randInt(allSegments.length)];
+            segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenGroundTile();
         }
         return new Vector2(
