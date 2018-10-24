@@ -13,14 +13,19 @@ class Arrow extends MemoryEntity {
     public static inline var INITIAL_VELOCITY = 15;
     public static inline var INITIAL_LIFT = 0.1;
     public static inline var GRAVITY = 0.2;
+    public static inline var DISAPPEAR_DELAY = 5;
 
     public var velocity(default, null):Vector2;
+    public var landed(default, null):Bool;
     private var sprite:Image;
-    private var landed:Bool;
     private var isVertical:Bool;
+    private var disappearTimer:Alarm;
 
-    public function setLanded(newLanded:Bool) {
+    public function setLanded(newLanded:Bool, disappear:Bool = false) {
         landed = newLanded;
+        if(landed && disappear) {
+            disappearTimer.start();
+        }
     }
 
     public function setVelocity(newVelocity:Vector2) {
@@ -46,6 +51,11 @@ class Arrow extends MemoryEntity {
             setHitbox(16, 3, 8, 1);
         }
         landed = false;
+        disappearTimer = new Alarm(DISAPPEAR_DELAY, TweenType.OneShot);
+        disappearTimer.onComplete.bind(function() {
+            scene.remove(this);
+        });
+        addTween(disappearTimer);
     }
 
     public override function update() {
@@ -62,12 +72,17 @@ class Arrow extends MemoryEntity {
                 ["walls", "enemy"], true
             );
         }
+        else {
+            if(disappearTimer.percent > 0.5) {
+                isFlashing = true;
+            }
+        }
         super.update();
     }
 
     public override function moveCollideX(e:Entity) {
-        landed = true;
         if(e.type == "enemy") {
+            setLanded(true, false);
             setAnchor(e);
             var towardsEnemy = new Vector2(
                 e.centerX - centerX, e.centerY - centerY
@@ -78,12 +93,15 @@ class Arrow extends MemoryEntity {
             collidable = false;
             cast(e, MemoryEntity).takeHit(this);
         }
+        else {
+            setLanded(true, true);
+        }
         return true;
     }
 
     public override function moveCollideY(e:Entity) {
-        landed = true;
         if(e.type == "enemy") {
+            setLanded(true, false);
             setAnchor(e);
             var towardsEnemy = new Vector2(
                 e.centerX - centerX, e.centerY - centerY
@@ -93,6 +111,9 @@ class Arrow extends MemoryEntity {
             y += towardsEnemy.y;
             collidable = false;
             cast(e, MemoryEntity).takeHit(this);
+        }
+        else {
+            setLanded(true, true);
         }
         return true;
     }

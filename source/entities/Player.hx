@@ -90,7 +90,7 @@ class Player extends MemoryEntity {
             quiverDisplay.add(arrowDisplay);
         }
         var arrowDisplay = new Image("graphics/arrowdisplay.png");
-        quiverDisplay.x = width/2 - (quiver * arrowDisplay.width / 2) + 2.5;
+        quiverDisplay.x = width/2 - (quiver * arrowDisplay.width / 2) + 1.5;
     }
 
     private function scaleX(newScaleX:Float, toLeft:Bool) {
@@ -156,6 +156,12 @@ class Player extends MemoryEntity {
         }
         if(collide("enemy", x, y) != null) {
             die();
+        }
+        var arrow = collide("arrow", x, y);
+        if(arrow != null && quiver < MAX_ARROWS && cast(arrow, Arrow).landed) {
+            scene.remove(arrow);
+            quiver++;
+            updateQuiverDisplay();
         }
     }
 
