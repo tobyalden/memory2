@@ -34,6 +34,7 @@ class Arrow extends MemoryEntity {
 
     public function new(x:Float, y:Float, direction:Vector2, isVertical:Bool) {
 	    super(x, y);
+        MemoryEntity.loadSfx(["arrowhit1", "arrowhit2", "arrowhit3"]);
         this.isVertical = isVertical;
         layer = 1;
         type = "arrow";
@@ -96,6 +97,8 @@ class Arrow extends MemoryEntity {
         else {
             setLanded(true, true);
         }
+        var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
+        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume);
         return true;
     }
 
@@ -115,6 +118,8 @@ class Arrow extends MemoryEntity {
         else {
             setLanded(true, true);
         }
+        var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
+        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume);
         return true;
     }
 }

@@ -48,13 +48,16 @@ class Player extends MemoryEntity {
     private var canMove:Bool;
 
     private var sprite:Spritemap;
+    private var armsAndBow:Spritemap;
     private var velocity:Vector2;
     private var quiver:Int;
     private var quiverDisplay:Graphiclist;
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
-        MemoryEntity.loadSfx(["arrowshoot"]);
+        MemoryEntity.loadSfx([
+            "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw"
+        ]);
         type = "player";
         name = "player";
         sprite = new Spritemap("graphics/player.png", 24, 32);
@@ -67,9 +70,36 @@ class Player extends MemoryEntity {
         sprite.add("leftwall", [13]);
         sprite.add("skid", [14]);
         sprite.play("idle");
-        sprite.pixelSnapping = true;
         sprite.y = -8;
         addGraphic(sprite);
+
+        armsAndBow = new Spritemap("graphics/armsandbow.png", 24, 32);
+        armsAndBow.y = -8;
+        armsAndBow.add("idle", [0]);
+        armsAndBow.add("idle_forward", [1]);
+        armsAndBow.add("idle_up", [2]);
+        armsAndBow.add("run", [3, 4, 5, 6, 7, 8], 10);
+        armsAndBow.add("walk", [3, 4, 5, 6, 7, 8], 5);
+        armsAndBow.add("run_forward", [9]);
+        armsAndBow.add("run_forwardup", [10]);
+        armsAndBow.add("walk_forward", [9]);
+        armsAndBow.add("walk_forwardup", [10]);
+        armsAndBow.add("run_up", [11]);
+        armsAndBow.add("walk_up", [11]);
+        armsAndBow.add("jump", [12]);
+        armsAndBow.add("jump_forward", [13]);
+        armsAndBow.add("jump_forwardup", [14]);
+        armsAndBow.add("jump_forwarddown", [15]);
+        armsAndBow.add("jump_up", [16]);
+        armsAndBow.add("jump_down", [17]);
+        armsAndBow.add("fall", [12]);
+        armsAndBow.add("fall_forward", [13]);
+        armsAndBow.add("fall_forwardup", [14]);
+        armsAndBow.add("fall_forwarddown", [15]);
+        armsAndBow.add("fall_up", [16]);
+        armsAndBow.add("fall_down", [17]);
+        armsAndBow.add("empty", [18]);
+        addGraphic(armsAndBow);
 
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -6, 0);
@@ -347,10 +377,13 @@ class Player extends MemoryEntity {
     }
 
     private function shooting() {
-        if(Main.inputReleased("act")) {
-            if(quiver <= 0 || (!isOnGround() && isOnWall())) {
-                return;
-            }
+        if(quiver <= 0 || (!isOnGround() && isOnWall())) {
+            return;
+        }
+        if(Main.inputPressed("act")) {
+            MemoryEntity.allSfx["arrowdraw"].play();
+        }
+        else if(Main.inputReleased("act")) {
             var direction:Vector2;
             var arrow:Arrow;
             if(Main.inputCheck("up")) {
@@ -396,7 +429,8 @@ class Player extends MemoryEntity {
             }
             velocity.subtract(kickback);
             scene.add(arrow);
-            MemoryEntity.allSfx["arrowshoot"].play();
+            MemoryEntity.allSfx['arrowshoot${HXP.choose(1, 2, 3)}'].play();
+            MemoryEntity.allSfx["arrowdraw"].stop();
             quiver--;
             updateQuiverDisplay();
         }
@@ -445,49 +479,93 @@ class Player extends MemoryEntity {
             scaleX(WALL_SQUASH, lastWallWasRight);
         }
 
+        var spriteAnimationName = "idle";
+
         if(!isOnGround()) {
             if(isOnWall()) {
                 if(isOnLeftWall()) {
-                    sprite.play("leftwall");
+                    spriteAnimationName = "leftwall";
                 }
                 else {
-                    sprite.play("rightwall");
+                    spriteAnimationName = "rightwall";
                 }
             }
             else {
                 if(velocity.y < 0) {
-                    sprite.play("jump");
+                    spriteAnimationName = "jump";
                 }
                 else {
-                    sprite.play("fall");
+                    spriteAnimationName = "fall";
                 }
             }
         }
         else if(velocity.x != 0) {
             if(isTurning) {
-                sprite.play("skid");
+                spriteAnimationName = "skid";
             }
             else {
                 if(Main.inputCheck("act")) {
-                    sprite.play("walk");
+                    spriteAnimationName = "walk";
                 }
                 else {
-                    sprite.play("run");
+                    spriteAnimationName = "run";
                 }
             }
         }
         else {
-            sprite.play("idle");
+            spriteAnimationName = "idle";
         }
+
+        sprite.play(spriteAnimationName);
 
         if(!isOnGround() && isOnWall()) {
             sprite.flipX = false;
         }
         else if(Main.inputCheck("left") && !(isOnGround() && isTurning)) {
             sprite.flipX = true;
+            armsAndBow.flipX = true;
         }
         else if(Main.inputCheck("right") && !(isOnGround() && isTurning)) {
             sprite.flipX = false;
+            armsAndBow.flipX = false;
+        }
+
+        // Animate arms and bow
+        if(
+            spriteAnimationName == "skid"
+            || spriteAnimationName == "rightwall"
+            || spriteAnimationName == "leftwall"
+        ) {
+            armsAndBow.play("empty");
+        }
+        else if(Main.inputCheck("act")) {
+            var suffix:String;
+            if(
+                Main.inputCheck("up")
+                && !(Main.inputCheck("right") || Main.inputCheck("left"))
+            ) {
+                suffix = "_up";
+            }
+            else if(
+                Main.inputCheck("down")
+                && !isOnGround()
+                && !(Main.inputCheck("right") || Main.inputCheck("left"))
+            ) {
+                suffix = "_down";
+            }
+            else if(Main.inputCheck("up")) {
+                suffix = "_forwardup";
+            }
+            else if(Main.inputCheck("down") && !isOnGround()) {
+                suffix = "_forwarddown";
+            }
+            else {
+                suffix = "_forward";
+            }
+            armsAndBow.play(spriteAnimationName + suffix);
+        }
+        else {
+            armsAndBow.play("empty");
         }
     }
 }
