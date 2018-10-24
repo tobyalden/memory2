@@ -17,6 +17,7 @@ class Player extends MemoryEntity {
     public static inline var AIR_DECCEL = 0.1;
     public static inline var MAX_RUN_VELOCITY = 3.5;
     public static inline var MAX_AIR_VELOCITY = 4.3;
+    public static inline var MAX_AIM_VELOCITY = 1.75;
     public static inline var JUMP_POWER = 5;
     public static inline var WALL_JUMP_POWER_X = 3;
     public static inline var WALL_JUMP_POWER_Y = 5;
@@ -59,6 +60,7 @@ class Player extends MemoryEntity {
         sprite = new Spritemap("graphics/player.png", 16, 24);
         sprite.add("idle", [0]);
         sprite.add("run", [1, 2, 3, 2], 10);
+        sprite.add("walk", [1, 2, 3, 2], 5);
         sprite.add("jump", [4]);
         sprite.add("wall", [5]);
         sprite.add("skid", [6]);
@@ -236,7 +238,6 @@ class Player extends MemoryEntity {
             velocity.y = 0;
             scaleY(1);
         }
-
         accel *= Main.getDelta();
         deccel *= Main.getDelta();
 
@@ -300,7 +301,12 @@ class Player extends MemoryEntity {
         // Cap the player's velocity
         var maxVelocity:Float = MAX_AIR_VELOCITY;
         if(isOnGround()) {
-            maxVelocity = MAX_RUN_VELOCITY;
+            if(Main.inputCheck("act")) {
+                maxVelocity = MAX_AIM_VELOCITY;
+            }
+            else {
+                maxVelocity = MAX_RUN_VELOCITY;
+            }
         }
         velocity.x = Math.min(velocity.x, maxVelocity);
         velocity.x = Math.max(velocity.x, -maxVelocity);
@@ -333,8 +339,8 @@ class Player extends MemoryEntity {
     }
 
     private function shooting() {
-        if(Main.inputPressed("act")) {
-            if(quiver <= 0) {
+        if(Main.inputReleased("act")) {
+            if(quiver <= 0 || (!isOnGround() && isOnWall())) {
                 return;
             }
             var direction:Vector2;
@@ -444,7 +450,12 @@ class Player extends MemoryEntity {
                 sprite.play("skid");
             }
             else {
-                sprite.play("run");
+                if(Main.inputCheck("act")) {
+                    sprite.play("walk");
+                }
+                else {
+                    sprite.play("run");
+                }
             }
         }
         else {
