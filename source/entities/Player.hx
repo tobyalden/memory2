@@ -57,19 +57,22 @@ class Player extends MemoryEntity {
         MemoryEntity.loadSfx(["arrowshoot"]);
         type = "player";
         name = "player";
-        sprite = new Spritemap("graphics/player.png", 16, 24);
-        sprite.add("idle", [0]);
-        sprite.add("run", [1, 2, 3, 2], 10);
-        sprite.add("walk", [1, 2, 3, 2], 5);
-        sprite.add("jump", [4]);
-        sprite.add("wall", [5]);
-        sprite.add("skid", [6]);
+        sprite = new Spritemap("graphics/player.png", 24, 32);
+        sprite.add("idle", [0, 1, 2], 4);
+        sprite.add("run", [4, 5, 6, 7, 8, 9], 10);
+        sprite.add("walk", [4, 5, 6, 7, 8, 9], 5);
+        sprite.add("jump", [10]);
+        sprite.add("fall", [11]);
+        sprite.add("rightwall", [12]);
+        sprite.add("leftwall", [13]);
+        sprite.add("skid", [14]);
         sprite.play("idle");
         sprite.pixelSnapping = true;
+        sprite.y = -8;
         addGraphic(sprite);
 
         velocity = new Vector2(0, 0);
-        setHitbox(12, 24, -2, 0);
+        setHitbox(12, 24, -6, 0);
         isTurning = false;
         wasOnGround = false;
         wasOnWall = false;
@@ -92,7 +95,9 @@ class Player extends MemoryEntity {
             quiverDisplay.add(arrowDisplay);
         }
         var arrowDisplay = new Image("graphics/arrowdisplay.png");
-        quiverDisplay.x = width/2 - (quiver * arrowDisplay.width / 2) + 1.5;
+        quiverDisplay.x = (
+            width/2 - (quiver * arrowDisplay.width / 2) - originX/2 + 1.5
+        );
     }
 
     private function scaleX(newScaleX:Float, toLeft:Bool) {
@@ -276,6 +281,9 @@ class Player extends MemoryEntity {
             else {
                 velocity.y += wallGravity;
             }
+            if(Main.inputReleased("jump")) {
+                velocity.y = Math.max(-JUMP_CANCEL_POWER, velocity.y);
+            }
             if(Main.inputPressed("jump")) {
                 velocity.y = -WALL_JUMP_POWER_Y;
                 scaleY(WALL_JUMP_STRETCH_Y);
@@ -439,10 +447,20 @@ class Player extends MemoryEntity {
 
         if(!isOnGround()) {
             if(isOnWall()) {
-                sprite.play("wall");
+                if(isOnLeftWall()) {
+                    sprite.play("leftwall");
+                }
+                else {
+                    sprite.play("rightwall");
+                }
             }
             else {
-                sprite.play("jump");
+                if(velocity.y < 0) {
+                    sprite.play("jump");
+                }
+                else {
+                    sprite.play("fall");
+                }
             }
         }
         else if(velocity.x != 0) {
@@ -462,7 +480,10 @@ class Player extends MemoryEntity {
             sprite.play("idle");
         }
 
-        if(Main.inputCheck("left") && !(isOnGround() && isTurning)) {
+        if(!isOnGround() && isOnWall()) {
+            sprite.flipX = false;
+        }
+        else if(Main.inputCheck("left") && !(isOnGround() && isTurning)) {
             sprite.flipX = true;
         }
         else if(Main.inputCheck("right") && !(isOnGround() && isTurning)) {
