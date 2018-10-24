@@ -56,7 +56,8 @@ class Player extends MemoryEntity {
     public function new(x:Float, y:Float) {
 	    super(x, y);
         MemoryEntity.loadSfx([
-            "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw"
+            "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw",
+            "outofarrows", "playerdeath"
         ]);
         type = "player";
         name = "player";
@@ -243,6 +244,7 @@ class Player extends MemoryEntity {
         Sys.sleep(0.02);
 #end
         scene.camera.shake(2, 8);
+        MemoryEntity.allSfx["playerdeath"].play();
     }
 
     private function movement() {
@@ -377,13 +379,20 @@ class Player extends MemoryEntity {
     }
 
     private function shooting() {
-        if(quiver <= 0 || (!isOnGround() && isOnWall())) {
+        if(!isOnGround() && isOnWall()) {
             return;
         }
         if(Main.inputPressed("act")) {
+            if(quiver <= 0) {
+                MemoryEntity.allSfx["outofarrows"].play();
+                return;
+            }
             MemoryEntity.allSfx["arrowdraw"].play();
         }
         else if(Main.inputReleased("act")) {
+            if(quiver <= 0) {
+                return;
+            }
             var direction:Vector2;
             var arrow:Arrow;
             if(Main.inputCheck("up")) {
@@ -538,7 +547,7 @@ class Player extends MemoryEntity {
         ) {
             armsAndBow.play("empty");
         }
-        else if(Main.inputCheck("act")) {
+        else if(Main.inputCheck("act") && quiver > 0) {
             var suffix:String;
             if(
                 Main.inputCheck("up")
@@ -565,7 +574,7 @@ class Player extends MemoryEntity {
             armsAndBow.play(spriteAnimationName + suffix);
         }
         else {
-            armsAndBow.play("empty");
+            armsAndBow.play(spriteAnimationName);
         }
     }
 }
