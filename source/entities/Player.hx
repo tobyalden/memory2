@@ -62,7 +62,7 @@ class Player extends MemoryEntity {
         type = "player";
         name = "player";
         sprite = new Spritemap("graphics/player.png", 24, 32);
-        sprite.add("idle", [0, 1, 2], 4);
+        sprite.add("idle", [2, 1, 0, 1], 2);
         sprite.add("run", [4, 5, 6, 7, 8, 9], 10);
         sprite.add("walk", [4, 5, 6, 7, 8, 9], 5);
         sprite.add("jump", [10]);
