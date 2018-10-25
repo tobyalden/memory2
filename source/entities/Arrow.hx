@@ -98,7 +98,7 @@ class Arrow extends MemoryEntity {
             setLanded(true, true);
         }
         var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
-        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume);
+        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume/3);
         return true;
     }
 
@@ -119,7 +119,7 @@ class Arrow extends MemoryEntity {
             setLanded(true, true);
         }
         var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
-        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume);
+        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume/3);
         return true;
     }
 }

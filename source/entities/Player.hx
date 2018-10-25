@@ -57,7 +57,7 @@ class Player extends MemoryEntity {
 	    super(x, y);
         MemoryEntity.loadSfx([
             "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw",
-            "outofarrows", "playerdeath"
+            "outofarrows", "playerdeath", "runloop", "walkloop"
         ]);
         type = "player";
         name = "player";
@@ -438,7 +438,7 @@ class Player extends MemoryEntity {
             }
             velocity.subtract(kickback);
             scene.add(arrow);
-            MemoryEntity.allSfx['arrowshoot${HXP.choose(1, 2, 3)}'].play();
+            MemoryEntity.allSfx['arrowshoot${HXP.choose(1, 2, 3)}'].play(0.5);
             MemoryEntity.allSfx["arrowdraw"].stop();
             quiver--;
             updateQuiverDisplay();
@@ -523,6 +523,24 @@ class Player extends MemoryEntity {
         }
         else {
             spriteAnimationName = "idle";
+        }
+
+        if(spriteAnimationName == "run") {
+            if(!MemoryEntity.allSfx["runloop"].playing) {
+                MemoryEntity.allSfx["runloop"].loop();
+            }
+        }
+        else {
+            MemoryEntity.allSfx["runloop"].stop();
+        }
+
+        if(spriteAnimationName == "walk") {
+            if(!MemoryEntity.allSfx["walkloop"].playing) {
+                MemoryEntity.allSfx["walkloop"].loop();
+            }
+        }
+        else {
+            MemoryEntity.allSfx["walkloop"].stop();
         }
 
         sprite.play(spriteAnimationName);

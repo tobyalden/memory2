@@ -23,6 +23,9 @@ class MemoryEntity extends Entity {
 
     static public function loadSfx(sfxNames:Array<String>) {
         for(sfxName in sfxNames) {
+            if(allSfx.exists(sfxName)) {
+                continue;
+            }
             allSfx[sfxName] = new Sfx('audio/${sfxName}.wav');
         }
     }
@@ -41,6 +44,10 @@ class MemoryEntity extends Entity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        MemoryEntity.loadSfx([
+            "robothit1", "robothit2", "robothit3", "robotdeath1",
+            "robotdeath2", "robotdeath3"
+        ]);
         anchor = null;
         anchorPosition = new Vector2();
 
@@ -78,6 +85,7 @@ class MemoryEntity extends Entity {
             }
         }
         explode();
+        MemoryEntity.allSfx['robotdeath${HXP.choose(1, 2, 3)}'].play();
 #if desktop
         Sys.sleep(0.02);
 #end
@@ -126,6 +134,7 @@ class MemoryEntity extends Entity {
     }
 
     public function takeHit(arrow:Arrow) {
+        MemoryEntity.allSfx['robothit${HXP.choose(1, 2, 3)}'].play();
         visible = false;
         isFlashing = true;
         stopFlasher.start();
