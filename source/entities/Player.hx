@@ -57,7 +57,8 @@ class Player extends MemoryEntity {
 	    super(x, y);
         MemoryEntity.loadSfx([
             "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw",
-            "outofarrows", "playerdeath", "runloop", "walkloop"
+            "outofarrows", "playerdeath", "runloop", "walkloop", "slide",
+            "jump", "land", "arrowpickup", "skid"
         ]);
         type = "player";
         name = "player";
@@ -200,6 +201,7 @@ class Player extends MemoryEntity {
             scene.remove(arrow);
             quiver++;
             updateQuiverDisplay();
+            MemoryEntity.allSfx["arrowpickup"].play();
         }
     }
 
@@ -244,13 +246,13 @@ class Player extends MemoryEntity {
         Sys.sleep(0.02);
 #end
         scene.camera.shake(2, 8);
-        MemoryEntity.allSfx["playerdeath"].play();
+        MemoryEntity.allSfx["playerdeath"].play(0.7);
     }
 
     private function movement() {
         isTurning = (
-            Main.inputCheck("left") && velocity.x >= 0 ||
-            Main.inputCheck("right") && velocity.x <= 0
+            Main.inputCheck("left") && velocity.x > 0 ||
+            Main.inputCheck("right") && velocity.x < 0
         );
 
         // If the player is changing directions or just starting to move,
@@ -302,6 +304,7 @@ class Player extends MemoryEntity {
             velocity.y = 0;
             if(Main.inputPressed("jump")) {
                 velocity.y = -JUMP_POWER;
+                MemoryEntity.allSfx["jump"].play();
                 scaleY(JUMP_STRETCH);
                 makeDustAtFeet();
             }
@@ -319,6 +322,7 @@ class Player extends MemoryEntity {
             if(Main.inputPressed("jump")) {
                 velocity.y = -WALL_JUMP_POWER_Y;
                 scaleY(WALL_JUMP_STRETCH_Y);
+                MemoryEntity.allSfx["jump"].play();
                 if(isOnLeftWall()) {
                     velocity.x = WALL_JUMP_POWER_X;
                     scaleX(WALL_JUMP_STRETCH_X, false);
@@ -475,6 +479,7 @@ class Player extends MemoryEntity {
         if(!wasOnGround && isOnGround()) {
             scaleY(LAND_SQUASH);
             makeDustAtFeet();
+            MemoryEntity.allSfx["land"].play();
         }
         if(!wasOnWall && isOnWall()) {
             if(isOnRightWall()) {
@@ -486,6 +491,7 @@ class Player extends MemoryEntity {
                 velocity.x = Math.max(velocity.x, -WALL_STICK_VELOCITY);
             }
             scaleX(WALL_SQUASH, lastWallWasRight);
+            MemoryEntity.allSfx["land"].play();
         }
 
         var spriteAnimationName = "idle";
@@ -511,6 +517,9 @@ class Player extends MemoryEntity {
         else if(velocity.x != 0) {
             if(isTurning) {
                 spriteAnimationName = "skid";
+                if(!MemoryEntity.allSfx["skid"].playing) {
+                    MemoryEntity.allSfx["skid"].play();
+                }
             }
             else {
                 if(Main.inputCheck("act")) {
@@ -542,6 +551,21 @@ class Player extends MemoryEntity {
         else {
             MemoryEntity.allSfx["walkloop"].stop();
         }
+
+        if(
+            spriteAnimationName == "leftwall"
+            || spriteAnimationName == "rightwall"
+        ) {
+            if(!MemoryEntity.allSfx["slide"].playing) {
+                MemoryEntity.allSfx["slide"].loop();
+            }
+        }
+        else {
+            MemoryEntity.allSfx["slide"].stop();
+        }
+        MemoryEntity.allSfx["slide"].volume = Math.min(
+            Math.abs(velocity.y) / MAX_WALL_VELOCITY, 1
+        );
 
         sprite.play(spriteAnimationName);
 
