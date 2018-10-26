@@ -147,6 +147,16 @@ class Roombad extends MemoryEntity {
         lightning.visible = stopFlasher.active;
     }
 
+    public override function moveCollideX(e:Entity) {
+        if(isChasing) {
+            velocity.x = 0;
+        }
+        else {
+            velocity.x = -velocity.x;
+        }
+        return true;
+    }
+
     override public function takeHit(arrow:Arrow) {
         var knockback = arrow.velocity.clone();
         knockback.normalize(HIT_KNOCKBACK);
