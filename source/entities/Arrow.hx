@@ -46,10 +46,10 @@ class Arrow extends MemoryEntity {
         sprite.angle = angle;
         setGraphic(sprite);
         if(isVertical) {
-            setHitbox(3, 16, 1, 8);
+            setHitbox(2, 16, 1, 8);
         }
         else {
-            setHitbox(16, 3, 8, 1);
+            setHitbox(16, 2, 8, 1);
         }
         landed = false;
         disappearTimer = new Alarm(DISAPPEAR_DELAY, TweenType.OneShot);
