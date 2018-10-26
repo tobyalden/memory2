@@ -19,7 +19,7 @@ class DoorKey extends MemoryEntity {
         super(x, y);
         sprite = new Image("graphics/key.png");
         setGraphic(sprite);
-        setHitbox(16, 16);
+        setHitbox(12, 6);
         bob = new NumTween(TweenType.PingPong);
         bob.tween(-BOB_AMOUNT, BOB_AMOUNT, 1, Ease.sineInOut);
         addTween(bob, true);

@@ -7,25 +7,27 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
 class Roombad extends MemoryEntity {
-    public static inline var ACCEL = 0.05;
-    public static inline var MAX_SPEED = 5;
+    public static inline var IDLE_SPEED = 2;
+    public static inline var CHASE_SPEED = 4;
     public static inline var HIT_KNOCKBACK = 5;
-    public static inline var TIME_BETWEEN_LOBS = 1;
-    public static inline var LOB_ACTIVATION_DISTANCE = 180;
-    public static inline var LOB_POWER = 5;
+    //public static inline var TIME_BETWEEN_LOBS = 1;
+    //public static inline var LOB_ACTIVATION_DISTANCE = 180;
+    //public static inline var LOB_POWER = 5;
 
     private var sprite:Spritemap;
     private var eye:Spritemap;
     private var lightning:Spritemap;
     private var velocity:Vector2;
+    private var isChasing:Bool;
+    private var chaseSfx:Sfx;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         MemoryEntity.loadSfx(["roombadchase"]);
         type = "enemy";
         sprite = new Spritemap("graphics/roombad.png", 24, 10);
-        sprite.add("idle", [0]);
-        sprite.add("chasing", [0, 1], 30);
+        sprite.add("idle", [0, 1], 7);
+        sprite.add("chasing", [0, 1], 14);
         sprite.play("idle");
         lightning = new Spritemap("graphics/roombad.png", 24, 10);
         lightning.add("idle", [3, 4], 24);
@@ -38,9 +40,14 @@ class Roombad extends MemoryEntity {
         setGraphic(sprite);
         addGraphic(eye);
         addGraphic(lightning);
-        velocity = new Vector2(0, 0);
+        velocity = new Vector2(IDLE_SPEED, 0);
+        if(Random.random > 0.5) {
+            velocity.x *= -1;
+        }
         setHitbox(24, 10);
         health = 2;
+        isChasing = false;
+        chaseSfx = new Sfx("audio/roombadchase.wav");
     }
 
     //private function lob() {
@@ -64,15 +71,22 @@ class Roombad extends MemoryEntity {
     override public function update() {
         var player = cast(scene.getInstance("player"), Player);
         if(bottom == player.bottom && player.isOnGround()) {
+            isChasing = true;
             if(x < player.x) {
-                velocity.x = MAX_SPEED;
+                velocity.x = CHASE_SPEED;
             }
             else {
-                velocity.x = -MAX_SPEED;
+                velocity.x = -CHASE_SPEED;
             }
         }
         else {
-            velocity.x = 0;
+            isChasing = false;
+            if(velocity.x > 0) {
+                velocity.x = IDLE_SPEED;
+            }
+            else {
+                velocity.x = -IDLE_SPEED;
+            }
         }
 
         x += velocity.x * Main.getDelta();
@@ -90,7 +104,12 @@ class Roombad extends MemoryEntity {
         x -= velocity.x * Main.getDelta();
 
         if(willGoOffEdge) {
-            velocity.x = 0;
+            if(isChasing) {
+                velocity.x = 0;
+            }
+            else {
+                velocity.x = -velocity.x;
+            }
         }
 
         moveBy(velocity.x * Main.getDelta(), 0, ["walls", "enemy"]);
@@ -107,26 +126,25 @@ class Roombad extends MemoryEntity {
 
     private function animation() {
         if(velocity.x < 0) {
-            sprite.play("chasing");
             sprite.flipX = false;
             lightning.flipX = false;
             eye.flipX = false;
         }
         else if(velocity.x > 0) {
-            sprite.play("chasing");
             sprite.flipX = true;
             lightning.flipX = true;
             eye.flipX = true;
         }
+
+        if(isChasing) {
+            sprite.play("chasing");
+            makeDustOnGround();
+        }
         else {
             sprite.play("idle");
         }
-        eye.visible = velocity.x != 0;
+        eye.visible = isChasing;
         lightning.visible = stopFlasher.active;
-
-        if(velocity.x != 0) {
-            makeDustOnGround();
-        }
     }
 
     override public function takeHit(arrow:Arrow) {

@@ -7,6 +7,8 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
 class MemoryEntity extends Entity {
+    public static inline var FLASH_TIME = 0.4;
+
     private var anchor(default, null):Entity;
     private var anchorPosition:Vector2;
     private var isFlashing:Bool;
@@ -60,7 +62,7 @@ class MemoryEntity extends Entity {
         });
         addTween(flasher, true);
 
-        stopFlasher = new Alarm(0.2, TweenType.Persist);
+        stopFlasher = new Alarm(FLASH_TIME, TweenType.Persist);
         stopFlasher.onComplete.bind(function() {
             visible = true;
             isFlashing = false;
@@ -189,5 +191,11 @@ class MemoryEntity extends Entity {
     private function isOnLeftWall() {
         return collide("walls", x - 1, y) != null;
     }
-}
 
+    private function isOnScreen() {
+        return (
+            right > camera.x && left < camera.x + HXP.width
+            && bottom > camera.y && top < camera.y + HXP.height
+        );
+    }
+}
