@@ -145,7 +145,9 @@ class GameScene extends Scene {
         var playerPoint = new Vector2(player.x, player.y);
         var isValid = false;
         var enemyPoint:Vector2 = null;
-        while(!isValid) {
+        var count = 0;
+        while(!isValid && count < 1000) {
+            count++;
             isValid = true;
             if(isGroundEnemy) {
                 enemyPoint = getRandomOpenGroundPoint();
@@ -159,6 +161,12 @@ class GameScene extends Scene {
                 isValid = false;
                 continue;
             }
+            if(isGroundEnemy) {
+                if(enemyPoint.y + Segment.TILE_SIZE == player.bottom) {
+                    isValid = false;
+                    continue;
+                }
+            }
             for(existingPoint in existingPoints) {
                 var distanceFromEnemy = enemyPoint.distance(existingPoint);
                 if(distanceFromEnemy < MIN_ENEMY_DISTANCE_FROM_EACHOTHER) {
@@ -167,6 +175,7 @@ class GameScene extends Scene {
                 }
             }
         }
+        trace(count);
         return enemyPoint;
     }
 

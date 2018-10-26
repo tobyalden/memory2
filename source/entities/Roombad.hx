@@ -113,7 +113,6 @@ class Roombad extends MemoryEntity {
         }
 
         moveBy(velocity.x * Main.getDelta(), 0, ["walls", "enemy"]);
-        trace(velocity);
         animation();
         super.update();
     }
