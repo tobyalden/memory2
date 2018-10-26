@@ -16,7 +16,8 @@ import scenes.*;
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 20;
-    public static inline var MIN_ENEMY_DISTANCE = 350;
+    public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
+    public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -119,11 +120,13 @@ class GameScene extends Scene {
         var groundEnemyPoints = new Array<Vector2>();
         for(i in 0...numberOfEnemies) {
             var isGroundEnemy = Random.random < 0.5;
+            var existingPoints = enemyPoints.concat(groundEnemyPoints);
+            existingPoints = enemyPoints.concat(groundEnemyPoints);
             if(isGroundEnemy) {
-                groundEnemyPoints.push(getGroundEnemyPoint());
+                groundEnemyPoints.push(getGroundEnemyPoint(existingPoints));
             }
             else {
-                enemyPoints.push(getEnemyPoint());
+                enemyPoints.push(getEnemyPoint(existingPoints));
             }
         }
         for(enemyPoint in enemyPoints) {
@@ -136,31 +139,47 @@ class GameScene extends Scene {
         }
     }
 
-    private function getEnemyPoint() {
+    private function getEnemyPoint(existingPoints:Array<Vector2>) {
         var playerPoint = new Vector2(player.x, player.y);
-        var enemyPoint = getRandomOpenPoint();
         var isValid = false;
+        var enemyPoint:Vector2 = null;
         while(!isValid) {
             isValid = true;
-            if(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+            enemyPoint = getRandomOpenPoint();
+            var distanceFromPlayer = enemyPoint.distance(playerPoint);
+            if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
                 isValid = false;
-                enemyPoint = getRandomOpenPoint();
                 continue;
+            }
+            for(existingPoint in existingPoints) {
+                var distanceFromEnemy = enemyPoint.distance(existingPoint);
+                if(distanceFromEnemy < MIN_ENEMY_DISTANCE_FROM_EACHOTHER) {
+                    isValid = false;
+                    break;
+                }
             }
         }
         return enemyPoint;
     }
 
-    private function getGroundEnemyPoint() {
+    private function getGroundEnemyPoint(existingPoints:Array<Vector2>) {
         var playerPoint = new Vector2(player.x, player.y);
-        var enemyPoint = getRandomOpenGroundPoint();
+        var enemyPoint:Vector2 = null;
         var isValid = false;
         while(!isValid) {
             isValid = true;
-            if(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+            enemyPoint = getRandomOpenGroundPoint();
+            var distanceFromPlayer = enemyPoint.distance(playerPoint);
+            if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
                 isValid = false;
-                enemyPoint = getRandomOpenGroundPoint();
                 continue;
+            }
+            for(existingPoint in existingPoints) {
+                var distanceFromEnemy = enemyPoint.distance(existingPoint);
+                if(distanceFromEnemy < MIN_ENEMY_DISTANCE_FROM_EACHOTHER) {
+                    isValid = false;
+                    break;
+                }
             }
         }
         return enemyPoint;
