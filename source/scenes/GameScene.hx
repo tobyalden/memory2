@@ -139,8 +139,14 @@ class GameScene extends Scene {
     private function getEnemyPoint() {
         var playerPoint = new Vector2(player.x, player.y);
         var enemyPoint = getRandomOpenPoint();
-        while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
-            enemyPoint = getRandomOpenPoint();
+        var isValid = false;
+        while(!isValid) {
+            isValid = true;
+            if(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+                isValid = false;
+                enemyPoint = getRandomOpenPoint();
+                continue;
+            }
         }
         return enemyPoint;
     }
@@ -148,8 +154,14 @@ class GameScene extends Scene {
     private function getGroundEnemyPoint() {
         var playerPoint = new Vector2(player.x, player.y);
         var enemyPoint = getRandomOpenGroundPoint();
-        while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
-            enemyPoint = getRandomOpenGroundPoint();
+        var isValid = false;
+        while(!isValid) {
+            isValid = true;
+            if(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+                isValid = false;
+                enemyPoint = getRandomOpenGroundPoint();
+                continue;
+            }
         }
         return enemyPoint;
     }
