@@ -12,6 +12,7 @@ class Follower extends MemoryEntity {
     public static inline var ACTIVATE_DISTANCE = 150;
 
     var sprite:Spritemap;
+    var lightning:Spritemap;
     var velocity:Vector2;
     var isActive:Bool;
 
@@ -19,10 +20,22 @@ class Follower extends MemoryEntity {
         super(x, y);
         type = "enemy";
         sprite = new Spritemap("graphics/follower.png", 24, 24);
-        sprite.add("idle", [0]);
+        sprite.add("idle", [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 1, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+        ], 24);
+        sprite.add("chasing", [3]);
+        sprite.add("hit", [4]);
+        sprite.play("idle");
+        lightning = new Spritemap("graphics/follower.png", 24, 24);
+        lightning.add("idle", [5, 6, 7], 24);
+        lightning.play("idle");
         setGraphic(sprite);
+        addGraphic(lightning);
+        lightning.visible = false;
         velocity = new Vector2(0, 0);
-        setHitbox(24, 24);
+        setHitbox(23, 23, -1, -1);
         isActive = false;
     }
 
@@ -49,7 +62,21 @@ class Follower extends MemoryEntity {
                 ["walls", "enemy"]
             );
         }
+        animation();
         super.update();
+    }
+
+    private function animation() {
+        if(stopFlasher.active) {
+            sprite.play("hit");
+        }
+        else if(isActive) {
+            sprite.play("chasing");
+        }
+        else {
+            sprite.play("idle");
+        }
+        lightning.visible = stopFlasher.active;
     }
 
     public override function moveCollideX(e:Entity) {

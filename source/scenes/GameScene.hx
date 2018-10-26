@@ -136,7 +136,7 @@ class GameScene extends Scene {
             }
         }
         for(enemyPoint in enemyPoints) {
-            //add(new Follower(enemyPoint.x, enemyPoint.y));
+            add(new Follower(enemyPoint.x, enemyPoint.y));
         }
         for(enemyPoint in groundEnemyPoints) {
             var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
