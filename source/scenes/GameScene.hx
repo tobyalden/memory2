@@ -123,10 +123,10 @@ class GameScene extends Scene {
             var existingPoints = enemyPoints.concat(groundEnemyPoints);
             existingPoints = enemyPoints.concat(groundEnemyPoints);
             if(isGroundEnemy) {
-                groundEnemyPoints.push(getGroundEnemyPoint(existingPoints));
+                groundEnemyPoints.push(getEnemyPoint(true, existingPoints));
             }
             else {
-                enemyPoints.push(getEnemyPoint(existingPoints));
+                enemyPoints.push(getEnemyPoint(false, existingPoints));
             }
         }
         for(enemyPoint in enemyPoints) {
@@ -139,36 +139,21 @@ class GameScene extends Scene {
         }
     }
 
-    private function getEnemyPoint(existingPoints:Array<Vector2>) {
+    private function getEnemyPoint(
+        isGroundEnemy:Bool, existingPoints:Array<Vector2>
+    ) {
         var playerPoint = new Vector2(player.x, player.y);
         var isValid = false;
         var enemyPoint:Vector2 = null;
         while(!isValid) {
             isValid = true;
-            enemyPoint = getRandomOpenPoint();
-            var distanceFromPlayer = enemyPoint.distance(playerPoint);
-            if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
-                isValid = false;
-                continue;
+            if(isGroundEnemy) {
+                enemyPoint = getRandomOpenGroundPoint();
             }
-            for(existingPoint in existingPoints) {
-                var distanceFromEnemy = enemyPoint.distance(existingPoint);
-                if(distanceFromEnemy < MIN_ENEMY_DISTANCE_FROM_EACHOTHER) {
-                    isValid = false;
-                    break;
-                }
+            else {
+                enemyPoint = getRandomOpenPoint();
             }
-        }
-        return enemyPoint;
-    }
 
-    private function getGroundEnemyPoint(existingPoints:Array<Vector2>) {
-        var playerPoint = new Vector2(player.x, player.y);
-        var enemyPoint:Vector2 = null;
-        var isValid = false;
-        while(!isValid) {
-            isValid = true;
-            enemyPoint = getRandomOpenGroundPoint();
             var distanceFromPlayer = enemyPoint.distance(playerPoint);
             if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
                 isValid = false;
