@@ -115,24 +115,15 @@ class GameScene extends Scene {
 
     private function addEnemies() {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
-        var playerPoint = new Vector2(player.x, player.y);
         var enemyPoints = new Array<Vector2>();
         var groundEnemyPoints = new Array<Vector2>();
         for(i in 0...numberOfEnemies) {
             var isGroundEnemy = Random.random < 0.5;
             if(isGroundEnemy) {
-                var enemyPoint = getRandomOpenGroundPoint();
-                while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
-                    enemyPoint = getRandomOpenGroundPoint();
-                }
-                groundEnemyPoints.push(enemyPoint);
+                groundEnemyPoints.push(getGroundEnemyPoint());
             }
             else {
-                var enemyPoint = getRandomOpenPoint();
-                while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
-                    enemyPoint = getRandomOpenPoint();
-                }
-                enemyPoints.push(enemyPoint);
+                enemyPoints.push(getEnemyPoint());
             }
         }
         for(enemyPoint in enemyPoints) {
@@ -143,6 +134,24 @@ class GameScene extends Scene {
             enemy.y += Segment.TILE_SIZE - enemy.height;
             add(enemy);
         }
+    }
+
+    private function getEnemyPoint() {
+        var playerPoint = new Vector2(player.x, player.y);
+        var enemyPoint = getRandomOpenPoint();
+        while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+            enemyPoint = getRandomOpenPoint();
+        }
+        return enemyPoint;
+    }
+
+    private function getGroundEnemyPoint() {
+        var playerPoint = new Vector2(player.x, player.y);
+        var enemyPoint = getRandomOpenGroundPoint();
+        while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+            enemyPoint = getRandomOpenGroundPoint();
+        }
+        return enemyPoint;
     }
 
     private function getWeightedSegments() {
