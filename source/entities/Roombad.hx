@@ -15,17 +15,32 @@ class Roombad extends MemoryEntity {
     public static inline var LOB_POWER = 5;
 
     private var sprite:Spritemap;
+    private var eye:Spritemap;
+    private var lightning:Spritemap;
     private var velocity:Vector2;
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        MemoryEntity.loadSfx(["roombadchase"]);
         type = "enemy";
         sprite = new Spritemap("graphics/roombad.png", 24, 10);
-        sprite.add("idle", [1]);
+        sprite.add("idle", [0]);
+        sprite.add("chasing", [0, 1], 30);
         sprite.play("idle");
+        lightning = new Spritemap("graphics/roombad.png", 24, 10);
+        lightning.add("idle", [3, 4], 24);
+        lightning.play("idle");
+        lightning.visible = false;
+        eye = new Spritemap("graphics/roombad.png", 24, 10);
+        eye.add("idle", [2]);
+        eye.play("idle");
+        eye.visible = false;
         setGraphic(sprite);
+        addGraphic(eye);
+        addGraphic(lightning);
         velocity = new Vector2(0, 0);
         setHitbox(24, 10);
+        health = 2;
     }
 
     //private function lob() {
@@ -79,7 +94,39 @@ class Roombad extends MemoryEntity {
         }
 
         moveBy(velocity.x * Main.getDelta(), 0, ["walls", "enemy"]);
+        trace(velocity);
+        animation();
         super.update();
+    }
+
+    private function makeDustOnGround() {
+        var dust:Dust;
+        dust = new Dust(centerX, bottom, "slide");
+        scene.add(dust);
+    }
+
+    private function animation() {
+        if(velocity.x < 0) {
+            sprite.play("chasing");
+            sprite.flipX = false;
+            lightning.flipX = false;
+            eye.flipX = false;
+        }
+        else if(velocity.x > 0) {
+            sprite.play("chasing");
+            sprite.flipX = true;
+            lightning.flipX = true;
+            eye.flipX = true;
+        }
+        else {
+            sprite.play("idle");
+        }
+        eye.visible = velocity.x != 0;
+        lightning.visible = stopFlasher.active;
+
+        if(velocity.x != 0) {
+            makeDustOnGround();
+        }
     }
 
     override public function takeHit(arrow:Arrow) {

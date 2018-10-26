@@ -67,6 +67,8 @@ class Follower extends MemoryEntity {
     }
 
     private function animation() {
+        var player = scene.getInstance("player");
+        sprite.flipX = centerX < player.centerX;
         if(stopFlasher.active) {
             sprite.play("hit");
         }
