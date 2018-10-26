@@ -15,7 +15,7 @@ import scenes.*;
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 20;
     public static inline var MIN_ENEMY_DISTANCE = 350;
 
     private var mapBlueprint:Grid;
@@ -117,15 +117,31 @@ class GameScene extends Scene {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
         var playerPoint = new Vector2(player.x, player.y);
         var enemyPoints = new Array<Vector2>();
+        var groundEnemyPoints = new Array<Vector2>();
         for(i in 0...numberOfEnemies) {
-            var enemyPoint = getRandomOpenPoint();
-            while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
-                enemyPoint = getRandomOpenPoint();
+            var isGroundEnemy = Random.random < 0.5;
+            if(isGroundEnemy) {
+                var enemyPoint = getRandomOpenGroundPoint();
+                while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+                    enemyPoint = getRandomOpenGroundPoint();
+                }
+                groundEnemyPoints.push(enemyPoint);
             }
-            enemyPoints.push(enemyPoint);
+            else {
+                var enemyPoint = getRandomOpenPoint();
+                while(enemyPoint.distance(playerPoint) < MIN_ENEMY_DISTANCE) {
+                    enemyPoint = getRandomOpenPoint();
+                }
+                enemyPoints.push(enemyPoint);
+            }
         }
         for(enemyPoint in enemyPoints) {
-            add(new Follower(enemyPoint.x, enemyPoint.y));
+            //add(new Follower(enemyPoint.x, enemyPoint.y));
+        }
+        for(enemyPoint in groundEnemyPoints) {
+            var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
+            enemy.y += Segment.TILE_SIZE - enemy.height;
+            add(enemy);
         }
     }
 

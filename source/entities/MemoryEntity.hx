@@ -160,6 +160,20 @@ class MemoryEntity extends Entity {
         return collide("walls", x, y + 1) != null;
     }
 
+    private function isBottomLeftCornerOnGround() {
+        var bottomLeftCorner = new Vector2(left, bottom);
+        return scene.collidePoint(
+            "walls", bottomLeftCorner.x, bottomLeftCorner.y
+        ) != null;
+    }
+
+    private function isBottomRightCornerOnGround() {
+        var bottomRightCorner = new Vector2(right, bottom);
+        return scene.collidePoint(
+            "walls", bottomRightCorner.x, bottomRightCorner.y
+        ) != null;
+    }
+
     private function isOnCeiling() {
         return collide("walls", x, y - 1) != null;
     }

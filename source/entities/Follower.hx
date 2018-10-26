@@ -5,9 +5,7 @@ import haxepunk.graphics.*;
 import haxepunk.math.*;
 
 class Follower extends MemoryEntity {
-    //public static inline var ACCEL = 0.1;
     public static inline var ACCEL = 0.05;
-    //public static inline var MAX_SPEED = 3;
     public static inline var MAX_SPEED = 2;
     public static inline var BOUNCE_FACTOR = 0.85;
     public static inline var HIT_KNOCKBACK = 5;
