@@ -19,6 +19,7 @@ class Segment extends MemoryEntity {
 
     private var walls:Grid;
     private var tiles:Tilemap;
+    private var edges:Tilemap;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -139,6 +140,79 @@ class Segment extends MemoryEntity {
         );
         tiles.loadFromString(walls.saveToString(',', '\n', '1', '0'));
         setGraphic(tiles);
+        edges = new Tilemap(
+            'graphics/tiles.png',
+            walls.width, walls.height, walls.tileWidth, walls.tileHeight
+        );
+        for(tileX in 0...walls.columns) {
+            for(tileY in 0...walls.rows) {
+                if(!walls.getTile(tileX, tileY)) {
+                    continue;
+                }
+                var hasLeftEdge = (
+                    tileX > 0 && !walls.getTile(tileX - 1, tileY)
+                );
+                var hasRightEdge = (
+                    tileX < walls.columns - 1
+                    && !walls.getTile(tileX + 1, tileY)
+                );
+                var hasTopEdge = (
+                    tileY > 0 && !walls.getTile(tileX, tileY - 1)
+                );
+                var hasBottomEdge = (
+                    tileY < walls.rows - 1
+                    && !walls.getTile(tileX, tileY + 1)
+                );
+                if(
+                    hasTopEdge && hasBottomEdge
+                    && hasLeftEdge && hasRightEdge
+                ) {
+                    edges.setTile(tileX, tileY, 9);
+                }
+                else if(hasTopEdge && hasBottomEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 13);
+                }
+                else if(hasBottomEdge && hasLeftEdge && hasTopEdge) {
+                    edges.setTile(tileX, tileY, 14);
+                }
+                else if(hasBottomEdge && hasLeftEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 15);
+                }
+                else if(hasTopEdge && hasLeftEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 16);
+                }
+                else if(hasTopEdge && hasBottomEdge) {
+                    edges.setTile(tileX, tileY, 4);
+                }
+                else if(hasLeftEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 12);
+                }
+                else if(hasTopEdge && hasLeftEdge) {
+                    edges.setTile(tileX, tileY, 5);
+                }
+                else if(hasTopEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 6);
+                }
+                else if(hasBottomEdge && hasLeftEdge) {
+                    edges.setTile(tileX, tileY, 7);
+                }
+                else if(hasBottomEdge && hasRightEdge) {
+                    edges.setTile(tileX, tileY, 8);
+                }
+                else if(hasTopEdge) {
+                    edges.setTile(tileX, tileY, 2);
+                }
+                else if(hasBottomEdge) {
+                    edges.setTile(tileX, tileY, 3);
+                }
+                else if(hasLeftEdge) {
+                    edges.setTile(tileX, tileY, 10);
+                }
+                else if(hasRightEdge) {
+                    edges.setTile(tileX, tileY, 11);
+                }
+            }
+        }
+        addGraphic(edges);
     }
-
 }
