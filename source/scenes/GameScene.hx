@@ -27,7 +27,8 @@ class GameScene extends Scene {
 
 	override public function begin() {
         loadMap(1);
-        allSegments = new Array<Segment>();
+
+        addBackgrounds();
         placeSegments();
         fillEmptySegments();
 
@@ -39,6 +40,43 @@ class GameScene extends Scene {
         add(curtain);
         curtain.fadeIn();
         camera.pixelSnapping = true;
+    }
+
+    private function addBackgrounds() {
+        // Add map background
+        var distanceBackground = new Backdrop("graphics/mapbackground.png");
+        distanceBackground.scrollX = 0.5;
+        distanceBackground.scrollY = 0.5;
+        addGraphic(distanceBackground, 1000);
+
+        // Add segment backgrounds
+        for(mapX in 0...mapBlueprint.columns) {
+            for(mapY in 0...mapBlueprint.rows) {
+                if(mapBlueprint.getTile(mapX, mapY)) {
+                    var segmentBackgrounds = new Image(
+                        "graphics/segmentbackgrounds.png"
+                    );
+                    var numBackgrounds = Std.int(
+                        segmentBackgrounds.height / Segment.MIN_SEGMENT_HEIGHT
+                    );
+                    var clipRect = new Rectangle(
+                        0,
+                        Random.randInt(numBackgrounds)
+                        * Segment.MIN_SEGMENT_HEIGHT,
+                        Segment.MIN_SEGMENT_WIDTH,
+                        Segment.MIN_SEGMENT_HEIGHT
+                    );
+                    var segmentBackground = new Image(
+                        "graphics/segmentbackgrounds.png", clipRect
+                    );
+                    addGraphic(
+                        segmentBackground, 100,
+                        mapX * Segment.MIN_SEGMENT_WIDTH,
+                        mapY * Segment.MIN_SEGMENT_HEIGHT
+                    );
+                }
+            }
+        }
     }
 
     public function onDeath() {
@@ -175,7 +213,6 @@ class GameScene extends Scene {
                 }
             }
         }
-        trace(count);
         return enemyPoint;
     }
 
@@ -222,6 +259,7 @@ class GameScene extends Scene {
     }
 
     private function placeSegments() {
+        allSegments = new Array<Segment>();
         for(tileX in 0...mapBlueprint.columns) {
             for(tileY in 0...mapBlueprint.rows) {
                 if(
