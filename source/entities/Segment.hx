@@ -17,7 +17,7 @@ class Segment extends MemoryEntity {
     public static inline var MIN_SEGMENT_HEIGHT_IN_TILES = 22;
     public static inline var TILE_SIZE = 16;
 
-    private var walls:Grid;
+    public var walls(default, null):Grid;
     private var tiles:Tilemap;
     private var edges:Tilemap;
 

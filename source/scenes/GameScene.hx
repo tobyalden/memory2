@@ -13,11 +13,19 @@ import haxepunk.utils.*;
 import openfl.Assets;
 import scenes.*;
 
+typedef SegmentPoint = {
+    var segment:Segment;
+    var point:Vector2;
+    var tileX:Int;
+    var tileY:Int;
+}
+
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 20;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
+    public static inline var MAX_CONSECUTIVE_SPIKES = 10;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -123,7 +131,7 @@ class GameScene extends Scene {
 
     private function addPlayer() {
         var playerStart = getRandomOpenGroundPoint();
-        player = new Player(playerStart.x, playerStart.y);
+        player = new Player(playerStart.point.x, playerStart.point.y);
         player.y += Segment.TILE_SIZE - player.height;
         add(player);
     }
@@ -136,17 +144,20 @@ class GameScene extends Scene {
             var newKeyPoint = getRandomOpenGroundPoint();
             var newDoorPoint = getRandomOpenGroundPoint();
             if(
-                newKeyPoint.distance(newDoorPoint) > keyPoint.distance(doorPoint)
-                && newKeyPoint.distance(playerPoint) > keyPoint.distance(playerPoint)
-                && newDoorPoint.distance(playerPoint) > doorPoint.distance(playerPoint)
+                newKeyPoint.point.distance(newDoorPoint.point)
+                > keyPoint.point.distance(doorPoint.point)
+                && newKeyPoint.point.distance(playerPoint)
+                > keyPoint.point.distance(playerPoint)
+                && newDoorPoint.point.distance(playerPoint)
+                > doorPoint.point.distance(playerPoint)
             ) {
                 keyPoint = newKeyPoint;
                 doorPoint = newDoorPoint;
             }
         }
-        var key = new DoorKey(keyPoint.x, keyPoint.y);
+        var key = new DoorKey(keyPoint.point.x, keyPoint.point.y);
         key.y -= Segment.TILE_SIZE;
-        var door = new Door(doorPoint.x, doorPoint.y);
+        var door = new Door(doorPoint.point.x, doorPoint.point.y);
         door.y += Segment.TILE_SIZE - door.height;
         add(key);
         add(door);
@@ -154,35 +165,54 @@ class GameScene extends Scene {
 
     private function addEnemies() {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
-        var enemyPoints = new Array<Vector2>();
-        var groundEnemyPoints = new Array<Vector2>();
+        var enemyPoints = new Array<SegmentPoint>();
+        var groundSegmentPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             var isGroundEnemy = Random.random < 0.5;
-            var existingPoints = enemyPoints.concat(groundEnemyPoints);
-            existingPoints = enemyPoints.concat(groundEnemyPoints);
+            var existingPoints = enemyPoints.concat(groundSegmentPoints);
+            existingPoints = enemyPoints.concat(groundSegmentPoints);
             if(isGroundEnemy) {
-                groundEnemyPoints.push(getEnemyPoint(true, existingPoints));
+                groundSegmentPoints.push(getEnemyPoint(true, existingPoints));
             }
             else {
                 enemyPoints.push(getEnemyPoint(false, existingPoints));
             }
         }
         for(enemyPoint in enemyPoints) {
-            add(new Follower(enemyPoint.x, enemyPoint.y));
+            add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
         }
-        for(enemyPoint in groundEnemyPoints) {
-            var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
+        for(enemyPoint in groundSegmentPoints) {
+            //var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
+            var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
+            if(enemy.type == "spike") {
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extraSpike = new FloorSpike(
+                        enemy.x + i * Segment.TILE_SIZE, enemy.y
+                    );
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + i, enemyPoint.tileY + 1
+                    )) {
+                        break;
+                    }
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + i, enemyPoint.tileY
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                }
+            }
             add(enemy);
         }
     }
 
     private function getEnemyPoint(
-        isGroundEnemy:Bool, existingPoints:Array<Vector2>
+        isGroundEnemy:Bool, existingPoints:Array<SegmentPoint>
     ) {
         var playerPoint = new Vector2(player.x, player.y);
         var isValid = false;
-        var enemyPoint:Vector2 = null;
+        var enemyPoint:SegmentPoint = null;
         var count = 0;
         while(!isValid && count < 1000) {
             count++;
@@ -194,19 +224,21 @@ class GameScene extends Scene {
                 enemyPoint = getRandomOpenPoint();
             }
 
-            var distanceFromPlayer = enemyPoint.distance(playerPoint);
+            var distanceFromPlayer = enemyPoint.point.distance(playerPoint);
             if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
                 isValid = false;
                 continue;
             }
             if(isGroundEnemy) {
-                if(enemyPoint.y + Segment.TILE_SIZE == player.bottom) {
+                if(enemyPoint.point.y + Segment.TILE_SIZE == player.bottom) {
                     isValid = false;
                     continue;
                 }
             }
             for(existingPoint in existingPoints) {
-                var distanceFromEnemy = enemyPoint.distance(existingPoint);
+                var distanceFromEnemy = enemyPoint.point.distance(
+                    existingPoint.point
+                );
                 if(distanceFromEnemy < MIN_ENEMY_DISTANCE_FROM_EACHOTHER) {
                     isValid = false;
                     break;
@@ -238,10 +270,16 @@ class GameScene extends Scene {
             segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenTile();
         }
-        return new Vector2(
-            segment.x + randomTile.tileX * Segment.TILE_SIZE,
-            segment.y + randomTile.tileY * Segment.TILE_SIZE
-        );
+        var openPoint:SegmentPoint = {
+            point: new Vector2(
+                segment.x + randomTile.tileX * Segment.TILE_SIZE,
+                segment.y + randomTile.tileY * Segment.TILE_SIZE
+            ),
+            segment: segment,
+            tileX: randomTile.tileX,
+            tileY: randomTile.tileY
+        };
+        return openPoint;
     }
 
     private function getRandomOpenGroundPoint() {
@@ -252,10 +290,16 @@ class GameScene extends Scene {
             segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenGroundTile();
         }
-        return new Vector2(
-            segment.x + randomTile.tileX * Segment.TILE_SIZE,
-            segment.y + randomTile.tileY * Segment.TILE_SIZE
-        );
+        var openGroundPoint:SegmentPoint = {
+            point: new Vector2(
+                segment.x + randomTile.tileX * Segment.TILE_SIZE,
+                segment.y + randomTile.tileY * Segment.TILE_SIZE
+            ),
+            segment: segment,
+            tileX: randomTile.tileX,
+            tileY: randomTile.tileY
+        };
+        return openGroundPoint;
     }
 
     private function placeSegments() {
