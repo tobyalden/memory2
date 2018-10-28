@@ -1,8 +1,9 @@
 - main menu
 - music
-- sound effects
-- bow & arrow
-- enemies & traps
+- wallspikes, bouncer, the tentacle monster, the turret, the mine, the ghost,
+  and the spider
+- descent (elevators and screen showing depth)
 - final boss
 - ending
-- death
+- opening
+- daily run
