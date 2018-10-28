@@ -32,6 +32,7 @@ class GameScene extends Scene {
     private var player:Player;
     private var curtain:Curtain;
     private var allSegments:Array<Segment>;
+    private var music:Sfx;
 
 	override public function begin() {
         loadMap(1);
@@ -48,6 +49,9 @@ class GameScene extends Scene {
         add(curtain);
         curtain.fadeIn();
         camera.pixelSnapping = true;
+
+        music = new Sfx("audio/music.wav");
+        music.loop();
     }
 
     private function addBackgrounds() {

@@ -52,6 +52,7 @@ class RoboPlant extends MemoryEntity {
         if(arrow != null) {
             cast(arrow, Arrow).velocity.inverse();
             cast(arrow, Arrow).velocity.scale(ARROW_DEFLECT_FACTOR);
+            MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(1);
         }
         super.update();
     }
