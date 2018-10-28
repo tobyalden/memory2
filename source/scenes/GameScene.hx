@@ -126,10 +126,10 @@ class GameScene extends Scene {
         for(roboPlant in roboPlants) {
             cast(roboPlant, RoboPlant).stopThemeSong();
         }
-        var followers = new Array<Entity>();
-        getClass(Follower, followers);
-        for(follower in followers) {
-            cast(follower, Follower).stopSound();
+        var entities = new Array<Entity>();
+        getClass(MemoryEntity, entities);
+        for(entity in entities) {
+            cast(entity, MemoryEntity).stopSound();
         }
         music.stop();
     }

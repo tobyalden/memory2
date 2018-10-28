@@ -84,6 +84,11 @@ class MemoryEntity extends Entity {
 #if desktop
         Sys.sleep(0.02);
 #end
+        stopSound();
+    }
+
+    public function stopSound() {
+        // Overridden in child classes
     }
 
     private function detachArrows() {

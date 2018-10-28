@@ -43,7 +43,7 @@ class Follower extends MemoryEntity {
         hum.volume = 0;
     }
 
-    public function stopSound() {
+    override public function stopSound() {
         hum.stop();
     }
 
@@ -101,11 +101,6 @@ class Follower extends MemoryEntity {
             sprite.play("idle");
         }
         lightning.visible = stopFlasher.active;
-    }
-
-    override private function die() {
-        stopSound();
-        super.die();
     }
 
     public override function moveCollideX(e:Entity) {
