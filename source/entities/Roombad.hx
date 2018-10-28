@@ -10,6 +10,7 @@ class Roombad extends MemoryEntity {
     public static inline var IDLE_SPEED = 2;
     public static inline var CHASE_SPEED = 4;
     public static inline var HIT_KNOCKBACK = 5;
+    public static inline var SFX_DISTANCE = 280;
     //public static inline var TIME_BETWEEN_LOBS = 1;
     //public static inline var LOB_ACTIVATION_DISTANCE = 180;
     //public static inline var LOB_POWER = 5;
@@ -19,7 +20,9 @@ class Roombad extends MemoryEntity {
     private var lightning:Spritemap;
     private var velocity:Vector2;
     private var isChasing:Bool;
+    private var idleSfx:Sfx;
     private var chaseSfx:Sfx;
+    private var soundsStopped:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -47,7 +50,11 @@ class Roombad extends MemoryEntity {
         setHitbox(24, 10);
         health = 2;
         isChasing = false;
+        idleSfx = new Sfx("audio/roombadidle.wav");
         chaseSfx = new Sfx("audio/roombadchase.wav");
+        idleSfx.volume = 0;
+        chaseSfx.volume = 0;
+        soundsStopped = false;
     }
 
     //private function lob() {
@@ -114,7 +121,33 @@ class Roombad extends MemoryEntity {
 
         moveBy(velocity.x * Main.getDelta(), 0, ["walls", "enemy"]);
         animation();
+
+        if(isChasing) {
+            if(!chaseSfx.playing && !soundsStopped) {
+                chaseSfx.loop();
+            }
+            chaseSfx.volume = 1 - Math.min(
+                distanceFrom(player, true), SFX_DISTANCE
+            ) / SFX_DISTANCE;
+            idleSfx.stop();
+        }
+        else {
+            if(!idleSfx.playing && !soundsStopped) {
+                idleSfx.loop();
+            }
+            idleSfx.volume = (1 - Math.min(
+                distanceFrom(player, true), SFX_DISTANCE
+            ) / SFX_DISTANCE) / 2;
+            chaseSfx.stop();
+        }
+
         super.update();
+    }
+
+    override public function stopSound() {
+        idleSfx.stop();
+        chaseSfx.stop();
+        soundsStopped = true;
     }
 
     private function makeDustOnGround() {

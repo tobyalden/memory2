@@ -198,7 +198,7 @@ class GameScene extends Scene {
         var groundSegmentPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var isGroundEnemy = false;
+            var isGroundEnemy = true;
             var existingPoints = enemyPoints.concat(groundSegmentPoints);
             existingPoints = enemyPoints.concat(groundSegmentPoints);
             if(isGroundEnemy) {
@@ -214,7 +214,7 @@ class GameScene extends Scene {
         }
         for(enemyPoint in groundSegmentPoints) {
             //var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
-            var enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y);
+            var enemy = new Roombad(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "spike") {
                 var extendLeft = Random.random < 0.5;
