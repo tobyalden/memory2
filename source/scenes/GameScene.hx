@@ -209,7 +209,7 @@ class GameScene extends Scene {
             }
         }
         for(enemyPoint in enemyPoints) {
-            add(new Bouncer(enemyPoint.point.x, enemyPoint.point.y));
+            add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
             //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in groundSegmentPoints) {

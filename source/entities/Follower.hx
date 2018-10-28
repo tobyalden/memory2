@@ -17,6 +17,7 @@ class Follower extends MemoryEntity {
     private var velocity:Vector2;
     private var isActive:Bool;
     private var hum:Sfx;
+    private var bounceSfx:Sfx;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -41,6 +42,7 @@ class Follower extends MemoryEntity {
         isActive = false;
         hum = new Sfx("audio/follower.wav");
         hum.volume = 0;
+        bounceSfx = new Sfx("audio/bounce.wav");
     }
 
     override public function stopSound() {
@@ -105,11 +107,13 @@ class Follower extends MemoryEntity {
 
     public override function moveCollideX(e:Entity) {
         velocity.x = -velocity.x * BOUNCE_FACTOR;
+        bounceSfx.play(Math.min(hum.volume * 2, 1));
         return true;
     }
 
     public override function moveCollideY(e:Entity) {
         velocity.y = -velocity.y * BOUNCE_FACTOR;
+        bounceSfx.play(Math.min(hum.volume * 2, 1));
         return true;
     }
 
