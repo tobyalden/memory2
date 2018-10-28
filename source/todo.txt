@@ -4,6 +4,8 @@
   and the spider
 - descent (elevators and screen showing depth)
 - final boss
+- make new segments
+
 - ending
 - opening
 - daily run

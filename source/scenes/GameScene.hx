@@ -22,7 +22,7 @@ typedef SegmentPoint = {
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 1;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -52,6 +52,13 @@ class GameScene extends Scene {
 
         music = new Sfx("audio/music.wav");
         music.loop();
+    }
+
+    public function spawnRoboPlant() {
+        add(new RoboPlant(
+            player.x + (Random.random < 0.5 ? HXP.width/1.5 : -HXP.width/1.5),
+            player.y + (Random.random < 0.5 ? HXP.height/1.5 : -HXP.height/1.5)
+        ));
     }
 
     private function addBackgrounds() {
@@ -410,6 +417,7 @@ class GameScene extends Scene {
 
     override public function update() {
         if(Key.pressed(Key.R)) {
+            stopAllSounds();
             HXP.scene = new GameScene();
         }
         if(curtain.graphic.alpha > 0.95) {

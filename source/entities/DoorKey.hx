@@ -8,6 +8,7 @@ import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
+import scenes.*;
 
 class DoorKey extends MemoryEntity {
     public static inline var BOB_AMOUNT = 0.2;
@@ -35,6 +36,7 @@ class DoorKey extends MemoryEntity {
             }
             scene.remove(this);
             explode(2, 0.1);
+            cast(scene, GameScene).spawnRoboPlant();
         }
         super.update();
     }
