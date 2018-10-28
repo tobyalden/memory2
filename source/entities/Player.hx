@@ -196,6 +196,12 @@ class Player extends MemoryEntity {
         if(collide("enemy", x, y) != null) {
             die();
         }
+        var spike = collide("spike", x, y);
+        if(spike != null) {
+            if(cast(spike, FloorSpike).isActive) {
+                die();
+            }
+        }
         var arrow = collide("arrow", x, y);
         if(arrow != null && quiver < MAX_ARROWS && cast(arrow, Arrow).landed) {
             scene.remove(arrow);
