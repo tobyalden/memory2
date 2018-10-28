@@ -198,7 +198,7 @@ class GameScene extends Scene {
         var groundSegmentPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var isGroundEnemy = true;
+            var isGroundEnemy = false;
             var existingPoints = enemyPoints.concat(groundSegmentPoints);
             existingPoints = enemyPoints.concat(groundSegmentPoints);
             if(isGroundEnemy) {
@@ -209,7 +209,7 @@ class GameScene extends Scene {
             }
         }
         for(enemyPoint in enemyPoints) {
-            add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            add(new Bouncer(enemyPoint.point.x, enemyPoint.point.y));
             //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in groundSegmentPoints) {
