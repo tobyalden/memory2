@@ -27,12 +27,12 @@ class GameScene extends Scene {
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
 
+    public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
     private var curtain:Curtain;
     private var allSegments:Array<Segment>;
-    private var music:Sfx;
 
 	override public function begin() {
         loadMap(1);
@@ -95,6 +95,7 @@ class GameScene extends Scene {
         curtain.fadeOut();
         var resetTimer = new Alarm(1.5, TweenType.OneShot);
         resetTimer.onComplete.bind(function() {
+            stopAllSounds();
             HXP.scene = new MainMenu();
         });
         addTween(resetTimer, true);
@@ -104,9 +105,19 @@ class GameScene extends Scene {
         curtain.fadeOut();
         var resetTimer = new Alarm(1.5, TweenType.OneShot);
         resetTimer.onComplete.bind(function() {
+            stopAllSounds();
             HXP.scene = new GameScene();
         });
         addTween(resetTimer, true);
+    }
+
+    private function stopAllSounds() {
+        var roboPlants = new Array<Entity>();
+        getType("roboplant", roboPlants);
+        for(roboPlant in roboPlants) {
+            cast(roboPlant, RoboPlant).stopThemeSong();
+        }
+        music.stop();
     }
 
     private function loadMap(mapNumber:Int) {

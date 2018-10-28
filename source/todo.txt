@@ -1,4 +1,4 @@
-- main menu
+- main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
 - wallspikes, bouncer, the tentacle monster, the turret, the mine, the ghost,
   and the spider
