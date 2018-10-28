@@ -11,10 +11,10 @@ class Follower extends MemoryEntity {
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var ACTIVATE_DISTANCE = 150;
 
-    var sprite:Spritemap;
-    var lightning:Spritemap;
-    var velocity:Vector2;
-    var isActive:Bool;
+    private var sprite:Spritemap;
+    private var lightning:Spritemap;
+    private var velocity:Vector2;
+    private var isActive:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);

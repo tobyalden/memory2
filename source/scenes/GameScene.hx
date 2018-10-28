@@ -22,7 +22,7 @@ typedef SegmentPoint = {
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -191,7 +191,7 @@ class GameScene extends Scene {
         var groundSegmentPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var isGroundEnemy = false;
+            var isGroundEnemy = true;
             var existingPoints = enemyPoints.concat(groundSegmentPoints);
             existingPoints = enemyPoints.concat(groundSegmentPoints);
             if(isGroundEnemy) {
@@ -206,8 +206,8 @@ class GameScene extends Scene {
             add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in groundSegmentPoints) {
-            //var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
-            var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
+            //var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
+            var enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "spike") {
                 var extendLeft = Random.random < 0.5;
@@ -229,7 +229,7 @@ class GameScene extends Scene {
                     //add(extraSpike);
                 }
             }
-            //add(enemy);
+            add(enemy);
         }
     }
 
