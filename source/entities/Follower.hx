@@ -10,11 +10,13 @@ class Follower extends MemoryEntity {
     public static inline var BOUNCE_FACTOR = 0.85;
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var ACTIVATE_DISTANCE = 150;
+    public static inline var HUM_DISTANCE = 280;
 
     private var sprite:Spritemap;
     private var lightning:Spritemap;
     private var velocity:Vector2;
     private var isActive:Bool;
+    private var hum:Sfx;
 
     public function new(x:Float, y:Float) {
         super(x, y);
@@ -37,12 +39,22 @@ class Follower extends MemoryEntity {
         velocity = new Vector2(0, 0);
         setHitbox(23, 23, -1, -1);
         isActive = false;
+        hum = new Sfx("audio/follower.wav");
+        hum.volume = 0;
+    }
+
+    public function stopSound() {
+        hum.stop();
     }
 
     override public function update() {
         var player = scene.getInstance("player");
+        var wasActive = isActive;
         if(distanceFrom(player, true) < ACTIVATE_DISTANCE) {
             isActive = true;
+        }
+        if(isActive && !wasActive) {
+            hum.loop();
         }
         var towardsPlayer = new Vector2(
             player.centerX - centerX, player.centerY - centerY
@@ -63,6 +75,16 @@ class Follower extends MemoryEntity {
             );
         }
         animation();
+
+        if(isActive) {
+            hum.volume = 1 - Math.min(
+                distanceFrom(player, true), HUM_DISTANCE
+            ) / HUM_DISTANCE;
+        }
+        else {
+            hum.volume = 0;
+        }
+
         super.update();
     }
 
@@ -79,6 +101,11 @@ class Follower extends MemoryEntity {
             sprite.play("idle");
         }
         lightning.visible = stopFlasher.active;
+    }
+
+    override private function die() {
+        stopSound();
+        super.die();
     }
 
     public override function moveCollideX(e:Entity) {
