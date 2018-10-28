@@ -22,6 +22,7 @@ class Hopper extends MemoryEntity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        MemoryEntity.loadSfx(["hopperjump", "hopperland"]);
         type = "enemy";
         sprite = new Spritemap("graphics/hopper.png", 24, 24);
         sprite.add("idle", [0, 1], 5);
@@ -48,6 +49,7 @@ class Hopper extends MemoryEntity {
     public override function update() {
         if(isOnGround()) {
             if(!wasOnGround) {
+                MemoryEntity.allSfx["hopperland"].play();
                 sprite.play("idle");
                 velocity.x = 0;
                 velocity.y = 0;
@@ -81,6 +83,7 @@ class Hopper extends MemoryEntity {
         }
         velocity.y = -JUMP_VEL_Y;
         sprite.play("jump");
+        MemoryEntity.allSfx["hopperjump"].play();
     }
 }
 
