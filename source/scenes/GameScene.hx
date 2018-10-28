@@ -31,6 +31,8 @@ class GameScene extends Scene {
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
+    private var door:Door;
+    private var key:DoorKey;
     private var curtain:Curtain;
     private var allSegments:Array<Segment>;
 
@@ -177,9 +179,9 @@ class GameScene extends Scene {
                 doorPoint = newDoorPoint;
             }
         }
-        var key = new DoorKey(keyPoint.point.x, keyPoint.point.y);
+        key = new DoorKey(keyPoint.point.x, keyPoint.point.y);
         key.y -= Segment.TILE_SIZE;
-        var door = new Door(doorPoint.point.x, doorPoint.point.y);
+        door = new Door(doorPoint.point.x, doorPoint.point.y);
         door.y += Segment.TILE_SIZE - door.height;
         add(key);
         add(door);
@@ -251,7 +253,17 @@ class GameScene extends Scene {
             }
 
             var distanceFromPlayer = enemyPoint.point.distance(playerPoint);
-            if(distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
+            var distanceFromDoor = door.distanceToPoint(
+                enemyPoint.point.x, enemyPoint.point.y, true
+            );
+            var distanceFromKey = key.distanceToPoint(
+                enemyPoint.point.x, enemyPoint.point.y, true
+            );
+            if(
+                distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER
+                || distanceFromDoor < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
+                || distanceFromKey < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
+            ) {
                 isValid = false;
                 continue;
             }
