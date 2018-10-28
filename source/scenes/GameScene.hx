@@ -186,17 +186,19 @@ class GameScene extends Scene {
             var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "spike") {
+                var extendLeft = Random.random < 0.5;
                 for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendLeft ? -i : i;
                     var extraSpike = new FloorSpike(
-                        enemy.x + i * Segment.TILE_SIZE, enemy.y
+                        enemy.x + extendCount * Segment.TILE_SIZE, enemy.y
                     );
                     if(!enemyPoint.segment.walls.getTile(
-                        enemyPoint.tileX + i, enemyPoint.tileY + 1
+                        enemyPoint.tileX + extendCount, enemyPoint.tileY + 1
                     )) {
                         break;
                     }
                     if(enemyPoint.segment.walls.getTile(
-                        enemyPoint.tileX + i, enemyPoint.tileY
+                        enemyPoint.tileX + extendCount, enemyPoint.tileY
                     )) {
                         break;
                     }
