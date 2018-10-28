@@ -196,6 +196,9 @@ class Player extends MemoryEntity {
         if(collide("enemy", x, y) != null) {
             die();
         }
+        if(collide("roboplant", x, y) != null) {
+            die();
+        }
         var spike = collide("spike", x, y);
         if(spike != null) {
             if(cast(spike, FloorSpike).isActive) {

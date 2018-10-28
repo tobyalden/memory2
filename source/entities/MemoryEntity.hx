@@ -73,6 +73,20 @@ class MemoryEntity extends Entity {
 
     private function die() {
         scene.remove(this);
+        var arrows = detachArrows();
+        for(arrow in arrows) {
+            cast(arrow, Arrow).setVelocity(
+                new Vector2(Math.random() * -5, Math.random() * -5)
+            );
+        }
+        explode();
+        MemoryEntity.allSfx['robotdeath${HXP.choose(1, 2, 3)}'].play();
+#if desktop
+        Sys.sleep(0.02);
+#end
+    }
+
+    private function detachArrows() {
         var arrows = new Array<Entity>();
         scene.getType("arrow", arrows);
         for(_arrow in arrows) {
@@ -80,17 +94,10 @@ class MemoryEntity extends Entity {
             if(arrow.anchor == this) {
                 arrow.anchor = null;
                 arrow.setLanded(false);
-                arrow.setVelocity(
-                    new Vector2(Math.random() * -5, Math.random() * -5)
-                );
                 arrow.collidable = true;
             }
         }
-        explode();
-        MemoryEntity.allSfx['robotdeath${HXP.choose(1, 2, 3)}'].play();
-#if desktop
-        Sys.sleep(0.02);
-#end
+        return arrows;
     }
 
     private function explode(numExplosions:Int = 15, speed:Float = 0.4) {

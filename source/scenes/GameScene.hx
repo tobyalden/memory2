@@ -22,7 +22,7 @@ typedef SegmentPoint = {
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 20;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 1;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -168,7 +168,8 @@ class GameScene extends Scene {
         var enemyPoints = new Array<SegmentPoint>();
         var groundSegmentPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
-            var isGroundEnemy = Random.random < 0.5;
+            //var isGroundEnemy = Random.random < 0.5;
+            var isGroundEnemy = false;
             var existingPoints = enemyPoints.concat(groundSegmentPoints);
             existingPoints = enemyPoints.concat(groundSegmentPoints);
             if(isGroundEnemy) {
@@ -179,7 +180,8 @@ class GameScene extends Scene {
             }
         }
         for(enemyPoint in enemyPoints) {
-            add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            //add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in groundSegmentPoints) {
             //var enemy = new Roombad(enemyPoint.x, enemyPoint.y);
@@ -202,10 +204,10 @@ class GameScene extends Scene {
                     )) {
                         break;
                     }
-                    add(extraSpike);
+                    //add(extraSpike);
                 }
             }
-            add(enemy);
+            //add(enemy);
         }
     }
 
@@ -399,6 +401,18 @@ class GameScene extends Scene {
             camera.x = Math.floor(player.x - HXP.width/2);
             camera.y = Math.floor(player.y - HXP.height/2);
         }
+
+        var updateFirst = new Array<Entity>();
+        for(e in _update) {
+            if(Type.getClass(e) == RoboPlant) {
+                _update.remove(e);
+                updateFirst.push(e);
+            }
+        }
+        for(e in updateFirst) {
+            _update.push(e);
+        }
+
         super.update();
 
         for(sfxName in MemoryEntity.sfxQueue) {
