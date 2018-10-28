@@ -13,6 +13,7 @@ class Hopper extends MemoryEntity {
     public static inline var JUMP_VEL_Y = 3.8;
     public static inline var GRAVITY = 0.16;
     public static inline var TIME_BETWEEN_JUMPS = 1.5;
+    public static inline var HIT_KNOCKBACK = 5;
 
     private var sprite:Spritemap;
     private var lightning:Spritemap;
@@ -102,6 +103,15 @@ class Hopper extends MemoryEntity {
     public override function moveCollideY(e:Entity) {
         velocity.y = velocity.y / 2;
         return true;
+    }
+
+    override public function takeHit(arrow:Arrow) {
+        if(!isOnGround()) {
+            var knockback = arrow.velocity.clone();
+            knockback.normalize(HIT_KNOCKBACK);
+            velocity.add(knockback);
+        }
+        super.takeHit(arrow);
     }
 }
 
