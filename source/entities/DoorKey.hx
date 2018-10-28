@@ -18,6 +18,7 @@ class DoorKey extends MemoryEntity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        MemoryEntity.loadSfx(["key"]);
         sprite = new Image("graphics/key.png");
         setGraphic(sprite);
         setHitbox(12, 6);
@@ -37,6 +38,7 @@ class DoorKey extends MemoryEntity {
             scene.remove(this);
             explode(2, 0.1);
             cast(scene, GameScene).spawnRoboPlant();
+            MemoryEntity.allSfx["key"].play();
         }
         super.update();
     }
