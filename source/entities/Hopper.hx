@@ -91,5 +91,17 @@ class Hopper extends MemoryEntity {
             MemoryEntity.allSfx["hopperjump"].play();
         }
     }
+
+    public override function moveCollideX(e:Entity) {
+        if(!isOnGround()) {
+            velocity.x = velocity.x / 2;
+        }
+        return true;
+    }
+
+    public override function moveCollideY(e:Entity) {
+        velocity.y = velocity.y / 2;
+        return true;
+    }
 }
 
