@@ -9,9 +9,9 @@ import scenes.*;
 
 class Hopper extends MemoryEntity {
     public static inline var ACTIVE_RANGE = 250;
-    public static inline var JUMP_VEL_X = 3.3;
-    public static inline var JUMP_VEL_Y = 3.3;
-    public static inline var GRAVITY = 0.18;
+    public static inline var JUMP_VEL_X = 3;
+    public static inline var JUMP_VEL_Y = 3.8;
+    public static inline var GRAVITY = 0.16;
     public static inline var TIME_BETWEEN_JUMPS = 1.5;
 
     private var sprite:Spritemap;
@@ -35,7 +35,7 @@ class Hopper extends MemoryEntity {
         setGraphic(sprite);
         addGraphic(lightning);
         lightning.visible = false;
-        setHitbox(24, 24);
+        setHitbox(24, 23, 0, -1);
         health = 2;
         velocity = new Vector2(0, 0);
         jumpTimer = new Alarm(TIME_BETWEEN_JUMPS, TweenType.Looping);
@@ -49,8 +49,9 @@ class Hopper extends MemoryEntity {
     public override function update() {
         if(isOnGround()) {
             if(!wasOnGround) {
-                MemoryEntity.allSfx["hopperland"].play();
-                sprite.play("idle");
+                if(isOnScreen()) {
+                    MemoryEntity.allSfx["hopperland"].play();
+                }
                 velocity.x = 0;
                 velocity.y = 0;
             }
@@ -66,6 +67,9 @@ class Hopper extends MemoryEntity {
         lightning.visible = stopFlasher.active;
         if(stopFlasher.active) {
             sprite.play("hit");
+        }
+        else if(isOnGround()) {
+            sprite.play("idle");
         }
         super.update();
     }
@@ -83,7 +87,9 @@ class Hopper extends MemoryEntity {
         }
         velocity.y = -JUMP_VEL_Y;
         sprite.play("jump");
-        MemoryEntity.allSfx["hopperjump"].play();
+        if(isOnScreen()) {
+            MemoryEntity.allSfx["hopperjump"].play();
+        }
     }
 }
 

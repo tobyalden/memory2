@@ -1,7 +1,6 @@
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
-- wallspikes, bouncer, the tentacle monster, the turret, the mine, the ghost,
-  and the spider
+- wallspikes, bouncer, the turret, the mine, the ghost
 - descent (elevators and screen showing depth)
 - final boss
 - make new segments

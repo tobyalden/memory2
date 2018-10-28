@@ -201,8 +201,8 @@ class MemoryEntity extends Entity {
 
     private function isOnScreen() {
         return (
-            right > camera.x && left < camera.x + HXP.width
-            && bottom > camera.y && top < camera.y + HXP.height
+            right > scene.camera.x && left < scene.camera.x + HXP.width
+            && bottom > scene.camera.y && top < scene.camera.y + HXP.height
         );
     }
 }
