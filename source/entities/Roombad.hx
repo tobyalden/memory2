@@ -126,9 +126,9 @@ class Roombad extends MemoryEntity {
             if(!chaseSfx.playing && !soundsStopped) {
                 chaseSfx.loop();
             }
-            chaseSfx.volume = 1 - Math.min(
+            chaseSfx.volume = (1 - Math.min(
                 distanceFrom(player, true), SFX_DISTANCE
-            ) / SFX_DISTANCE;
+            ) / SFX_DISTANCE) / 2;
             idleSfx.stop();
         }
         else {
@@ -137,7 +137,7 @@ class Roombad extends MemoryEntity {
             }
             idleSfx.volume = (1 - Math.min(
                 distanceFrom(player, true), SFX_DISTANCE
-            ) / SFX_DISTANCE) / 2;
+            ) / SFX_DISTANCE) / 4;
             chaseSfx.stop();
         }
 
