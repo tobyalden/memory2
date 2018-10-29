@@ -6,7 +6,7 @@ import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
-class FloorSpike extends MemoryEntity {
+class LeftWallSpike extends MemoryEntity {
     public static inline var ACTIVATE_DELAY = 0.3;
     public static inline var DEACTIVATE_DELAY = 2;
 
@@ -21,16 +21,16 @@ class FloorSpike extends MemoryEntity {
         MemoryEntity.loadSfx([
             "spikewarning", "spikeactivate", "spikedeactivate"
         ]);
-        type = "floorspike";
-        sprite = new Spritemap("graphics/floorspikes.png", 16, 18);
-        setHitbox(16, 18);
-        sprite.add("idle", [0]);
-        sprite.add("activate", [1, 2], 24, false);
-        sprite.add("deactivate", [2, 1, 0], 12, false);
+        type = "leftwallspike";
+        sprite = new Spritemap("graphics/leftwallspikes.png", 18, 16);
+        setHitbox(18, 16);
+        sprite.add("idle", [2]);
+        sprite.add("activate", [1, 0], 24, false);
+        sprite.add("deactivate", [0, 1, 2], 12, false);
         sprite.play("idle");
         setGraphic(sprite);
         base = new Image("graphics/spikebase.png");
-        base.y = base.height;
+        base.x = -base.width;
         addGraphic(base);
         activateTimer = new Alarm(ACTIVATE_DELAY, TweenType.Persist);
         activateTimer.onComplete.bind(function() {
@@ -49,7 +49,7 @@ class FloorSpike extends MemoryEntity {
         var player = cast(scene.getInstance("player"), Player);
         if(
             collideWith(player, x, y) != null
-            && player.isOnGround()
+            && player.isOnWall()
             && !isActive
             && !activateTimer.active
         ) {
@@ -71,3 +71,4 @@ class FloorSpike extends MemoryEntity {
         MemoryEntity.allSfx["spikedeactivate"].play();
     }
 }
+

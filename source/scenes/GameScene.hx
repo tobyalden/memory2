@@ -22,7 +22,7 @@ typedef SegmentPoint = {
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 30;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -195,28 +195,42 @@ class GameScene extends Scene {
     private function addEnemies() {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
         var enemyPoints = new Array<SegmentPoint>();
-        var groundSegmentPoints = new Array<SegmentPoint>();
+        var groundEnemyPoints = new Array<SegmentPoint>();
+        var leftWallEnemyPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var isGroundEnemy = true;
-            var existingPoints = enemyPoints.concat(groundSegmentPoints);
-            existingPoints = enemyPoints.concat(groundSegmentPoints);
-            if(isGroundEnemy) {
-                groundSegmentPoints.push(getEnemyPoint(true, existingPoints));
+            var enemyType = "leftwall";
+            var existingPoints = (
+                enemyPoints.concat(groundEnemyPoints).concat(
+                    leftWallEnemyPoints
+                )
+            );
+            if(enemyType == "ground") {
+                groundEnemyPoints.push(getEnemyPoint("ground", existingPoints));
+            }
+            else if(enemyType == "leftwall") {
+                leftWallEnemyPoints.push(getEnemyPoint("leftwall", existingPoints));
             }
             else {
-                enemyPoints.push(getEnemyPoint(false, existingPoints));
+                enemyPoints.push(getEnemyPoint("air", existingPoints));
             }
         }
         for(enemyPoint in enemyPoints) {
             add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
             //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
-        for(enemyPoint in groundSegmentPoints) {
+        for(enemyPoint in leftWallEnemyPoints) {
+            //add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            //addGraphic(new ColoredRect(16, 16), -999999, enemyPoint.point.x, enemyPoint.point.y);
+            var enemy = new LeftWallSpike(enemyPoint.point.x, enemyPoint.point.y);
+            add(enemy);
+            //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
+        }
+        for(enemyPoint in groundEnemyPoints) {
             //var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
             var enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
-            if(enemy.type == "spike") {
+            if(enemy.type == "floorspike") {
                 var extendLeft = Random.random < 0.5;
                 for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
                     var extendCount = extendLeft ? -i : i;
@@ -241,7 +255,7 @@ class GameScene extends Scene {
     }
 
     private function getEnemyPoint(
-        isGroundEnemy:Bool, existingPoints:Array<SegmentPoint>
+        enemyType:String, existingPoints:Array<SegmentPoint>
     ) {
         var playerPoint = new Vector2(player.x, player.y);
         var isValid = false;
@@ -250,8 +264,11 @@ class GameScene extends Scene {
         while(!isValid && count < 1000) {
             count++;
             isValid = true;
-            if(isGroundEnemy) {
+            if(enemyType == "ground") {
                 enemyPoint = getRandomOpenGroundPoint();
+            }
+            else if(enemyType == "leftwall") {
+                enemyPoint = getRandomOpenLeftWallPoint();
             }
             else {
                 enemyPoint = getRandomOpenPoint();
@@ -272,7 +289,7 @@ class GameScene extends Scene {
                 isValid = false;
                 continue;
             }
-            if(isGroundEnemy) {
+            if(enemyType == "ground") {
                 if(enemyPoint.point.y + Segment.TILE_SIZE == player.bottom) {
                     isValid = false;
                     continue;
@@ -312,6 +329,26 @@ class GameScene extends Scene {
         while(randomTile == null) {
             segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenTile();
+        }
+        var openPoint:SegmentPoint = {
+            point: new Vector2(
+                segment.x + randomTile.tileX * Segment.TILE_SIZE,
+                segment.y + randomTile.tileY * Segment.TILE_SIZE
+            ),
+            segment: segment,
+            tileX: randomTile.tileX,
+            tileY: randomTile.tileY
+        };
+        return openPoint;
+    }
+
+    private function getRandomOpenLeftWallPoint() {
+        var weightedSegments = getWeightedSegments();
+        var segment = weightedSegments[Random.randInt(weightedSegments.length)];
+        var randomTile = segment.getRandomOpenLeftWallTile();
+        while(randomTile == null) {
+            segment = weightedSegments[Random.randInt(weightedSegments.length)];
+            randomTile = segment.getRandomOpenLeftWallTile();
         }
         var openPoint:SegmentPoint = {
             point: new Vector2(

@@ -205,9 +205,15 @@ class Player extends MemoryEntity {
                 die();
             }
         }
-        var spike = collide("spike", x, y);
-        if(spike != null) {
-            if(cast(spike, FloorSpike).isActive) {
+        var floorSpike = collide("floorspike", x, y);
+        if(floorSpike != null) {
+            if(cast(floorSpike, FloorSpike).isActive) {
+                die();
+            }
+        }
+        var leftWallSpike = collide("leftwallspike", x, y);
+        if(leftWallSpike != null) {
+            if(cast(leftWallSpike, LeftWallSpike).isActive) {
                 die();
             }
         }
