@@ -7,7 +7,8 @@ import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 
 class Turret extends MemoryEntity {
-    public static inline var TIME_BETWEEN_LOBS = 3;
+    public static inline var TIME_BETWEEN_LOBS = 2.5;
+    public static inline var LOB_ANTICIPATION = 0.5;
     public static inline var LOB_POWER = 5;
 
     private var sprite:Spritemap;
@@ -15,14 +16,19 @@ class Turret extends MemoryEntity {
     private var lightning:Spritemap;
     private var lobTimer:Alarm;
     private var lobSfx:Sfx;
+    private var prepareSfx:Sfx;
+    private var isAncipatingLob:Bool;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         type = "enemy";
         sprite = new Spritemap("graphics/turret.png", 24, 16);
-        sprite.add("idle", [1]);
-        sprite.add("left", [3]);
-        sprite.add("right", [5]);
+        sprite.add("idle", [0]);
+        sprite.add("idleprepare", [1]);
+        sprite.add("left", [2]);
+        sprite.add("leftprepare", [3]);
+        sprite.add("right", [4]);
+        sprite.add("rightprepare", [5]);
         sprite.play("idle");
         lightning = new Spritemap("graphics/turret.png", 24, 16);
         lightning.add("idle", [6, 7], 24);
@@ -39,15 +45,27 @@ class Turret extends MemoryEntity {
         health = 3;
         lobTimer = new Alarm(TIME_BETWEEN_LOBS, TweenType.Looping);
         lobTimer.onComplete.bind(function() {
-            lob();
+            if(!isOnScreen()) {
+                return;
+            }
+            isAncipatingLob = true;
+            prepareSfx.play();
+            var preLob = new Alarm(LOB_ANTICIPATION, TweenType.OneShot);
+            preLob.onComplete.bind(function() {
+                lob();
+            });
+            addTween(preLob, true);
         });
         addTween(lobTimer);
-        var lobTimerDelay = new Alarm(Math.random(), TweenType.OneShot);
+        var lobTimerDelay = new Alarm(
+            Math.random() * TIME_BETWEEN_LOBS, TweenType.OneShot
+        );
         lobTimerDelay.onComplete.bind(function() {
             lobTimer.start();
         });
         addTween(lobTimerDelay, true);
         lobSfx = new Sfx("audio/turretshoot.wav");
+        prepareSfx = new Sfx("audio/turretprepare.wav");
     }
 
     private function lob() {
@@ -64,6 +82,7 @@ class Turret extends MemoryEntity {
         var grenade = new Grenade(centerX, top, towardsPlayer);
         scene.add(grenade);
         lobSfx.play();
+        isAncipatingLob = false;
     }
 
     override public function update() {
@@ -75,10 +94,10 @@ class Turret extends MemoryEntity {
         lightning.visible = stopFlasher.active;
         var player = scene.getInstance("player");
         if(x > player.x) {
-            sprite.play("left");
+            sprite.play(isAncipatingLob ? "leftprepare" : "left");
         }
         else {
-            sprite.play("right");
+            sprite.play(isAncipatingLob ? "rightprepare" : "right");
         }
     }
 }

@@ -1,6 +1,6 @@
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
-- wallspikes, the turret, the mine, the ghost
+- wallspikes, the mine, the ghost
 - descent (elevators and screen showing depth)
 - final boss
 - make new segments
