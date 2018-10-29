@@ -43,7 +43,12 @@ class Hopper extends MemoryEntity {
         jumpTimer.onComplete.bind(function() {
             jump();
         });
-        addTween(jumpTimer, true);
+        addTween(jumpTimer);
+        var jumpTimerDelay = new Alarm(Math.random(), TweenType.OneShot);
+        jumpTimerDelay.onComplete.bind(function() {
+            jumpTimer.start();
+        });
+        addTween(jumpTimerDelay, true);
         wasOnGround = false;
     }
 

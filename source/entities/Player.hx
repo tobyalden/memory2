@@ -38,7 +38,8 @@ class Player extends MemoryEntity {
     public static inline var WALL_JUMP_STRETCH_X = 1.4;
     public static inline var WALL_JUMP_STRETCH_Y = 1.4;
 
-    public static inline var MAX_ARROWS = 5;
+    public static inline var MAX_ARROWS = 6;
+    public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
     private var isTurning:Bool;
     private var wasOnGround:Bool;
@@ -130,6 +131,12 @@ class Player extends MemoryEntity {
         quiverDisplay.x = (
             width/2 - (quiver * arrowDisplay.width / 2) - originX/2 + 1.5
         );
+        if(quiver >= MAX_ARROWS) {
+            quiverDisplay.color = 0xf4428c;
+        }
+        else {
+            quiverDisplay.color = 0xFFFFFF66;
+        }
     }
 
     private function scaleX(newScaleX:Float, toLeft:Bool) {
@@ -626,6 +633,19 @@ class Player extends MemoryEntity {
         }
         else {
             armsAndBow.play(spriteAnimationName);
+        }
+
+        if(velocity.length == 0 || Main.inputCheck("act")) {
+            quiverDisplay.alpha = Math.min(
+                1, quiverDisplay.alpha +
+                QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
+            );
+        }
+        else {
+            quiverDisplay.alpha = Math.max(
+                0, quiverDisplay.alpha -
+                QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
+            );
         }
     }
 }

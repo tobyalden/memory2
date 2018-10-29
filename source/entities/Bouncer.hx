@@ -59,6 +59,7 @@ class Bouncer extends MemoryEntity {
         });
         addTween(sparker, true);
         bounceSfx = new Sfx("audio/bounce.wav");
+        health = 2;
     }
 
     override public function stopSound() {
