@@ -214,7 +214,7 @@ class GameScene extends Scene {
         }
         for(enemyPoint in groundSegmentPoints) {
             //var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
-            var enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y);
+            var enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "spike") {
                 var extendLeft = Random.random < 0.5;

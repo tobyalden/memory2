@@ -200,11 +200,10 @@ class Player extends MemoryEntity {
                 enterDoor();
             }
         }
-        if(collide("enemy", x, y) != null) {
-            die();
-        }
-        if(collide("roboplant", x, y) != null) {
-            die();
+        for(hazardType in ["enemy", "grenade", "explosion", "roboplant"]) {
+            if(collide(hazardType, x, y) != null) {
+                die();
+            }
         }
         var spike = collide("spike", x, y);
         if(spike != null) {
@@ -635,18 +634,18 @@ class Player extends MemoryEntity {
             armsAndBow.play(spriteAnimationName);
         }
 
-        if(velocity.length == 0 || Main.inputCheck("act")) {
-            quiverDisplay.alpha = Math.min(
-                1, quiverDisplay.alpha +
-                QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
-            );
-        }
-        else {
-            quiverDisplay.alpha = Math.max(
-                0, quiverDisplay.alpha -
-                QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
-            );
-        }
+        //if(velocity.length == 0 || Main.inputCheck("act")) {
+            //quiverDisplay.alpha = Math.min(
+                //1, quiverDisplay.alpha +
+                //QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
+            //);
+        //}
+        //else {
+            //quiverDisplay.alpha = Math.max(
+                //0, quiverDisplay.alpha -
+                //QUIVER_DISPLAY_FADE_SPEED * Main.getDelta()
+            //);
+        //}
     }
 }
 
