@@ -24,6 +24,7 @@ class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
+    public static inline var MAX_PLACEMENT_RETRIES = 1000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -67,8 +68,8 @@ class GameScene extends Scene {
     private function addBackgrounds() {
         // Add map background
         var distanceBackground = new Backdrop("graphics/mapbackground.png");
-        distanceBackground.scrollX = 0.5;
-        distanceBackground.scrollY = 0.5;
+        distanceBackground.scrollX = 0.25;
+        distanceBackground.scrollY = 0.25;
         addGraphic(distanceBackground, 1000);
 
         // Add segment backgrounds
@@ -382,7 +383,7 @@ class GameScene extends Scene {
         var isValid = false;
         var enemyPoint:SegmentPoint = null;
         var count = 0;
-        while(!isValid && count < 1000) {
+        while(!isValid && count < MAX_PLACEMENT_RETRIES) {
             count++;
             isValid = true;
             if(enemyType == "ground") {
