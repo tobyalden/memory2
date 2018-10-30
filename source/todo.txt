@@ -1,11 +1,11 @@
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
-- mine, the ghost
+- the ghost
+- scatter arrows
 - descent (elevators and screen showing depth)
 - final boss
 - make new segments
 - add new tiles
-- make explosions hurt enemies
 - add new backgrounds
 
 - ending

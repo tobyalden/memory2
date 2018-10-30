@@ -22,7 +22,8 @@ typedef SegmentPoint = {
 
 class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 30;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var STARTING_NUMBER_OF_TRAPS = 10;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -196,43 +197,98 @@ class GameScene extends Scene {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
         var enemyPoints = new Array<SegmentPoint>();
         var groundEnemyPoints = new Array<SegmentPoint>();
-        var leftWallEnemyPoints = new Array<SegmentPoint>();
-        var rightWallEnemyPoints = new Array<SegmentPoint>();
+
+        var numberOfTraps = STARTING_NUMBER_OF_TRAPS;
+        var groundTrapPoints = new Array<SegmentPoint>();
+        var leftWallTrapPoints = new Array<SegmentPoint>();
+        var rightWallTrapPoints = new Array<SegmentPoint>();
+
+        for(i in 0...numberOfTraps) {
+            var trapType = ["rightwall", "leftwall", "ground"][
+                Random.randInt(3)
+            ];
+            var existingPoints = (
+                groundTrapPoints
+                .concat(leftWallTrapPoints)
+                .concat(rightWallTrapPoints)
+            );
+            if(trapType == "ground") {
+                groundTrapPoints.push(
+                    getEnemyPoint("ground", existingPoints)
+                );
+            }
+            else if(trapType == "leftwall") {
+                leftWallTrapPoints.push(
+                    getEnemyPoint("leftwall", existingPoints)
+                );
+            }
+            else if(trapType == "rightwall") {
+                rightWallTrapPoints.push(
+                    getEnemyPoint("rightwall", existingPoints)
+                );
+            }
+        }
         for(i in 0...numberOfEnemies) {
-            //var isGroundEnemy = Random.random < 0.5;
-            var enemyType = HXP.choose("air", "rightwall", "leftwall");
+            var enemyType = ["air", "ground"][Random.randInt(2)];
             var existingPoints = (
                 enemyPoints
                 .concat(groundEnemyPoints)
-                .concat(leftWallEnemyPoints)
-                .concat(rightWallEnemyPoints)
+                .concat(groundTrapPoints)
+                .concat(leftWallTrapPoints)
+                .concat(rightWallTrapPoints)
             );
             if(enemyType == "ground") {
                 groundEnemyPoints.push(
                     getEnemyPoint("ground", existingPoints)
                 );
             }
-            else if(enemyType == "leftwall") {
-                leftWallEnemyPoints.push(
-                    getEnemyPoint("leftwall", existingPoints)
-                );
-            }
-            else if(enemyType == "rightwall") {
-                rightWallEnemyPoints.push(
-                    getEnemyPoint("rightwall", existingPoints)
-                );
-            }
             else {
                 enemyPoints.push(getEnemyPoint("air", existingPoints));
             }
         }
+
+        // Add enemies
         for(enemyPoint in enemyPoints) {
-            add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            var choice = Random.randInt(3);
+            if(choice == 0) {
+                add(new Bouncer(enemyPoint.point.x, enemyPoint.point.y));
+            }
+            else if(choice == 1) {
+                add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+            }
+            else if(choice == 2) {
+                add(new Ghost(enemyPoint.point.x, enemyPoint.point.y));
+            }
         }
-        for(enemyPoint in leftWallEnemyPoints) {
-            var enemy = new Mine(
-                enemyPoint.point.x, enemyPoint.point.y
-            );
+        for(enemyPoint in groundEnemyPoints) {
+            var choice = Random.randInt(3);
+            var enemy:MemoryEntity;
+            if(choice == 0) {
+                enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
+            }
+            else if(choice == 1) {
+                enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y);
+            }
+            else {
+                enemy = new Roombad(enemyPoint.point.x, enemyPoint.point.y);
+            }
+            enemy.y += Segment.TILE_SIZE - enemy.height;
+            add(enemy);
+        }
+
+        // Add traps
+        for(enemyPoint in leftWallTrapPoints) {
+            var enemy:MemoryEntity;
+            if(Random.random < 0.5) {
+                enemy = new Mine(
+                    enemyPoint.point.x, enemyPoint.point.y
+                );
+            }
+            else {
+                enemy = new LeftWallSpike(
+                    enemyPoint.point.x, enemyPoint.point.y
+                );
+            }
             if(enemy.type == "leftwallspike") {
                 var extendUp = Random.random < 0.5;
                 for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
@@ -255,10 +311,18 @@ class GameScene extends Scene {
             }
             add(enemy);
         }
-        for(enemyPoint in rightWallEnemyPoints) {
-            var enemy = new Mine(
-                enemyPoint.point.x, enemyPoint.point.y
-            );
+        for(enemyPoint in rightWallTrapPoints) {
+            var enemy:MemoryEntity;
+            if(Random.random < 0.5) {
+                enemy = new Mine(
+                    enemyPoint.point.x, enemyPoint.point.y
+                );
+            }
+            else {
+                enemy = new RightWallSpike(
+                    enemyPoint.point.x, enemyPoint.point.y
+                );
+            }
             if(enemy.type == "mine") {
                 enemy.x += 4;
             }
@@ -284,8 +348,8 @@ class GameScene extends Scene {
             }
             add(enemy);
         }
-        for(enemyPoint in groundEnemyPoints) {
-            var enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
+        for(enemyPoint in groundTrapPoints) {
+            var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "floorspike") {
                 var extendLeft = Random.random < 0.5;
@@ -304,7 +368,7 @@ class GameScene extends Scene {
                     )) {
                         break;
                     }
-                    //add(extraSpike);
+                    add(extraSpike);
                 }
             }
             add(enemy);
