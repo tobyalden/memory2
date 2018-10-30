@@ -200,7 +200,9 @@ class Player extends MemoryEntity {
                 enterDoor();
             }
         }
-        for(hazardType in ["enemy", "grenade", "explosion", "roboplant"]) {
+        for(hazardType in [
+            "mine", "enemy", "grenade", "explosion", "roboplant"
+        ]) {
             if(collide(hazardType, x, y) != null) {
                 die();
             }

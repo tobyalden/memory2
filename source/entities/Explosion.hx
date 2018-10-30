@@ -20,6 +20,26 @@ class Explosion extends MemoryEntity {
     }
 
     override public function update() {
+        collidable = sprite.index < 2;
+        var arrows = new Array<Entity>();
+        scene.getType("arrow", arrows);
+        for(arrow in arrows) {
+            var tempCollidable = arrow.collidable;
+            arrow.collidable = true;
+            if(collideWith(arrow, x, y) != null) {
+                cast(arrow, Arrow).explode(2, 0.05);
+                scene.remove(arrow);
+            }
+            else {
+                arrow.collidable = tempCollidable;
+            }
+        }
+
+        var enemy = collide("enemy", x, y);
+        if(enemy != null) {
+            cast(enemy, MemoryEntity).die();
+        }
+
         if(sprite.complete) {
             scene.remove(this);
         }

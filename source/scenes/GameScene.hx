@@ -200,7 +200,7 @@ class GameScene extends Scene {
         var rightWallEnemyPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var enemyType = HXP.choose("rightwall", "leftwall");
+            var enemyType = HXP.choose("air", "rightwall", "leftwall");
             var existingPoints = (
                 enemyPoints
                 .concat(groundEnemyPoints)
@@ -230,7 +230,7 @@ class GameScene extends Scene {
             add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in leftWallEnemyPoints) {
-            var enemy = new LeftWallSpike(
+            var enemy = new Mine(
                 enemyPoint.point.x, enemyPoint.point.y
             );
             if(enemy.type == "leftwallspike") {
@@ -256,9 +256,12 @@ class GameScene extends Scene {
             add(enemy);
         }
         for(enemyPoint in rightWallEnemyPoints) {
-            var enemy = new RightWallSpike(
+            var enemy = new Mine(
                 enemyPoint.point.x, enemyPoint.point.y
             );
+            if(enemy.type == "mine") {
+                enemy.x += 4;
+            }
             if(enemy.type == "rightwallspike") {
                 var extendUp = Random.random < 0.5;
                 for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
