@@ -32,6 +32,8 @@ class GameScene extends Scene {
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
 
+    public static var easyMode:Bool = true;
+
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -230,6 +232,11 @@ class GameScene extends Scene {
         var groundTrapPoints = new Array<SegmentPoint>();
         var leftWallTrapPoints = new Array<SegmentPoint>();
         var rightWallTrapPoints = new Array<SegmentPoint>();
+
+        if(easyMode) {
+            numberOfEnemies = Std.int(Math.floor(numberOfEnemies / 2));
+            numberOfTraps = Std.int(Math.floor(numberOfTraps / 2));
+        }
 
         for(i in 0...numberOfTraps) {
             var trapType = ["rightwall", "leftwall", "ground"][

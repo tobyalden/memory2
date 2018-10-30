@@ -5,6 +5,7 @@ import haxepunk.graphics.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import scenes.*;
 
 class Roombad extends MemoryEntity {
     public static inline var IDLE_SPEED = 2;
@@ -48,7 +49,12 @@ class Roombad extends MemoryEntity {
             velocity.x *= -1;
         }
         setHitbox(24, 10);
-        health = 2;
+        if(GameScene.easyMode) {
+            health = 1;
+        }
+        else {
+            health = 2;
+        }
         isChasing = false;
         idleSfx = new Sfx("audio/roombadidle.wav");
         chaseSfx = new Sfx("audio/roombadchase.wav");

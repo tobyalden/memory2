@@ -8,6 +8,7 @@ import scenes.*;
 class RoboPlant extends MemoryEntity {
     public static inline var ACCEL = 0.055;
     public static inline var MAX_SPEED = 2.9;
+    public static inline var MAX_SPEED_EASY = 2;
     public static inline var ARROW_DEFLECT_FACTOR = 1.5;
     public static inline var THEME_SONG_DISTANCE = 310;
 
@@ -52,8 +53,9 @@ class RoboPlant extends MemoryEntity {
         }
         towardsPlayer.normalize(accel * Main.getDelta());
         velocity.add(towardsPlayer);
-        if(velocity.length > MAX_SPEED) {
-            velocity.normalize(MAX_SPEED);
+        var maxSpeed = GameScene.easyMode ? MAX_SPEED_EASY : MAX_SPEED;
+        if(velocity.length > maxSpeed) {
+            velocity.normalize(maxSpeed);
         }
 
         themeSong.volume = 1 - Math.min(

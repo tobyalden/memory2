@@ -3,6 +3,7 @@ package entities;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.math.*;
+import scenes.*;
 
 class Follower extends MemoryEntity {
     public static inline var ACCEL = 0.05;
@@ -43,6 +44,12 @@ class Follower extends MemoryEntity {
         hum = new Sfx("audio/follower.wav");
         hum.volume = 0;
         bounceSfx = new Sfx("audio/bounce.wav");
+        if(GameScene.easyMode) {
+            health = 2;
+        }
+        else {
+            health = 3;
+        }
     }
 
     override public function stopSound() {

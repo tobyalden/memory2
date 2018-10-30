@@ -37,7 +37,12 @@ class Hopper extends MemoryEntity {
         addGraphic(lightning);
         lightning.visible = false;
         setHitbox(24, 23, 0, -1);
-        health = 2;
+        if(GameScene.easyMode) {
+            health = 1;
+        }
+        else {
+            health = 2;
+        }
         velocity = new Vector2(0, 0);
         jumpTimer = new Alarm(TIME_BETWEEN_JUMPS, TweenType.Looping);
         jumpTimer.onComplete.bind(function() {

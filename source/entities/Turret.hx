@@ -5,6 +5,7 @@ import haxepunk.graphics.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import scenes.*;
 
 class Turret extends MemoryEntity {
     public static inline var TIME_BETWEEN_LOBS = 2.5;
@@ -42,7 +43,12 @@ class Turret extends MemoryEntity {
         addGraphic(eyes);
         addGraphic(lightning);
         setHitbox(24, 16);
-        health = 3;
+        if(GameScene.easyMode) {
+            health = 2;
+        }
+        else {
+            health = 3;
+        }
         lobTimer = new Alarm(TIME_BETWEEN_LOBS, TweenType.Looping);
         lobTimer.onComplete.bind(function() {
             if(!isOnScreen()) {

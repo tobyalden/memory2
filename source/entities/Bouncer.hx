@@ -5,6 +5,7 @@ import haxepunk.graphics.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import scenes.*;
 
 class Bouncer extends MemoryEntity {
     public static inline var MAX_SPEED = 2;
@@ -59,7 +60,12 @@ class Bouncer extends MemoryEntity {
         });
         addTween(sparker, true);
         bounceSfx = new Sfx("audio/bounce.wav");
-        health = 2;
+        if(GameScene.easyMode) {
+            health = 1;
+        }
+        else {
+            health = 2;
+        }
     }
 
     override public function stopSound() {
