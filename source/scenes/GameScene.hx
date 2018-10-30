@@ -233,12 +233,52 @@ class GameScene extends Scene {
             var enemy = new LeftWallSpike(
                 enemyPoint.point.x, enemyPoint.point.y
             );
+            if(enemy.type == "leftwallspike") {
+                var extendUp = Random.random < 0.5;
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendUp ? -i : i;
+                    var extraSpike = new LeftWallSpike(
+                        enemy.x, enemy.y + extendCount * Segment.TILE_SIZE
+                    );
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX - 1, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                }
+            }
             add(enemy);
         }
         for(enemyPoint in rightWallEnemyPoints) {
             var enemy = new RightWallSpike(
                 enemyPoint.point.x, enemyPoint.point.y
             );
+            if(enemy.type == "rightwallspike") {
+                var extendUp = Random.random < 0.5;
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendUp ? -i : i;
+                    var extraSpike = new RightWallSpike(
+                        enemy.x, enemy.y + extendCount * Segment.TILE_SIZE
+                    );
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + 1, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                }
+            }
             add(enemy);
         }
         for(enemyPoint in groundEnemyPoints) {

@@ -79,11 +79,13 @@ class Segment extends MemoryEntity {
     public function getRandomOpenLeftWallTile() {
         var randomTileX = Random.randInt(walls.columns);
         var randomTileY = Random.randInt(walls.rows);
-        if(walls.getTile(randomTileX, randomTileY)) {
-            return null;
-        }
-        if(!walls.getTile(randomTileX - 1, randomTileY)) {
-            return null;
+        for(checkY in -1...2) {
+            if(walls.getTile(randomTileX, randomTileY + checkY)) {
+                return null;
+            }
+            if(!walls.getTile(randomTileX - 1, randomTileY + checkY)) {
+                return null;
+            }
         }
         return {tileX: randomTileX, tileY: randomTileY};
     }
@@ -91,11 +93,13 @@ class Segment extends MemoryEntity {
     public function getRandomOpenRightWallTile() {
         var randomTileX = Random.randInt(walls.columns);
         var randomTileY = Random.randInt(walls.rows);
-        if(walls.getTile(randomTileX, randomTileY)) {
-            return null;
-        }
-        if(!walls.getTile(randomTileX + 1, randomTileY)) {
-            return null;
+        for(checkY in -1...2) {
+            if(walls.getTile(randomTileX, randomTileY + checkY)) {
+                return null;
+            }
+            if(!walls.getTile(randomTileX + 1, randomTileY + checkY)) {
+                return null;
+            }
         }
         return {tileX: randomTileX, tileY: randomTileY};
     }
