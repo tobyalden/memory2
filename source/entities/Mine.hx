@@ -68,18 +68,25 @@ class Mine extends MemoryEntity {
         super.update();
     }
 
-    private function detonate() {
+    private function detonate(makeSound:Bool = true) {
         scene.remove(this);
         scene.add(new Explosion(centerX - 72, centerY - 72));
-        detonateSfx.play();
+        if(makeSound) {
+            detonateSfx.play();
 #if desktop
-        Sys.sleep(0.02);
+            Sys.sleep(0.02);
 #end
+        }
     }
 
     override public function takeHit(arrow:Arrow) {
-        MemoryEntity.allSfx['robothit${HXP.choose(1, 2, 3)}'].play();
-        detonate();
+        if(arrow.isScattered) {
+            detonate(false);
+        }
+        else {
+            MemoryEntity.allSfx['robothit${HXP.choose(1, 2, 3)}'].play();
+            detonate();
+        }
     }
 }
 

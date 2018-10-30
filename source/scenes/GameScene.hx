@@ -24,6 +24,7 @@ class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
+    public static inline var STARTING_SCATTERED_ARROWS = 10;
     public static inline var MAX_PLACEMENT_RETRIES = 1000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
@@ -48,6 +49,8 @@ class GameScene extends Scene {
         addPlayer();
         addKeyAndDoor();
         addEnemies();
+
+        scatterArrows(STARTING_SCATTERED_ARROWS);
 
         curtain = new Curtain(0, 0);
         add(curtain);
@@ -192,6 +195,28 @@ class GameScene extends Scene {
         door.y += Segment.TILE_SIZE - door.height;
         add(key);
         add(door);
+    }
+
+    private function scatterArrows(numArrows:Int) {
+        var arrowPoints = new Array<SegmentPoint>();
+        for(i in 0...numArrows) {
+            arrowPoints.push(getEnemyPoint("air", arrowPoints));
+        }
+        for(arrowPoint in arrowPoints) {
+            var awayFromPlayer = new Vector2(
+                player.centerX - arrowPoint.point.x,
+                player.centerY - arrowPoint.point.y
+            );
+            awayFromPlayer.inverse();
+            awayFromPlayer.normalize(Arrow.INITIAL_VELOCITY);
+            var isVertical = (
+                Math.abs(awayFromPlayer.y) > Math.abs(awayFromPlayer.x)
+            );
+            add(new Arrow(
+                arrowPoint.point.x, arrowPoint.point.y, awayFromPlayer,
+                isVertical, true
+            ));
+        }
     }
 
     private function addEnemies() {

@@ -100,6 +100,9 @@ class Ghost extends MemoryEntity {
     }
 
     override public function takeHit(arrow:Arrow) {
+        if(arrow.isScattered) {
+            return;
+        }
         scene.remove(this);
         var arrows = detachArrows();
         explode();

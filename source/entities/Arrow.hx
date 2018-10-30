@@ -17,13 +17,14 @@ class Arrow extends MemoryEntity {
 
     public var velocity(default, null):Vector2;
     public var landed(default, null):Bool;
+    public var isScattered(default, null):Bool;
     private var sprite:Image;
     private var isVertical:Bool;
     private var disappearTimer:Alarm;
 
     public function setLanded(newLanded:Bool, disappear:Bool = false) {
         landed = newLanded;
-        if(landed && disappear) {
+        if(landed && disappear && !isScattered) {
             disappearTimer.start();
         }
     }
@@ -32,15 +33,20 @@ class Arrow extends MemoryEntity {
         velocity = newVelocity;
     }
 
-    public function new(x:Float, y:Float, direction:Vector2, isVertical:Bool) {
+    public function new(
+        x:Float, y:Float, direction:Vector2, isVertical:Bool,
+        isScattered:Bool = false
+    ) {
 	    super(x, y);
         MemoryEntity.loadSfx(["arrowhit1", "arrowhit2", "arrowhit3"]);
         this.isVertical = isVertical;
+        this.isScattered = isScattered;
         layer = 1;
         type = "arrow";
         velocity = direction;
         velocity.normalize(INITIAL_VELOCITY);
-        sprite = new Image("graphics/arrow.png");
+        var spriteName = isScattered ? "scatteredarrow" : "arrow";
+        sprite = new Image('graphics/${spriteName}.png');
         sprite.centerOrigin();
         var angle = MathUtil.angle(0, 0, velocity.x, velocity.y);
         sprite.angle = angle;
@@ -98,7 +104,11 @@ class Arrow extends MemoryEntity {
             setLanded(true, true);
         }
         var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
-        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume/3);
+        if(!isScattered) {
+            MemoryEntity.allSfx[
+                'arrowhit${HXP.choose(1, 2, 3)}'
+            ].play(hitVolume/3);
+        }
         return true;
     }
 
@@ -119,7 +129,11 @@ class Arrow extends MemoryEntity {
             setLanded(true, true);
         }
         var hitVolume = Math.min(velocity.length / INITIAL_VELOCITY, 1);
-        MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(hitVolume/3);
+        if(!isScattered) {
+            MemoryEntity.allSfx[
+                'arrowhit${HXP.choose(1, 2, 3)}'
+            ].play(hitVolume/3);
+        }
         return true;
     }
 }

@@ -148,7 +148,9 @@ class MemoryEntity extends Entity {
     }
 
     public function takeHit(arrow:Arrow) {
-        MemoryEntity.allSfx['robothit${HXP.choose(1, 2, 3)}'].play();
+        if(!arrow.isScattered) {
+            MemoryEntity.allSfx['robothit${HXP.choose(1, 2, 3)}'].play();
+        }
         visible = false;
         isFlashing = true;
         stopFlasher.start();

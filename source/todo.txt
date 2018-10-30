@@ -1,14 +1,14 @@
+- make new segments
+- scatter arrows
+- final boss
+- every floor has a powerup item that increases your max ammo
+
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
-- scatter arrows
-- every floor has a powerup item that increases your max ammo
 - floors get bigger and bigger and then reset with each new pallette change
 - descent (elevators and screen showing depth)
-- final boss
-- make new segments
 - add new tiles
 - add new backgrounds
-- add double trouble roboplants for final floors
 - tutorial
 - ending
 - opening
