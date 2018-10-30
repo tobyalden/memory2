@@ -197,19 +197,30 @@ class GameScene extends Scene {
         var enemyPoints = new Array<SegmentPoint>();
         var groundEnemyPoints = new Array<SegmentPoint>();
         var leftWallEnemyPoints = new Array<SegmentPoint>();
+        var rightWallEnemyPoints = new Array<SegmentPoint>();
         for(i in 0...numberOfEnemies) {
             //var isGroundEnemy = Random.random < 0.5;
-            var enemyType = "leftwall";
+            var enemyType = HXP.choose("rightwall", "leftwall");
             var existingPoints = (
-                enemyPoints.concat(groundEnemyPoints).concat(
-                    leftWallEnemyPoints
-                )
+                enemyPoints
+                .concat(groundEnemyPoints)
+                .concat(leftWallEnemyPoints)
+                .concat(rightWallEnemyPoints)
             );
             if(enemyType == "ground") {
-                groundEnemyPoints.push(getEnemyPoint("ground", existingPoints));
+                groundEnemyPoints.push(
+                    getEnemyPoint("ground", existingPoints)
+                );
             }
             else if(enemyType == "leftwall") {
-                leftWallEnemyPoints.push(getEnemyPoint("leftwall", existingPoints));
+                leftWallEnemyPoints.push(
+                    getEnemyPoint("leftwall", existingPoints)
+                );
+            }
+            else if(enemyType == "rightwall") {
+                rightWallEnemyPoints.push(
+                    getEnemyPoint("rightwall", existingPoints)
+                );
             }
             else {
                 enemyPoints.push(getEnemyPoint("air", existingPoints));
@@ -217,17 +228,20 @@ class GameScene extends Scene {
         }
         for(enemyPoint in enemyPoints) {
             add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
-            //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
         }
         for(enemyPoint in leftWallEnemyPoints) {
-            //add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
-            //addGraphic(new ColoredRect(16, 16), -999999, enemyPoint.point.x, enemyPoint.point.y);
-            var enemy = new LeftWallSpike(enemyPoint.point.x, enemyPoint.point.y);
+            var enemy = new LeftWallSpike(
+                enemyPoint.point.x, enemyPoint.point.y
+            );
             add(enemy);
-            //add(new RoboPlant(enemyPoint.point.x, enemyPoint.point.y));
+        }
+        for(enemyPoint in rightWallEnemyPoints) {
+            var enemy = new RightWallSpike(
+                enemyPoint.point.x, enemyPoint.point.y
+            );
+            add(enemy);
         }
         for(enemyPoint in groundEnemyPoints) {
-            //var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
             var enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
             enemy.y += Segment.TILE_SIZE - enemy.height;
             if(enemy.type == "floorspike") {
@@ -269,6 +283,9 @@ class GameScene extends Scene {
             }
             else if(enemyType == "leftwall") {
                 enemyPoint = getRandomOpenLeftWallPoint();
+            }
+            else if(enemyType == "rightwall") {
+                enemyPoint = getRandomOpenRightWallPoint();
             }
             else {
                 enemyPoint = getRandomOpenPoint();
@@ -349,6 +366,26 @@ class GameScene extends Scene {
         while(randomTile == null) {
             segment = weightedSegments[Random.randInt(weightedSegments.length)];
             randomTile = segment.getRandomOpenLeftWallTile();
+        }
+        var openPoint:SegmentPoint = {
+            point: new Vector2(
+                segment.x + randomTile.tileX * Segment.TILE_SIZE,
+                segment.y + randomTile.tileY * Segment.TILE_SIZE
+            ),
+            segment: segment,
+            tileX: randomTile.tileX,
+            tileY: randomTile.tileY
+        };
+        return openPoint;
+    }
+
+    private function getRandomOpenRightWallPoint() {
+        var weightedSegments = getWeightedSegments();
+        var segment = weightedSegments[Random.randInt(weightedSegments.length)];
+        var randomTile = segment.getRandomOpenRightWallTile();
+        while(randomTile == null) {
+            segment = weightedSegments[Random.randInt(weightedSegments.length)];
+            randomTile = segment.getRandomOpenRightWallTile();
         }
         var openPoint:SegmentPoint = {
             point: new Vector2(

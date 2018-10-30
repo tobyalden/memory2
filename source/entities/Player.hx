@@ -217,6 +217,12 @@ class Player extends MemoryEntity {
                 die();
             }
         }
+        var rightWallSpike = collide("rightwallspike", x, y);
+        if(rightWallSpike != null) {
+            if(cast(rightWallSpike, RightWallSpike).isActive) {
+                die();
+            }
+        }
         var arrow = collide("arrow", x, y);
         if(arrow != null && quiver < MAX_ARROWS && cast(arrow, Arrow).landed) {
             scene.remove(arrow);
