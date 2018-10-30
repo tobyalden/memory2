@@ -10,7 +10,7 @@ import openfl.Assets;
 import scenes.*;
 
 class Segment extends MemoryEntity {
-    public static inline var NUMBER_OF_SEGMENTS = 1;
+    public static inline var NUMBER_OF_SEGMENTS = 6;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var MIN_SEGMENT_WIDTH_IN_TILES = 40;
@@ -18,13 +18,15 @@ class Segment extends MemoryEntity {
     public static inline var TILE_SIZE = 16;
 
     public var walls(default, null):Grid;
+    public var number(default, null):Int;
     private var tiles:Tilemap;
     private var edges:Tilemap;
 
     public function new(x:Float, y:Float) {
         super(x, y);
         type = "walls";
-        loadSegment(Random.randInt(NUMBER_OF_SEGMENTS));
+        number = Random.randInt(NUMBER_OF_SEGMENTS);
+        loadSegment(number);
         updateGraphic();
         mask = walls;
     }

@@ -21,6 +21,8 @@ typedef SegmentPoint = {
 }
 
 class GameScene extends Scene {
+    public static inline var TOTAL_NUMBER_OF_MAPS = 30;
+
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
@@ -40,7 +42,7 @@ class GameScene extends Scene {
     private var allSegments:Array<Segment>;
 
 	override public function begin() {
-        loadMap(1);
+        loadMap(Random.randInt(TOTAL_NUMBER_OF_MAPS));
 
         addBackgrounds();
         placeSegments();
@@ -643,6 +645,17 @@ class GameScene extends Scene {
         if(Key.pressed(Key.R)) {
             stopAllSounds();
             HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.P)) {
+            for(segment in allSegments) {
+                if(player.collideRect(
+                    player.x, player.y, segment.x, segment.y, segment.width,
+                    segment.height
+                )) {
+                    trace('player is in segment #${segment.number}');
+                    break;
+                }
+            }
         }
         if(curtain.graphic.alpha > 0.95) {
             camera.x = Math.floor(player.x - HXP.width/2);
