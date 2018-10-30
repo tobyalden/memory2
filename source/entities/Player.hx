@@ -176,7 +176,7 @@ class Player extends MemoryEntity {
     }
 
     private function makeDustAtFeet() {
-        var dust = new Dust(x, bottom - 8, "ground");
+        var dust = new Dust(centerX - 8, bottom - 8, "ground");
         if(sprite.flipX) {
             dust.x += 0.5;
         }
