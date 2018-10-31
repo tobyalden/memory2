@@ -27,6 +27,7 @@ class GameScene extends Scene {
     public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
     public static inline var STARTING_SCATTERED_ARROWS = 10;
+    public static inline var NUMBER_OF_DECORATIONS = 10;
     public static inline var MAX_PLACEMENT_RETRIES = 1000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
@@ -52,7 +53,8 @@ class GameScene extends Scene {
 
         addPlayer();
         addKeyAndDoor();
-        addEnemies();
+        var enemyPoints = addEnemies();
+        addDecorations(enemyPoints);
 
         scatterArrows(STARTING_SCATTERED_ARROWS);
 
@@ -238,11 +240,12 @@ class GameScene extends Scene {
             numberOfTraps = Std.int(Math.floor(numberOfTraps / 2));
         }
 
+        var existingPoints:Array<SegmentPoint> = [];
         for(i in 0...numberOfTraps) {
             var trapType = ["rightwall", "leftwall", "ground"][
                 Random.randInt(3)
             ];
-            var existingPoints = (
+            existingPoints = (
                 groundTrapPoints
                 .concat(leftWallTrapPoints)
                 .concat(rightWallTrapPoints)
@@ -407,6 +410,29 @@ class GameScene extends Scene {
                 }
             }
             add(enemy);
+        }
+        return existingPoints;
+    }
+
+    private function addDecorations(enemyPoints:Array<SegmentPoint>) {
+        var decorationPoints = new Array<SegmentPoint>();
+        for(i in 0...NUMBER_OF_DECORATIONS) {
+            decorationPoints.push(
+                getEnemyPoint("ground", decorationPoints.concat(enemyPoints))
+            );
+        }
+        for(decorationPoint in decorationPoints) {
+            var decorationNum = Random.randInt(14);
+            var decoration = new Image(
+                "graphics/decorations.png",
+                new Rectangle(decorationNum * 30, 0, 30, 30)
+            );
+            addGraphic(
+                decoration,
+                1,
+                decorationPoint.point.x,
+                decorationPoint.point.y + Segment.TILE_SIZE - 30
+            );
         }
     }
 

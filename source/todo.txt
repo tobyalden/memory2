@@ -3,6 +3,7 @@
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
 - music
 - descent (elevators and screen showing depth)
+- add decorations
 - add new tiles
 - add new backgrounds
 - "tutorial" (show controls)
