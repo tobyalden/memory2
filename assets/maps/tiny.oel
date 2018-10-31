@@ -1,0 +1,7 @@
+<level>
+  <width>160</width>
+  <height>160</height>
+  <walls>
+    <rect x="80" y="48" w="32" h="16"/>
+  </walls>
+</level>
