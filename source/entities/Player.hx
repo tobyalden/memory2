@@ -188,15 +188,19 @@ class Player extends MemoryEntity {
         if(canMove) {
             movement();
             shooting();
+            animation();
         }
-        animation();
         super.update();
     }
 
     private function collisions() {
         var door = collide("door", x, y);
         if(door != null) {
-            if(cast(door, Door).isOpen) {
+            if(
+                cast(door, Door).isOpen
+                && isOnGround()
+                && Math.abs(centerX - door.centerX) < 7
+            ) {
                 enterDoor();
             }
         }
@@ -235,6 +239,10 @@ class Player extends MemoryEntity {
     }
 
     public function enterDoor() {
+        MemoryEntity.allSfx["runloop"].stop();
+        velocity.x = 0;
+        sprite.play("idle");
+        armsAndBow.play("idle");
         collidable = false;
         canMove = false;
         cast(scene, GameScene).descend();
