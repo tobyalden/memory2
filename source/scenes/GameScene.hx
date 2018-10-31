@@ -51,10 +51,12 @@ class GameScene extends Scene {
         placeSegments();
         fillEmptySegments();
 
-        addPlayer();
-        addKeyAndDoor();
+        var playerPoint = addPlayer();
+        var keyAndDoorPoints = addKeyAndDoor();
         var enemyPoints = addEnemies();
-        addDecorations(enemyPoints);
+        addDecorations(
+            enemyPoints.concat(keyAndDoorPoints).concat(playerPoint)
+        );
 
         scatterArrows(STARTING_SCATTERED_ARROWS);
 
@@ -174,6 +176,7 @@ class GameScene extends Scene {
         player = new Player(playerStart.point.x, playerStart.point.y);
         player.y += Segment.TILE_SIZE - player.height;
         add(player);
+        return [playerStart];
     }
 
     private function addKeyAndDoor() {
@@ -199,8 +202,11 @@ class GameScene extends Scene {
         key.y -= Segment.TILE_SIZE;
         door = new Door(doorPoint.point.x, doorPoint.point.y);
         door.y += Segment.TILE_SIZE - door.height;
+        door.door.y += Segment.TILE_SIZE - door.height;
         add(key);
         add(door);
+        add(door.door);
+        return [keyPoint, doorPoint];
     }
 
     private function scatterArrows(numArrows:Int) {
