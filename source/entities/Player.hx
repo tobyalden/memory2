@@ -285,6 +285,8 @@ class Player extends MemoryEntity {
 #end
         scene.camera.shake(2, 8);
         MemoryEntity.allSfx["playerdeath"].play(0.7);
+        MemoryEntity.allSfx["slide"].stop();
+        MemoryEntity.allSfx["runloop"].stop();
     }
 
     private function movement() {
