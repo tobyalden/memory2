@@ -188,8 +188,8 @@ class Player extends MemoryEntity {
         if(canMove) {
             movement();
             shooting();
-            animation();
         }
+        animation();
         super.update();
     }
 
@@ -201,6 +201,7 @@ class Player extends MemoryEntity {
                 && isOnGround()
                 && Math.abs(centerX - door.centerX) < 7
             ) {
+                cast(door, Door).close();
                 enterDoor();
             }
         }
@@ -511,6 +512,10 @@ class Player extends MemoryEntity {
             scaleX(
                 Math.min(sprite.scaleX + squashRecovery, 1), lastWallWasRight
             );
+        }
+
+        if(!canMove) {
+            return;
         }
 
         if(!wasOnGround && isOnGround()) {

@@ -22,6 +22,7 @@ class Door extends MemoryEntity {
 
     public function new(x:Float, y:Float) {
         super(x, y);
+        MemoryEntity.loadSfx(["slidingdooropen", "slidingdoorclose"]);
         type = "door";
         layer = 5;
 
@@ -44,7 +45,7 @@ class Door extends MemoryEntity {
         gate.play("idle");
 
         setGraphic(sprite);
-        addGraphic(floorIndicator);
+        //addGraphic(floorIndicator);
         addGraphic(gate);
 
         setHitbox(2, 40, -19, 0);
@@ -53,6 +54,7 @@ class Door extends MemoryEntity {
         doorSprite = new Spritemap("graphics/elevator.png", 38, 40);
         doorSprite.add("closed", [1]);
         doorSprite.add("opening", [2, 3, 4, 0], 8, false);
+        doorSprite.add("closing", [4, 3, 2, 1], 8, false);
         doorSprite.play("closed");
         door = new Entity(x, y, doorSprite);
         door.setHitbox(38, 40);
@@ -62,17 +64,28 @@ class Door extends MemoryEntity {
 
     public override function update() {
         var player = scene.getInstance("player");
-        if(!isDoorOpen && isOpen && distanceFrom(player, true) < OPEN_DISTANCE) {
+        if(
+            !isDoorOpen
+            && isOpen
+            && distanceFrom(player, true) < OPEN_DISTANCE
+        ) {
             isDoorOpen = true;
             doorSprite.play("opening");
+            MemoryEntity.allSfx["slidingdooropen"].play();
         }
         super.update();
     }
 
+    public function close() {
+        door.layer = -4;
+        doorSprite.play("closing");
+        MemoryEntity.allSfx["slidingdoorclose"].play();
+    }
+
     public function open() {
+        door.layer = 4;
         isOpen = true;
         sprite.play("open");
-        door.layer = 4;
         var gateFade = new VarTween(TweenType.OneShot);
         gateFade.tween(gate, "alpha", 0, 1);
         addTween(gateFade, true);
