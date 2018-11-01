@@ -38,7 +38,7 @@ class Hopper extends MemoryEntity {
         lightning.visible = false;
         setHitbox(24, 23, 0, -1);
         if(GameScene.easyMode) {
-            health = 1;
+            health = 2;
         }
         else {
             health = 2;

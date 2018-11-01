@@ -26,6 +26,8 @@ class GameScene extends Scene {
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
     public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
+    //public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
+    //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
     public static inline var STARTING_SCATTERED_ARROWS = 10;
     public static inline var NUMBER_OF_DECORATIONS = 10;
     public static inline var MAX_PLACEMENT_RETRIES = 1000;
@@ -149,6 +151,7 @@ class GameScene extends Scene {
 
     private function loadMap(mapNumber:Int) {
         var mapPath = 'maps/${mapNumber}.oel';
+        //var mapPath = 'maps/tiny.oel';
         var xml = Xml.parse(Assets.getText(mapPath));
         var fastXml = new haxe.xml.Fast(xml.firstElement());
 
