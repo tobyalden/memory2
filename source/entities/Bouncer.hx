@@ -102,13 +102,17 @@ class Bouncer extends MemoryEntity {
 
     public override function moveCollideX(e:Entity) {
         velocity.x = -velocity.x;
-        bounceSfx.play(Math.min(hum.volume * 2, 1));
+        if(isOnScreen()) {
+            bounceSfx.play(Math.min(hum.volume * 2, 1));
+        }
         return true;
     }
 
     public override function moveCollideY(e:Entity) {
         velocity.y = -velocity.y;
-        bounceSfx.play(Math.min(hum.volume * 2, 1));
+        if(isOnScreen()) {
+            bounceSfx.play(Math.min(hum.volume * 2, 1));
+        }
         return true;
     }
 
