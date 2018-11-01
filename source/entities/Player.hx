@@ -245,6 +245,7 @@ class Player extends MemoryEntity {
         sprite.play("idle");
         armsAndBow.play("idle");
         collidable = false;
+        quiverDisplay.visible = false;
         canMove = false;
         cast(scene, GameScene).descend();
     }

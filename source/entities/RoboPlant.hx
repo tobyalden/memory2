@@ -25,7 +25,7 @@ class RoboPlant extends MemoryEntity {
         face.add("mad", [1]);
         face.add("robot", [2]);
         var faceNames = ["evil", "mad", "robot"];
-        face.play(faceNames[Random.randInt(faceNames.length)]);
+        face.play("evil");
         tentacles = new Spritemap("graphics/roboplanttentacles.png", 48, 46);
         tentacles.add("idle", [0, 1], 12);
         tentacles.play("idle");

@@ -8,6 +8,7 @@ import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
 import haxepunk.utils.*;
+import scenes.*;
 
 class Door extends MemoryEntity {
     public static inline var OPEN_DISTANCE = 140;
@@ -26,32 +27,32 @@ class Door extends MemoryEntity {
         type = "door";
         layer = 5;
 
-        sprite = new Spritemap("graphics/elevator.png", 38, 40);
+        sprite = new Spritemap("graphics/elevatortall.png", 38, 60);
         sprite.add("open", [5]);
-        sprite.add("closed", [22]);
+        sprite.add("closed", [21]);
         sprite.play("closed");
 
-        floorIndicator = new Spritemap("graphics/elevator.png", 38, 40);
-        floorIndicator.add("1", [7]);
-        floorIndicator.add("2", [8]);
-        floorIndicator.add("3", [9]);
-        floorIndicator.add("4", [10]);
-        floorIndicator.add("5", [11]);
-        floorIndicator.add("6", [12]);
-        floorIndicator.play("1");
+        floorIndicator = new Spritemap("graphics/elevatortall.png", 38, 60);
+        floorIndicator.add("1", [12]);
+        floorIndicator.add("2", [11]);
+        floorIndicator.add("3", [10]);
+        floorIndicator.add("4", [9]);
+        floorIndicator.add("5", [8]);
+        floorIndicator.add("6", [7]);
+        floorIndicator.play('${GameScene.depth}');
 
-        gate = new Spritemap("graphics/elevator.png", 38, 40);
-        gate.add("idle", [21]);
+        gate = new Spritemap("graphics/elevatortall.png", 38, 60);
+        gate.add("idle", [20]);
         gate.play("idle");
 
         setGraphic(sprite);
-        //addGraphic(floorIndicator);
+        addGraphic(floorIndicator);
         addGraphic(gate);
 
-        setHitbox(2, 40, -19, 0);
+        setHitbox(2, 60, -19, 0);
         isOpen = false;
 
-        doorSprite = new Spritemap("graphics/elevator.png", 38, 40);
+        doorSprite = new Spritemap("graphics/elevatortall.png", 38, 60);
         doorSprite.add("closed", [1]);
         doorSprite.add("opening", [2, 3, 4, 0], 8, false);
         doorSprite.add("closing", [4, 3, 2, 1], 8, false);

@@ -1,4 +1,3 @@
-- descent (elevators and screen showing depth)
 - make new segments and maps (more horizontal maps!)
 - final boss
 - main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
