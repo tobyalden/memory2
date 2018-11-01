@@ -1,12 +1,13 @@
-- make new segments and maps (more horizontal maps!)
+- make new segments
 - final boss
-- main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
-- music
-- add new tiles
-- add new backgrounds
+- add new tiles & backgrounds
+- change graphics every two depths
 - "tutorial" (show controls)
 - daily run
 - disable up/down scroll keys in JS
 - remove debug controls
 - ending
 - opening
+
+- main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
+- music
