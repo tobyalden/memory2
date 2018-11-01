@@ -46,6 +46,8 @@ class GameScene extends Scene {
     private var curtain:Curtain;
     private var allSegments:Array<Segment>;
 
+    private var depthDisplay:DepthDisplay;
+
 	override public function begin() {
         loadMap(Random.randInt(TOTAL_NUMBER_OF_MAPS));
 
@@ -69,6 +71,9 @@ class GameScene extends Scene {
 
         music = new Sfx("audio/music.wav");
         //music.loop();
+
+        depthDisplay = new DepthDisplay();
+        add(depthDisplay);
     }
 
     public function spawnRoboPlant() {
