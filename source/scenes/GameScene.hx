@@ -75,6 +75,10 @@ class GameScene extends Scene {
 
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
+
+        if(depth == 1) {
+            add(new Tutorial());
+        }
     }
 
     public function spawnRoboPlant() {
