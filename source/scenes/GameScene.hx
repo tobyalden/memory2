@@ -36,6 +36,7 @@ class GameScene extends Scene {
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
 
     public static var easyMode:Bool = true;
+    public static var depth:Int = 1;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -131,6 +132,7 @@ class GameScene extends Scene {
     }
 
     public function descend() {
+        depth++;
         curtain.fadeOut();
         var resetTimer = new Alarm(1.5, TweenType.OneShot);
         resetTimer.onComplete.bind(function() {
@@ -253,6 +255,9 @@ class GameScene extends Scene {
             numberOfEnemies = Std.int(Math.floor(numberOfEnemies / 2));
             numberOfTraps = Std.int(Math.floor(numberOfTraps / 2));
         }
+
+        numberOfEnemies += depth - 1;
+        numberOfTraps += depth - 1;
 
         var existingPoints:Array<SegmentPoint> = [];
         for(i in 0...numberOfTraps) {

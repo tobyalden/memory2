@@ -25,7 +25,7 @@ class DepthDisplay extends MemoryEntity {
         for(i in 1...7) {
             message.add('${i}F', [i-1]);
         }
-        message.play("1F");
+        message.play('${GameScene.depth}F');
         setGraphic(message);
 
         var messageFade = new VarTween(TweenType.OneShot);
