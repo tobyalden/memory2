@@ -24,6 +24,7 @@ class Ghost extends MemoryEntity {
         type = "enemy";
         sprite = new Spritemap("graphics/ghost.png", 30, 30);
         sprite.add("idle", [0, 1], 6);
+        sprite.add("phasing", [2, 3], 6);
         sprite.play("idle");
         setGraphic(sprite);
         velocity = new Vector2(0, 0);
@@ -61,7 +62,6 @@ class Ghost extends MemoryEntity {
         if(collide("walls", x, y) != null) {
             collidable = false;
         }
-        sprite.alpha = collidable ? 1 : 0.5;
 
         var maxSpeed = collidable ? MAX_SPEED : MAX_SPEED_PHASED;
         if(velocity.length > maxSpeed) {
@@ -87,15 +87,12 @@ class Ghost extends MemoryEntity {
 
     private function animation() {
         var player = scene.getInstance("player");
-        sprite.flipX = centerX < player.centerX;
-        if(stopFlasher.active) {
-            sprite.play("hit");
-        }
-        else if(isActive) {
-            sprite.play("chasing");
+        sprite.flipX = centerX > player.centerX;
+        if(collidable) {
+            sprite.play("idle");
         }
         else {
-            sprite.play("idle");
+            sprite.play("phasing");
         }
     }
 
