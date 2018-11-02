@@ -64,16 +64,7 @@ class GameScene extends Scene {
 
 	override public function begin() {
         if(depth == 7) {
-            placeBossSegment();
-            addPlayer();
-            curtain = new Curtain(0, 0);
-            add(curtain);
-            curtain.fadeIn();
-            camera.pixelSnapping = true;
-            camera.x = Math.floor(allSegments[0].centerX - HXP.width/2);
-            camera.y = allSegments[0].y;
-            depthDisplay = new DepthDisplay();
-            add(depthDisplay);
+            loadBossRoom();
             return;
         }
         loadMap(Random.randInt(TOTAL_NUMBER_OF_MAPS));
@@ -109,6 +100,27 @@ class GameScene extends Scene {
         if(depth == 1) {
             add(new Tutorial());
         }
+    }
+
+    private function loadBossRoom() {
+        placeBossSegment();
+        player = new Player(
+            allSegments[0].centerX - 6,
+            allSegments[0].bottom - Segment.TILE_SIZE * 2 - 24
+        );
+        add(player);
+        add(new Boss(
+            allSegments[0].centerX - 50,
+            allSegments[0].top + Segment.TILE_SIZE + 50
+        ));
+        curtain = new Curtain(0, 0);
+        add(curtain);
+        curtain.fadeIn();
+        camera.pixelSnapping = true;
+        camera.x = Math.floor(allSegments[0].centerX - HXP.width/2);
+        camera.y = allSegments[0].y;
+        depthDisplay = new DepthDisplay();
+        add(depthDisplay);
     }
 
     public function spawnRoboPlant() {
