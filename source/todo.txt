@@ -1,6 +1,5 @@
 - make new segments
 - final boss
-- add new tiles & backgrounds
 - change graphics every two depths
 - daily run
 - disable up/down scroll keys in JS

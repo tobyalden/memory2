@@ -11,6 +11,7 @@ class RoboPlant extends MemoryEntity {
     public static inline var MAX_SPEED_EASY = 2;
     public static inline var ARROW_DEFLECT_FACTOR = 1.5;
     public static inline var THEME_SONG_DISTANCE = 310;
+    public static inline var NUMBER_OF_FACES = 7;
 
     private var themeSong:Sfx;
     private var face:Spritemap;
@@ -21,11 +22,10 @@ class RoboPlant extends MemoryEntity {
         super(x, y);
         type = "roboplant";
         face = new Spritemap("graphics/roboplantface.png", 48, 46);
-        face.add("evil", [0]);
-        face.add("mad", [1]);
-        face.add("robot", [2]);
-        var faceNames = ["evil", "mad", "robot"];
-        face.play("evil");
+        for(i in 0...NUMBER_OF_FACES) {
+            face.add('${i + 1}', [i]);
+        }
+        face.play('${GameScene.depth}');
         tentacles = new Spritemap("graphics/roboplanttentacles.png", 48, 46);
         tentacles.add("idle", [0, 1], 12);
         tentacles.play("idle");
