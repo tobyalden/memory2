@@ -22,10 +22,15 @@ class Segment extends MemoryEntity {
     private var tiles:Tilemap;
     private var edges:Tilemap;
 
-    public function new(x:Float, y:Float) {
+    public function new(x:Float, y:Float, isBossSegment:Bool = false) {
         super(x, y);
         type = "walls";
-        number = Random.randInt(NUMBER_OF_SEGMENTS);
+        if(isBossSegment) {
+            number = 666;
+        }
+        else {
+            number = Random.randInt(NUMBER_OF_SEGMENTS);
+        }
         loadSegment(number);
         updateGraphic();
         mask = walls;

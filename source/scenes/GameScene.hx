@@ -37,7 +37,7 @@ class GameScene extends Scene {
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
 
     public static var easyMode:Bool = true;
-    public static var depth:Int = 3;
+    public static var depth:Int = 7;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -63,6 +63,19 @@ class GameScene extends Scene {
     }
 
 	override public function begin() {
+        if(depth == 7) {
+            placeBossSegment();
+            addPlayer();
+            curtain = new Curtain(0, 0);
+            add(curtain);
+            curtain.fadeIn();
+            camera.pixelSnapping = true;
+            camera.x = Math.floor(allSegments[0].centerX - HXP.width/2);
+            camera.y = allSegments[0].y;
+            depthDisplay = new DepthDisplay();
+            add(depthDisplay);
+            return;
+        }
         loadMap(Random.randInt(TOTAL_NUMBER_OF_MAPS));
 
         addBackgrounds();
@@ -636,6 +649,13 @@ class GameScene extends Scene {
         return openGroundPoint;
     }
 
+    private function placeBossSegment() {
+        allSegments = new Array<Segment>();
+        var segment = new Segment(0, 0, true);
+        add(segment);
+        allSegments.push(segment);
+    }
+
     private function placeSegments() {
         allSegments = new Array<Segment>();
         for(tileX in 0...mapBlueprint.columns) {
@@ -740,8 +760,7 @@ class GameScene extends Scene {
             }
         }
         if(curtain.graphic.alpha > 0.95) {
-            camera.x = Math.floor(player.x - HXP.width/2);
-            camera.y = Math.floor(player.y - HXP.height/2);
+            centerCameraOnPlayer();
         }
 
         var updateFirst = new Array<Entity>();
@@ -768,8 +787,15 @@ class GameScene extends Scene {
             // This screwy code duplication is because of a weird issue
             // where setting the camera before super.update() causes
             // jitter, but setting it after screws up the fade in
-            camera.x = Math.floor(player.x - HXP.width/2);
-            camera.y = Math.floor(player.y - HXP.height/2);
+             centerCameraOnPlayer();
         }
+    }
+
+    private function centerCameraOnPlayer() {
+        if(depth == 7) {
+            return;
+        }
+        camera.x = Math.floor(player.x - HXP.width/2);
+        camera.y = Math.floor(player.y - HXP.height/2);
     }
 }
