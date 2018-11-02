@@ -37,7 +37,7 @@ class GameScene extends Scene {
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
 
     public static var easyMode:Bool = true;
-    public static var depth:Int = 1;
+    public static var depth:Int = 3;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -49,6 +49,18 @@ class GameScene extends Scene {
     private var allSegments:Array<Segment>;
 
     private var depthDisplay:DepthDisplay;
+
+    static public function getDepthBlock() {
+        if(depth < 3) {
+            return "";
+        }
+        else if(depth < 5) {
+            return "2";
+        }
+        else {
+            return "3";
+        }
+    }
 
 	override public function begin() {
         loadMap(Random.randInt(TOTAL_NUMBER_OF_MAPS));
@@ -95,7 +107,9 @@ class GameScene extends Scene {
 
     private function addBackgrounds() {
         // Add map background
-        var distanceBackground = new Backdrop("graphics/mapbackground.png");
+        var distanceBackground = new Backdrop(
+            'graphics/mapbackground${GameScene.getDepthBlock()}.png'
+        );
         distanceBackground.scrollX = 0.25;
         distanceBackground.scrollY = 0.25;
         addGraphic(distanceBackground, 1000);
@@ -105,7 +119,9 @@ class GameScene extends Scene {
             for(mapY in 0...mapBlueprint.rows) {
                 if(mapBlueprint.getTile(mapX, mapY)) {
                     var segmentBackgrounds = new Image(
-                        "graphics/segmentbackgrounds.png"
+                        'graphics/segmentbackgrounds${
+                            GameScene.getDepthBlock()
+                        }.png'
                     );
                     var numBackgrounds = Std.int(
                         segmentBackgrounds.height / Segment.MIN_SEGMENT_HEIGHT
@@ -118,7 +134,10 @@ class GameScene extends Scene {
                         Segment.MIN_SEGMENT_HEIGHT
                     );
                     var segmentBackground = new Image(
-                        "graphics/segmentbackgrounds.png", clipRect
+                        'graphics/segmentbackgrounds${
+                            GameScene.getDepthBlock()
+                        }.png',
+                        clipRect
                     );
                     addGraphic(
                         segmentBackground, 100,
@@ -454,7 +473,7 @@ class GameScene extends Scene {
         for(decorationPoint in decorationPoints) {
             var decorationNum = Random.randInt(NUMBER_OF_DECORATION_TYPES);
             var decoration = new Image(
-                "graphics/decorations.png",
+                'graphics/decorations${GameScene.getDepthBlock()}.png',
                 new Rectangle(decorationNum * 30, 0, 30, 30)
             );
             addGraphic(

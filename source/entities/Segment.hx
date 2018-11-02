@@ -165,13 +165,13 @@ class Segment extends MemoryEntity {
 
     public function updateGraphic() {
         tiles = new Tilemap(
-            'graphics/tiles.png',
+            'graphics/tiles${GameScene.getDepthBlock()}.png',
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
         );
         tiles.loadFromString(walls.saveToString(',', '\n', '1', '0'));
         setGraphic(tiles);
         edges = new Tilemap(
-            'graphics/tiles.png',
+            'graphics/tiles${GameScene.getDepthBlock()}.png',
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
         );
         for(tileX in 0...walls.columns) {
