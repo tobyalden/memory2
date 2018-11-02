@@ -49,12 +49,7 @@ class Roombad extends MemoryEntity {
             velocity.x *= -1;
         }
         setHitbox(24, 10);
-        if(GameScene.easyMode) {
-            health = 1;
-        }
-        else {
-            health = 2;
-        }
+        health = 1;
         isChasing = false;
         idleSfx = new Sfx("audio/roombadidle.wav");
         chaseSfx = new Sfx("audio/roombadchase.wav");

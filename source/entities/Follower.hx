@@ -44,12 +44,7 @@ class Follower extends MemoryEntity {
         hum = new Sfx("audio/follower.wav");
         hum.volume = 0;
         bounceSfx = new Sfx("audio/bounce.wav");
-        if(GameScene.easyMode) {
-            health = 2;
-        }
-        else {
-            health = 3;
-        }
+        health = 2;
     }
 
     override public function stopSound() {

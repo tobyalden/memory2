@@ -28,7 +28,7 @@ class GameScene extends Scene {
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
     //public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
     //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
-    public static inline var STARTING_SCATTERED_ARROWS = 7;
+    public static inline var STARTING_SCATTERED_ARROWS = 10;
     public static inline var NUMBER_OF_DECORATIONS = 10;
     public static inline var MAX_PLACEMENT_RETRIES = 1000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
@@ -63,7 +63,11 @@ class GameScene extends Scene {
             enemyPoints.concat(keyAndDoorPoints).concat(playerPoint)
         );
 
-        scatterArrows(STARTING_SCATTERED_ARROWS - depth);
+        var numArrows = STARTING_SCATTERED_ARROWS - depth;
+        if(!easyMode) {
+            numArrows -= 3;
+        }
+        scatterArrows(numArrows);
 
         curtain = new Curtain(0, 0);
         add(curtain);

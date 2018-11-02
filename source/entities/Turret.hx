@@ -43,12 +43,7 @@ class Turret extends MemoryEntity {
         addGraphic(eyes);
         addGraphic(lightning);
         setHitbox(24, 16);
-        if(GameScene.easyMode) {
-            health = 2;
-        }
-        else {
-            health = 3;
-        }
+        health = 2;
         lobTimer = new Alarm(TIME_BETWEEN_LOBS, TweenType.Looping);
         lobTimer.onComplete.bind(function() {
             if(!isOnScreen()) {

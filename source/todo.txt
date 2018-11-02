@@ -6,8 +6,7 @@
 - daily run
 - disable up/down scroll keys in JS
 - remove debug controls
-- ending
+- ending (maybe just credits?)
 - opening
-
-- main menu (have a "NO CONTROLLER CONNECTED / CONTROLLER FOUND!" display)
+- main menu
 - music

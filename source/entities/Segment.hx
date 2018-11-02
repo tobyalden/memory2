@@ -10,7 +10,7 @@ import openfl.Assets;
 import scenes.*;
 
 class Segment extends MemoryEntity {
-    public static inline var NUMBER_OF_SEGMENTS = 6;
+    public static inline var NUMBER_OF_SEGMENTS = 9;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var MIN_SEGMENT_WIDTH_IN_TILES = 40;
