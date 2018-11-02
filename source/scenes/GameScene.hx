@@ -34,6 +34,7 @@ class GameScene extends Scene {
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
+    public static inline var NUMBER_OF_DECORATION_TYPES = 18;
 
     public static var easyMode:Bool = true;
     public static var depth:Int = 1;
@@ -74,8 +75,8 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        music = new Sfx("audio/music.wav");
-        //music.loop();
+        music = new Sfx('audio/music${depth}.wav');
+        music.loop();
 
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
@@ -136,6 +137,7 @@ class GameScene extends Scene {
             stopAllSounds();
             HXP.scene = new MainMenu();
         });
+        music.stop();
         addTween(resetTimer, true);
     }
 
@@ -147,6 +149,7 @@ class GameScene extends Scene {
             stopAllSounds();
             HXP.scene = new GameScene();
         });
+        music.stop();
         addTween(resetTimer, true);
     }
 
@@ -449,7 +452,7 @@ class GameScene extends Scene {
             );
         }
         for(decorationPoint in decorationPoints) {
-            var decorationNum = Random.randInt(14);
+            var decorationNum = Random.randInt(NUMBER_OF_DECORATION_TYPES);
             var decoration = new Image(
                 "graphics/decorations.png",
                 new Rectangle(decorationNum * 30, 0, 30, 30)

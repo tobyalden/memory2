@@ -2,7 +2,6 @@
 - final boss
 - add new tiles & backgrounds
 - change graphics every two depths
-- "tutorial" (show controls)
 - daily run
 - disable up/down scroll keys in JS
 - remove debug controls

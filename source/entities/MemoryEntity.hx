@@ -5,6 +5,7 @@ import haxepunk.graphics.*;
 import haxepunk.math.*;
 import haxepunk.Tween;
 import haxepunk.tweens.misc.*;
+import scenes.*;
 
 class MemoryEntity extends Entity {
     public static inline var FLASH_TIME = 0.4;
