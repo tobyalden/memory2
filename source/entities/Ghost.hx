@@ -21,7 +21,7 @@ class Ghost extends MemoryEntity {
     public function new(x:Float, y:Float) {
         super(x, y);
         MemoryEntity.loadSfx(["ghosthit1", "ghosthit2", "ghosthit3"]);
-        type = "enemy";
+        type = "ghost";
         sprite = new Spritemap("graphics/ghost.png", 30, 30);
         sprite.add("idle", [0, 1], 6);
         sprite.add("phasing", [2, 3], 6);

@@ -206,7 +206,7 @@ class Player extends MemoryEntity {
             }
         }
         for(hazardType in [
-            "mine", "enemy", "grenade", "explosion", "roboplant"
+            "mine", "enemy", "grenade", "explosion", "roboplant", "ghost"
         ]) {
             if(collide(hazardType, x, y) != null) {
                 die();

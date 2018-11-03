@@ -76,7 +76,7 @@ class Arrow extends MemoryEntity {
             sprite.angle = angle;
             moveBy(
                 velocity.x * Main.getDelta(), velocity.y * Main.getDelta(),
-                ["walls", "enemy", "mine"], true
+                ["walls", "enemy", "mine", "ghost"], true
             );
         }
         else {
@@ -88,7 +88,7 @@ class Arrow extends MemoryEntity {
     }
 
     public override function moveCollideX(e:Entity) {
-        if(e.type == "enemy" || e.type == "mine") {
+        if(e.type == "enemy" || e.type == "mine" || e.type == "ghost") {
             setLanded(true, false);
             setAnchor(e);
             var towardsEnemy = new Vector2(
@@ -113,7 +113,7 @@ class Arrow extends MemoryEntity {
     }
 
     public override function moveCollideY(e:Entity) {
-        if(e.type == "enemy" || e.type == "mine") {
+        if(e.type == "enemy" || e.type == "mine" || e.type == "ghost") {
             setLanded(true, false);
             setAnchor(e);
             var towardsEnemy = new Vector2(
