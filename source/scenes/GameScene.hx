@@ -93,7 +93,8 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        music = new Sfx('audio/music${depth}.wav');
+        //music = new Sfx('audio/music${depth}.wav');
+        music = new Sfx('audio/silence.wav');
         music.loop();
 
         depthDisplay = new DepthDisplay();
@@ -259,8 +260,16 @@ class GameScene extends Scene {
     private function addPlayer() {
         var playerStart = getRandomOpenGroundPoint();
         player = new Player(playerStart.point.x, playerStart.point.y);
+        player.x += 3;
         player.y += Segment.TILE_SIZE - player.height;
         add(player);
+        var disabledDoor = new MemoryEntity(
+            playerStart.point.x, playerStart.point.y
+        );
+        disabledDoor.setGraphic(new Image("graphics/disableddoor.png"));
+        disabledDoor.y += Segment.TILE_SIZE - 42;
+        disabledDoor.layer = 50;
+        add(disabledDoor);
         return [playerStart];
     }
 

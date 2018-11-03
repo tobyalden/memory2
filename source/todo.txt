@@ -1,5 +1,6 @@
-- make new segments
 - final boss
+- make new segments
+- add disabled door
 - unlock hard mode
 - spawn spikes in boss room in hard mode
 - disable up/down scroll keys in JS
@@ -7,3 +8,4 @@
 - ending (maybe just credits?)
 - add sound to main menu
 - music
+- levels, compress music
