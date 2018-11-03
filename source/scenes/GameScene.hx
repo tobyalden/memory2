@@ -510,11 +510,36 @@ class GameScene extends Scene {
                 'graphics/decorations${GameScene.getDepthBlock()}.png',
                 new Rectangle(decorationNum * 30, 0, 30, 30)
             );
+            decoration.flipX = Random.random < 0.5;
             addGraphic(
                 decoration,
                 1,
                 decorationPoint.point.x,
                 decorationPoint.point.y + Segment.TILE_SIZE - 30
+            );
+        }
+
+        var skeletonPoints = new Array<SegmentPoint>();
+        for(i in 0...(depth * 4)) {
+            skeletonPoints.push(
+                getEnemyPoint(
+                    "ground",
+                    skeletonPoints.concat(enemyPoints).concat(decorationPoints)
+                )
+            );
+        }
+        for(skeletonPoint in skeletonPoints) {
+            var skeletonNum = 14;
+            var skeleton = new Image(
+                'graphics/decorations${GameScene.getDepthBlock()}.png',
+                new Rectangle(skeletonNum * 30, 0, 30, 30)
+            );
+            skeleton.flipX = Random.random < 0.5;
+            addGraphic(
+                skeleton,
+                1,
+                skeletonPoint.point.x,
+                skeletonPoint.point.y + Segment.TILE_SIZE - 30
             );
         }
     }
