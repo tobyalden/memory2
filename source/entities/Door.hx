@@ -33,12 +33,12 @@ class Door extends MemoryEntity {
         sprite.play("closed");
 
         floorIndicator = new Spritemap("graphics/elevatortall.png", 38, 60);
-        floorIndicator.add("1", [12]);
-        floorIndicator.add("2", [11]);
-        floorIndicator.add("3", [10]);
-        floorIndicator.add("4", [9]);
-        floorIndicator.add("5", [8]);
-        floorIndicator.add("6", [7]);
+        floorIndicator.add("1", [7]);
+        floorIndicator.add("2", [8]);
+        floorIndicator.add("3", [9]);
+        floorIndicator.add("4", [10]);
+        floorIndicator.add("5", [11]);
+        floorIndicator.add("6", [12]);
         floorIndicator.play('${GameScene.depth}');
 
         gate = new Spritemap("graphics/elevatortall.png", 38, 60);
