@@ -153,6 +153,12 @@ class GameScene extends Scene {
                     var numBackgrounds = Std.int(
                         segmentBackgrounds.height / Segment.MIN_SEGMENT_HEIGHT
                     );
+                    if(depth < 3) {
+                        numBackgrounds -= 2;
+                    }
+                    else if(depth < 5) {
+                        numBackgrounds -= 1;
+                    }
                     var clipRect = new Rectangle(
                         0,
                         Random.randInt(numBackgrounds)
