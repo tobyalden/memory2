@@ -118,6 +118,34 @@ class MainMenu extends Scene {
         );
 
         if(Main.inputPressed("jump") || Main.inputPressed("act")) {
+            if(hardModeUnlocked) {
+                if(cursorPosition == 0) {
+                    GameScene.easyMode = false;
+                    Random.randomizeSeed();
+                }
+                else if(cursorPosition == 1) {
+                    GameScene.easyMode = false;
+                    Random.randomSeed = getDailySeed();
+                }
+                else if(cursorPosition == 2) {
+                    GameScene.easyMode = true;
+                    Random.randomizeSeed();
+                }
+                else if(cursorPosition == 3) {
+                    GameScene.easyMode = true;
+                    Random.randomSeed = getDailySeed();
+                }
+            }
+            else {
+                if(cursorPosition == 0) {
+                    GameScene.easyMode = true;
+                    Random.randomizeSeed();
+                }
+                else if(cursorPosition == 1) {
+                    GameScene.easyMode = true;
+                    Random.randomSeed = getDailySeed();
+                }
+            }
             curtain.fadeOut();
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
@@ -136,5 +164,17 @@ class MainMenu extends Scene {
         }
 
         super.update();
+    }
+
+    private function getDailySeed() {
+        var today = Date.now();
+        var dailySeed = (
+            (today.getDay() * 32 + today.getMonth()) * 13
+            + today.getFullYear()
+        );
+        if(!GameScene.easyMode) {
+            dailySeed += 666;
+        }
+        return dailySeed;
     }
 }

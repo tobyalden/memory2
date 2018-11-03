@@ -37,6 +37,7 @@ class GameScene extends Scene {
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
 
     public static var easyMode:Bool = true;
+
     public static var depth:Int = 6;
 
     public var music(default, null):Sfx;
