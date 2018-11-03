@@ -18,6 +18,7 @@ class MainMenu extends Scene {
     private var curtain:Curtain;
     private var controllerConnected:Spritemap;
     private var gradient:Entity;
+    private var music:Sfx;
 
 	override public function begin() {
         gradient = new Entity(0, 0, new Backdrop("graphics/gradient.png"));
@@ -35,6 +36,8 @@ class MainMenu extends Scene {
         controllerConnected.add("nocontroller", [0]);
         controllerConnected.add("controller", [1]);
         add(new Entity(30, 315, controllerConnected));
+        music = new Sfx("audio/mainmenu.wav");
+        music.loop();
     }
 
     public override function update() {
@@ -45,6 +48,7 @@ class MainMenu extends Scene {
             curtain.fadeOut();
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
+                    music.stop();
                     clearTweens();
                     GameScene.depth = 1;
                     Tutorial.messageNum = 1;
