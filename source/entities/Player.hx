@@ -208,8 +208,12 @@ class Player extends MemoryEntity {
         for(hazardType in [
             "mine", "enemy", "grenade", "explosion", "roboplant", "ghost"
         ]) {
-            if(collide(hazardType, x, y) != null) {
+            var hazard = collide(hazardType, x, y);
+            if(hazard != null) {
                 die();
+                if(hazardType == "mine") {
+                    cast(hazard, Mine).detonate();
+                }
             }
         }
         var floorSpike = collide("floorspike", x, y);

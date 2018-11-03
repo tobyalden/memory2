@@ -68,7 +68,7 @@ class Mine extends MemoryEntity {
         super.update();
     }
 
-    private function detonate(makeSound:Bool = true) {
+    public function detonate(makeSound:Bool = true) {
         scene.remove(this);
         scene.add(new Explosion(centerX - 72, centerY - 72));
         if(makeSound) {
