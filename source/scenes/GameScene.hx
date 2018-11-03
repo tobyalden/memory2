@@ -24,13 +24,13 @@ class GameScene extends Scene {
     public static inline var TOTAL_NUMBER_OF_MAPS = 40;
 
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
-    public static inline var STARTING_NUMBER_OF_TRAPS = 10;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 30;
+    public static inline var STARTING_NUMBER_OF_TRAPS = 30;
     //public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
     //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
     public static inline var STARTING_SCATTERED_ARROWS = 10;
     public static inline var NUMBER_OF_DECORATIONS = 10;
-    public static inline var MAX_PLACEMENT_RETRIES = 1000;
+    public static inline var MAX_PLACEMENT_RETRIES = 10000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
@@ -47,6 +47,7 @@ class GameScene extends Scene {
     private var key:DoorKey;
     private var curtain:Curtain;
     private var allSegments:Array<Segment>;
+    private var allEnemies:Array<MemoryEntity>;
 
     private var depthDisplay:DepthDisplay;
 
@@ -99,6 +100,16 @@ class GameScene extends Scene {
 
         if(depth == 1) {
             add(new Tutorial());
+        }
+
+        removeEnemiesTooCloseToPlayer();
+    }
+
+    private function removeEnemiesTooCloseToPlayer() {
+        for(enemy in allEnemies) {
+            if(enemy.distanceFrom(player) < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
+                remove(enemy);
+            }
         }
     }
 
@@ -305,6 +316,7 @@ class GameScene extends Scene {
     }
 
     private function addEnemies() {
+        allEnemies = new Array<MemoryEntity>();
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
         var enemyPoints = new Array<SegmentPoint>();
         var groundEnemyPoints = new Array<SegmentPoint>();
@@ -371,15 +383,18 @@ class GameScene extends Scene {
         // Add enemies
         for(enemyPoint in enemyPoints) {
             var choice = Random.randInt(3);
+            var enemy:MemoryEntity;
             if(choice == 0) {
-                add(new Bouncer(enemyPoint.point.x, enemyPoint.point.y));
+                enemy = new Bouncer(enemyPoint.point.x, enemyPoint.point.y);
             }
             else if(choice == 1) {
-                add(new Follower(enemyPoint.point.x, enemyPoint.point.y));
+                enemy = new Follower(enemyPoint.point.x, enemyPoint.point.y);
             }
-            else if(choice == 2) {
-                add(new Ghost(enemyPoint.point.x, enemyPoint.point.y));
+            else {
+                enemy = new Ghost(enemyPoint.point.x, enemyPoint.point.y);
             }
+            add(enemy);
+            allEnemies.push(enemy);
         }
         for(enemyPoint in groundEnemyPoints) {
             var choice = Random.randInt(3);
@@ -396,6 +411,7 @@ class GameScene extends Scene {
             }
             enemy.y += Segment.TILE_SIZE - enemy.height;
             add(enemy);
+            allEnemies.push(enemy);
         }
 
         // Add traps
@@ -429,9 +445,11 @@ class GameScene extends Scene {
                         break;
                     }
                     add(extraSpike);
+                    allEnemies.push(extraSpike);
                 }
             }
             add(enemy);
+            allEnemies.push(enemy);
         }
         for(enemyPoint in rightWallTrapPoints) {
             var enemy:MemoryEntity;
@@ -466,9 +484,11 @@ class GameScene extends Scene {
                         break;
                     }
                     add(extraSpike);
+                    allEnemies.push(extraSpike);
                 }
             }
             add(enemy);
+            allEnemies.push(enemy);
         }
         for(enemyPoint in groundTrapPoints) {
             var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
@@ -491,9 +511,11 @@ class GameScene extends Scene {
                         break;
                     }
                     add(extraSpike);
+                    allEnemies.push(extraSpike);
                 }
             }
             add(enemy);
+            allEnemies.push(enemy);
         }
         return existingPoints;
     }
