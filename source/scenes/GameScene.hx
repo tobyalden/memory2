@@ -344,6 +344,7 @@ class GameScene extends Scene {
         }
         for(i in 0...numberOfEnemies) {
             var enemyType = ["air", "ground"][Random.randInt(2)];
+            //var enemyType = "ground";
             var existingPoints = (
                 enemyPoints
                 .concat(groundEnemyPoints)
@@ -381,7 +382,7 @@ class GameScene extends Scene {
                 enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
             }
             else if(choice == 1) {
-                enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y);
+                enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y - 1);
             }
             else {
                 enemy = new Roombad(enemyPoint.point.x, enemyPoint.point.y);
