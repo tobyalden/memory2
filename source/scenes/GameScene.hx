@@ -121,6 +121,8 @@ class GameScene extends Scene {
         camera.y = allSegments[0].y;
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
+        music = new Sfx('audio/boss.wav');
+        music.loop();
     }
 
     public function spawnRoboPlant() {

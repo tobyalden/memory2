@@ -7,4 +7,10 @@
     <rect x="16" y="336" w="624" h="32"/>
     <rect x="624" y="16" w="16" h="320"/>
   </walls>
+  <optionalWalls>
+    <rect x="16" y="240" w="48" h="96"/>
+    <rect x="144" y="288" w="96" h="48"/>
+    <rect x="400" y="304" w="112" h="32"/>
+    <rect x="576" y="240" w="48" h="96"/>
+  </optionalWalls>
 </level>

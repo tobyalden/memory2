@@ -76,7 +76,7 @@ class Turret extends MemoryEntity {
         }
         var towardsPlayer = new Vector2(0, 0);
         towardsPlayer.x = LOB_POWER;
-        if(x > player.x) {
+        if(centerX > player.centerX) {
             towardsPlayer.x = -LOB_POWER;
         }
         towardsPlayer.y = -LOB_POWER;
