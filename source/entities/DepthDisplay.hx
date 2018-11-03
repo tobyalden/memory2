@@ -17,8 +17,8 @@ class DepthDisplay extends MemoryEntity {
 
     private var message:Spritemap;
 
-    public function new() {
-        super(0, 0);
+    public function new(x:Float = 0, y:Float = 0) {
+        super(x, y);
         layer = -20;
 
         message = new Spritemap("graphics/depthdisplay.png", 640, 41);
@@ -42,9 +42,11 @@ class DepthDisplay extends MemoryEntity {
     }
 
     public override function update() {
-        var player = scene.getInstance("player");
-        x = player.centerX - message.width / 2;
-        y = player.centerY - message.height / 2 - 80;
+        if(GameScene.depth < 7) {
+            var player = scene.getInstance("player");
+            x = player.centerX - message.width / 2;
+            y = player.centerY - message.height / 2 - 80;
+        }
         super.update();
     }
 }

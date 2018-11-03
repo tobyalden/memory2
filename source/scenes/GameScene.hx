@@ -119,7 +119,7 @@ class GameScene extends Scene {
         camera.pixelSnapping = true;
         camera.x = Math.floor(allSegments[0].centerX - HXP.width/2);
         camera.y = allSegments[0].y;
-        depthDisplay = new DepthDisplay();
+        depthDisplay = new DepthDisplay(0, HXP.height/2);
         add(depthDisplay);
         music = new Sfx('audio/boss.wav');
         music.loop();
