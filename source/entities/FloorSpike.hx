@@ -30,7 +30,7 @@ class FloorSpike extends MemoryEntity {
         sprite.play("idle");
         setGraphic(sprite);
         base = new Image("graphics/spikebase.png");
-        base.y = base.height;
+        base.y = base.height + 2;
         addGraphic(base);
         activateTimer = new Alarm(ACTIVATE_DELAY, TweenType.Persist);
         activateTimer.onComplete.bind(function() {
