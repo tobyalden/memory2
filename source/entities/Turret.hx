@@ -81,6 +81,12 @@ class Turret extends MemoryEntity {
         }
         towardsPlayer.y = -LOB_POWER;
         var grenade = new Grenade(centerX, top, towardsPlayer);
+        if(towardsPlayer.x > 0) {
+            grenade.x -= grenade.width/2;
+        }
+        else {
+            grenade.x -= grenade.width + grenade.width/2;
+        }
         scene.add(grenade);
         lobSfx.play();
         isAncipatingLob = false;
