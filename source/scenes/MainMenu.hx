@@ -13,13 +13,16 @@ import haxepunk.utils.*;
 import openfl.Assets;
 
 class MainMenu extends Scene {
+    public static inline var SAVE_FILE_NAME = "memory.sav";
     public static inline var GRADIENT_SCROLL_SPEED = 6;
     public static inline var MENU_SPACING = 35;
     public static inline var CURSOR_PAUSE_TIME = 0.5;
     public static inline var BOB_AMOUNT = 0.25;
     public static inline var BOB_SPEED = 0.75;
 
-    private static var hardModeUnlocked:Bool = true;
+    private static var hardModeUnlocked:Bool;
+    private static var lastDailyAttempt:String;
+    private static var lastDailyHardAttempt:String;
 
     private var curtain:Curtain;
     private var controllerConnected:Spritemap;
@@ -32,6 +35,11 @@ class MainMenu extends Scene {
     private var bob:NumTween;
 
 	override public function begin() {
+        Data.load(SAVE_FILE_NAME);
+        hardModeUnlocked = Data.read("hardModeUnlocked", false);
+        lastDailyAttempt = Data.read("lastDailyAttempt", "");
+        lastDailyHardAttempt = Data.read("lastDailyHardAttempt", "");
+
         gradient = new Entity(0, 0, new Backdrop("graphics/gradient.png"));
         gradient.layer = 100;
         add(gradient);
@@ -50,6 +58,9 @@ class MainMenu extends Scene {
             var dailyHard = new Spritemap("graphics/menuselection.png", 412, 41);
             dailyHard.add("idle", [3]);
             dailyHard.play("idle");
+            if(lastDailyHardAttempt == getDailyStamp()) {
+                dailyHard.alpha = 0.5;
+            }
             menu.push(dailyHard);
         }
         var start = new Spritemap("graphics/menuselection.png", 412, 41);
@@ -59,10 +70,15 @@ class MainMenu extends Scene {
         var daily = new Spritemap("graphics/menuselection.png", 412, 41);
         daily.add("idle", [1]);
         daily.play("idle");
+        if(lastDailyAttempt == getDailyStamp()) {
+            daily.alpha = 0.5;
+        }
         menu.push(daily);
 
         cursorPosition = 0;
-        cursor = new Entity(15, 101, new Image("graphics/cursor.png"));
+        cursor = new Entity(13, 101, new Image("graphics/cursor.png"));
+        cursor.graphic.pixelSnapping = true;
+        cursor.graphic.smooth = false;
         add(cursor);
 
         cursorPause = new Alarm(CURSOR_PAUSE_TIME, TweenType.Persist);
@@ -124,16 +140,30 @@ class MainMenu extends Scene {
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 1) {
+                    if(lastDailyHardAttempt == getDailyStamp()) {
+                        super.update();
+                        return;
+                    }
                     GameScene.easyMode = false;
                     Random.randomSeed = getDailySeed();
+                    lastDailyHardAttempt = getDailyStamp();
+                    Data.write("lastDailyHardAttempt", lastDailyHardAttempt);
+                    Data.save(SAVE_FILE_NAME);
                 }
                 else if(cursorPosition == 2) {
                     GameScene.easyMode = true;
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 3) {
+                    if(lastDailyAttempt == getDailyStamp()) {
+                        super.update();
+                        return;
+                    }
                     GameScene.easyMode = true;
                     Random.randomSeed = getDailySeed();
+                    lastDailyAttempt = getDailyStamp();
+                    Data.write("lastDailyAttempt", lastDailyAttempt);
+                    Data.save(SAVE_FILE_NAME);
                 }
             }
             else {
@@ -142,8 +172,15 @@ class MainMenu extends Scene {
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 1) {
+                    if(lastDailyAttempt == getDailyStamp()) {
+                        super.update();
+                        return;
+                    }
                     GameScene.easyMode = true;
                     Random.randomSeed = getDailySeed();
+                    lastDailyAttempt = getDailyStamp();
+                    Data.write("lastDailyAttempt", lastDailyAttempt);
+                    Data.save(SAVE_FILE_NAME);
                 }
             }
             curtain.fadeOut();
@@ -176,5 +213,13 @@ class MainMenu extends Scene {
             dailySeed += 666;
         }
         return dailySeed;
+    }
+
+    private function getDailyStamp() {
+        var today = Date.now();
+        var dailyStamp = (
+            '${today.getMonth()}-${today.getDay()}-${today.getFullYear()}'
+        );
+        return dailyStamp;
     }
 }

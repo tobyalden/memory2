@@ -24,8 +24,8 @@ class GameScene extends Scene {
     public static inline var TOTAL_NUMBER_OF_MAPS = 40;
 
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 30;
-    public static inline var STARTING_NUMBER_OF_TRAPS = 30;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var STARTING_NUMBER_OF_TRAPS = 10;
     //public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
     //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
     public static inline var STARTING_SCATTERED_ARROWS = 10;
