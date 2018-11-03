@@ -52,41 +52,42 @@ class Boss extends MemoryEntity {
         //bounceSfx = new Sfx("audio/bounce.wav");
         health = 999;
         cycle = 0;
+
         grenadeDropCount = 0;
-        grenadeTimer = new Alarm(2, TweenType.Looping);
+        grenadeTimer = new Alarm(2, TweenType.Persist);
         grenadeTimer.onComplete.bind(function() {
-            onGrenadeTimerComplete();
+            dropGrenade();
+            grenadeDropCount++;
+            if(grenadeDropCount >= STARTING_GRENADE_DROPS) {
+                advanceCycle();
+            }
+            else {
+                grenadeTimer.start();
+            }
         });
         addTween(grenadeTimer, true);
 
         jumpCount = 0;
-        jumpTimer = new Alarm(TIME_BETWEEN_JUMPS, TweenType.Looping);
+        jumpTimer = new Alarm(TIME_BETWEEN_JUMPS, TweenType.Persist);
         jumpTimer.onComplete.bind(function() {
-            jump();
-            jumpCount++;
             if(jumpCount >= STARTING_JUMPS) {
-                jumpTimer.cancel();
                 advanceCycle();
             }
+            else {
+                jumpTimer.start();
+            }
+            jump();
         });
         addTween(jumpTimer);
 
         wasOnGround = false;
     }
 
-    private function onGrenadeTimerComplete() {
-        dropGrenade();
-        grenadeDropCount++;
-        if(grenadeDropCount >= STARTING_GRENADE_DROPS) {
-            grenadeTimer.cancel();
-            advanceCycle();
-        }
-    }
-
     private function jump() {
         if(!isOnGround()) {
             return;
         }
+        jumpCount++;
         var player = scene.getInstance("player");
         if(centerX < player.centerX) {
             velocity.x = JUMP_VEL_X * (distanceFrom(player, true) / 200);
@@ -107,11 +108,19 @@ class Boss extends MemoryEntity {
             stompTimer.onComplete.bind(function() {
                 cycle++;
                 velocity.y = -CYCLE_0_END_HOP;
+                jumpCount = 0;
             });
             addTween(stompTimer, true);
         }
         else if(cycle == 1) {
-            trace('done with cycles');
+            cycle++;
+            var floatUp = new VarTween(TweenType.OneShot);
+            floatUp.onComplete.bind(function() {
+                grenadeTimer.start();
+                cycle = 0;
+            });
+            floatUp.tween(this, "y", startY, 3);
+            addTween(floatUp, true);
         }
     }
 
@@ -156,6 +165,10 @@ class Boss extends MemoryEntity {
             else {
                 velocity.y += Main.getDelta() * GRAVITY;
             }
+        }
+        else if(cycle == 2) {
+            velocity.x = 0;
+            velocity.y = 0;
         }
         wasOnGround = isOnGround();
         moveBy(
