@@ -82,7 +82,11 @@ class Hopper extends MemoryEntity {
 
     private function jump() {
         var player = scene.getInstance("player");
-        if(distanceFrom(player, true) > ACTIVE_RANGE || !isOnGround()) {
+        if(
+            !isOnScreen()
+            || distanceFrom(player, true) > ACTIVE_RANGE
+            || !isOnGround()
+        ) {
             return;
         }
         if(centerX < player.centerX) {

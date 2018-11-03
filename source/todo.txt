@@ -1,5 +1,6 @@
 - make new segments
 - final boss
+- spawn spikes in boss room
 - daily run
 - disable up/down scroll keys in JS
 - remove debug controls
