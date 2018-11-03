@@ -37,7 +37,7 @@ class GameScene extends Scene {
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
 
     public static var easyMode:Bool = true;
-    public static var depth:Int = 7;
+    public static var depth:Int = 6;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -350,7 +350,7 @@ class GameScene extends Scene {
         }
         for(i in 0...numberOfEnemies) {
             var enemyType = ["air", "ground"][Random.randInt(2)];
-            //var enemyType = "ground";
+            //var enemyType = "air";
             var existingPoints = (
                 enemyPoints
                 .concat(groundEnemyPoints)
@@ -384,6 +384,7 @@ class GameScene extends Scene {
         for(enemyPoint in groundEnemyPoints) {
             var choice = Random.randInt(3);
             var enemy:MemoryEntity;
+            //choice = 0;
             if(choice == 0) {
                 enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
             }
@@ -767,7 +768,6 @@ class GameScene extends Scene {
                         tileY * Segment.MIN_SEGMENT_HEIGHT
                     );
                     add(segment);
-                    allSegments.push(segment);
                 }
             }
         }

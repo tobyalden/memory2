@@ -9,6 +9,11 @@ import haxepunk.math.*;
 import openfl.Assets;
 import scenes.*;
 
+typedef OpenPoint = {
+    var tileX:Int;
+    var tileY:Int;
+}
+
 class Segment extends MemoryEntity {
     public static inline var NUMBER_OF_SEGMENTS = 9;
     public static inline var MIN_SEGMENT_WIDTH = 640;
@@ -21,6 +26,10 @@ class Segment extends MemoryEntity {
     public var number(default, null):Int;
     private var tiles:Tilemap;
     private var edges:Tilemap;
+    private var openPoints:Array<OpenPoint>;
+    private var openGroundPoints:Array<OpenPoint>;
+    private var openLeftWallPoints:Array<OpenPoint>;
+    private var openRightWallPoints:Array<OpenPoint>;
 
     public function new(x:Float, y:Float, isBossSegment:Bool = false) {
         super(x, y);
@@ -34,6 +43,39 @@ class Segment extends MemoryEntity {
         loadSegment(number);
         updateGraphic();
         mask = walls;
+        openPoints = new Array<OpenPoint>();
+        openGroundPoints = new Array<OpenPoint>();
+        openLeftWallPoints = new Array<OpenPoint>();
+        openRightWallPoints = new Array<OpenPoint>();
+        findOpenPoints();
+    }
+
+    private function findOpenPoints() {
+        for(tileX in 0...walls.columns) {
+            for(tileY in 0...walls.rows) {
+                if(
+                    !walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX, tileY + 1)
+                ) {
+                    openGroundPoints.push({tileX: tileX, tileY: tileY});
+                }
+                else if(
+                    !walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX - 1, tileY)
+                ) {
+                    openLeftWallPoints.push({tileX: tileX, tileY: tileY});
+                }
+                else if(
+                    !walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX + 1, tileY)
+                ) {
+                    openRightWallPoints.push({tileX: tileX, tileY: tileY});
+                }
+                else if(!walls.getTile(tileX, tileY)) {
+                    openPoints.push({tileX: tileX, tileY: tileY});
+                }
+            }
+        }
     }
 
     private function loadSegment(segmentNumber:Int) {
@@ -69,66 +111,70 @@ class Segment extends MemoryEntity {
     }
 
     public function getRandomOpenTile() {
-        var randomTileX = Random.randInt(walls.columns);
-        var randomTileY = Random.randInt(walls.rows);
+        var randomTile:OpenPoint = openPoints[
+            Random.randInt(openPoints.length)
+        ];
         for(checkX in -1...2) {
             for(checkY in -1...2) {
-                if(
-                    walls.getTile(randomTileX + checkX, randomTileY + checkY)
-                ) {
+                if(walls.getTile(
+                    randomTile.tileX + checkX, randomTile.tileY + checkY
+                )) {
                     return null;
                 }
             }
         }
-        return {tileX: randomTileX, tileY: randomTileY};
+        return {tileX: randomTile.tileX, tileY: randomTile.tileY};
     }
 
     public function getRandomOpenLeftWallTile() {
-        var randomTileX = Random.randInt(walls.columns);
-        var randomTileY = Random.randInt(walls.rows);
+        var randomTile:OpenPoint = openLeftWallPoints[
+            Random.randInt(openLeftWallPoints.length)
+        ];
         for(checkY in -1...2) {
-            if(walls.getTile(randomTileX, randomTileY + checkY)) {
+            if(walls.getTile(randomTile.tileX, randomTile.tileY + checkY)) {
                 return null;
             }
-            if(!walls.getTile(randomTileX - 1, randomTileY + checkY)) {
+            if(!walls.getTile(randomTile.tileX - 1, randomTile.tileY + checkY)) {
                 return null;
             }
         }
-        return {tileX: randomTileX, tileY: randomTileY};
+        return {tileX: randomTile.tileX, tileY: randomTile.tileY};
     }
 
     public function getRandomOpenRightWallTile() {
-        var randomTileX = Random.randInt(walls.columns);
-        var randomTileY = Random.randInt(walls.rows);
+        var randomTile:OpenPoint = openRightWallPoints[
+            Random.randInt(openRightWallPoints.length)
+        ];
         for(checkY in -1...2) {
-            if(walls.getTile(randomTileX, randomTileY + checkY)) {
+            if(walls.getTile(randomTile.tileX, randomTile.tileY + checkY)) {
                 return null;
             }
-            if(!walls.getTile(randomTileX + 1, randomTileY + checkY)) {
+            if(!walls.getTile(randomTile.tileX + 1, randomTile.tileY + checkY)) {
                 return null;
             }
         }
-        return {tileX: randomTileX, tileY: randomTileY};
+        return {tileX: randomTile.tileX, tileY: randomTile.tileY};
     }
 
     public function getRandomOpenGroundTile() {
-        var randomTileX = Random.randInt(walls.columns);
-        var randomTileY = Random.randInt(walls.rows);
+        var randomTile:OpenPoint = openGroundPoints[
+            Random.randInt(openGroundPoints.length)
+        ];
         for(checkX in -1...2) {
             for(checkY in -2...1) {
                 if(
-                    walls.getTile(randomTileX + checkX, randomTileY + checkY)
+                    walls.getTile(randomTile.tileX + checkX, randomTile.tileY + checkY)
                 ) {
                     return null;
                 }
             }
         }
         for(checkX in -1...2) {
-            if(!walls.getTile(randomTileX + checkX, randomTileY + 1)) {
+            if(!walls.getTile(randomTile.tileX + checkX, randomTile.tileY + 1)) {
                 return null;
             }
         }
-        return {tileX: randomTileX, tileY: randomTileY};
+        return {tileX: randomTile.tileX, tileY: randomTile.tileY};
     }
 
     public function makeSolid1x1() {
