@@ -542,6 +542,7 @@ class GameScene extends Scene {
             );
         }
 
+        // Add more skeletons at lower depths
         var skeletonPoints = new Array<SegmentPoint>();
         for(i in 0...(depth * 4)) {
             skeletonPoints.push(
@@ -563,6 +564,34 @@ class GameScene extends Scene {
                 1,
                 skeletonPoint.point.x,
                 skeletonPoint.point.y + Segment.TILE_SIZE - 30
+            );
+        }
+
+        // Add more plants at lower depths
+        var plantPoints = new Array<SegmentPoint>();
+        for(i in 0...(depth * 10)) {
+            plantPoints.push(
+                getEnemyPoint(
+                    "ground",
+                    plantPoints
+                    .concat(enemyPoints)
+                    .concat(decorationPoints)
+                    .concat(skeletonPoints)
+                )
+            );
+        }
+        for(plantPoint in plantPoints) {
+            var plantNum = 9 + Random.randInt(5);
+            var plant = new Image(
+                'graphics/decorations${GameScene.getDepthBlock()}.png',
+                new Rectangle(plantNum * 30, 0, 30, 30)
+            );
+            plant.flipX = Random.random < 0.5;
+            addGraphic(
+                plant,
+                1,
+                plantPoint.point.x,
+                plantPoint.point.y + Segment.TILE_SIZE - 30
             );
         }
     }
