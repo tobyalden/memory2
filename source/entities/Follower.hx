@@ -109,21 +109,27 @@ class Follower extends MemoryEntity {
 
     public override function moveCollideX(e:Entity) {
         velocity.x = -velocity.x * BOUNCE_FACTOR;
-        bounceSfx.play(Math.min(hum.volume * 2, 1));
+        if(isOnScreen()) {
+            bounceSfx.play(Math.min(hum.volume * 2, 1));
+        }
         return true;
     }
 
     public override function moveCollideY(e:Entity) {
         velocity.y = -velocity.y * BOUNCE_FACTOR;
-        bounceSfx.play(Math.min(hum.volume * 2, 1));
+        if(isOnScreen()) {
+            bounceSfx.play(Math.min(hum.volume * 2, 1));
+        }
         return true;
     }
 
     override public function takeHit(arrow:Arrow) {
-        isActive = true;
-        var knockback = arrow.velocity.clone();
-        knockback.normalize(HIT_KNOCKBACK);
-        velocity.add(knockback);
+        if(!arrow.isScattered) {
+            isActive = true;
+            var knockback = arrow.velocity.clone();
+            knockback.normalize(HIT_KNOCKBACK);
+            velocity.add(knockback);
+        }
         super.takeHit(arrow);
     }
 }
