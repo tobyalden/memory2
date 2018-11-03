@@ -6,4 +6,5 @@
 - remove debug controls
 - ending (maybe just credits?)
 - main menu
+- add sound to main menu
 - music

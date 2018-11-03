@@ -16,6 +16,8 @@ class MainMenu extends Scene {
     public static inline var GRADIENT_SCROLL_SPEED = 6;
     public static inline var MENU_SPACING = 35;
     public static inline var CURSOR_PAUSE_TIME = 0.5;
+    public static inline var BOB_AMOUNT = 0.25;
+    public static inline var BOB_SPEED = 0.75;
 
     private static var hardModeUnlocked:Bool = true;
 
@@ -27,6 +29,7 @@ class MainMenu extends Scene {
     private var cursor:Entity;
     private var cursorPosition:Int;
     private var cursorPause:Alarm;
+    private var bob:NumTween;
 
 	override public function begin() {
         gradient = new Entity(0, 0, new Backdrop("graphics/gradient.png"));
@@ -64,6 +67,10 @@ class MainMenu extends Scene {
 
         cursorPause = new Alarm(CURSOR_PAUSE_TIME, TweenType.Persist);
         addTween(cursorPause);
+
+        bob = new NumTween(TweenType.PingPong);
+        bob.tween(-BOB_AMOUNT, BOB_AMOUNT, BOB_SPEED, Ease.sineInOut);
+        addTween(bob, true);
 
         var count = 0;
         for(menuItem in menu) {
@@ -104,6 +111,7 @@ class MainMenu extends Scene {
             cursorPause.cancel();
         }
         cursor.y = 101 + cursorPosition * MENU_SPACING;
+        cursor.x += bob.value;
 
         controllerConnected.play(
             Main.gamepad != null ? "controller" : "nocontroller"
