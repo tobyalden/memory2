@@ -82,7 +82,7 @@ class Boss extends MemoryEntity {
         addTween(jumpTimer);
 
         wasOnGround = false;
-        weakPoint = new BossWeakPoint(centerX, top, this);
+        weakPoint = new BossWeakPoint(this);
     }
 
     private function jump() {

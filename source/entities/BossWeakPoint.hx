@@ -8,8 +8,8 @@ class BossWeakPoint extends MemoryEntity {
     private var sprite:Spritemap;
     private var boss:Boss;
 
-    public function new(x:Float, y:Float, boss:Boss) {
-        super(x, y);
+    public function new(boss:Boss) {
+        super(0, 0);
         this.boss = boss;
         type = "enemy";
         sprite = new Spritemap("graphics/bossweakpoint.png", 40, 40);
