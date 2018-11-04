@@ -17,7 +17,7 @@ class BossWeakPoint extends MemoryEntity {
         sprite.play("idle");
         setGraphic(sprite);
         setHitbox(40, 40);
-        health = 999;
+        health = 3;
     }
 
     override public function update() {
@@ -28,6 +28,11 @@ class BossWeakPoint extends MemoryEntity {
 
     override public function takeHit(arrow:Arrow) {
         super.takeHit(arrow);
+    }
+
+    override private function die() {
+        boss.die();
+        super.die();
     }
 }
 

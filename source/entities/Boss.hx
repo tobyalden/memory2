@@ -19,6 +19,7 @@ class Boss extends MemoryEntity {
     public static inline var JUMP_VEL_X = 4;
     public static inline var MAX_JUMP_VEL_X = 7;
     public static inline var JUMP_VEL_Y = 6.3;
+    public static inline var ARROW_DEFLECT_FACTOR = 1;
 
     public var weakPoint(default, null):BossWeakPoint;
     private var sprite:Spritemap;
@@ -38,7 +39,7 @@ class Boss extends MemoryEntity {
         super(x, y);
         startX = x;
         startY = y;
-        type = "enemy";
+        type = "boss";
         sprite = new Spritemap("graphics/boss.png", 100, 100);
         sprite.add("idle", [0]);
         sprite.play("idle");
@@ -178,6 +179,15 @@ class Boss extends MemoryEntity {
             ["walls"]
         );
         animation();
+
+        var _arrow = collide("arrow", x, y);
+        if(_arrow != null && !cast(_arrow, Arrow).landed) {
+            var arrow = cast(_arrow, Arrow);
+            arrow.velocity.inverse();
+            arrow.velocity.scale(ARROW_DEFLECT_FACTOR);
+            MemoryEntity.allSfx['arrowhit${HXP.choose(1, 2, 3)}'].play(1);
+        }
+
         super.update();
     }
 
