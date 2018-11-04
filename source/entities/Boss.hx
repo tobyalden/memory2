@@ -20,6 +20,7 @@ class Boss extends MemoryEntity {
     public static inline var MAX_JUMP_VEL_X = 7;
     public static inline var JUMP_VEL_Y = 6.3;
 
+    public var weakPoint(default, null):BossWeakPoint;
     private var sprite:Spritemap;
     //private var lightning:Spritemap;
     private var velocity:Vector2;
@@ -81,6 +82,7 @@ class Boss extends MemoryEntity {
         addTween(jumpTimer);
 
         wasOnGround = false;
+        weakPoint = new BossWeakPoint(centerX, top, this);
     }
 
     private function jump() {

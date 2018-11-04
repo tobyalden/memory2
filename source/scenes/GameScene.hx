@@ -38,7 +38,7 @@ class GameScene extends Scene {
 
     public static var easyMode:Bool = true;
 
-    public static var depth:Int = 6;
+    public static var depth:Int = 7;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -93,8 +93,8 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        //music = new Sfx('audio/music${depth}.wav');
         music = new Sfx('audio/silence.wav');
+        music.volume = 0.6;
         music.loop();
 
         depthDisplay = new DepthDisplay();
@@ -122,10 +122,12 @@ class GameScene extends Scene {
             allSegments[0].bottom - Segment.TILE_SIZE * 2 - 24
         );
         add(player);
-        add(new Boss(
+        var boss = new Boss(
             allSegments[0].centerX - 50,
             allSegments[0].top + Segment.TILE_SIZE + 50
-        ));
+        );
+        add(boss);
+        add(boss.weakPoint);
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();

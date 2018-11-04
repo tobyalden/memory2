@@ -184,9 +184,9 @@ class MainMenu extends Scene {
                 }
             }
             curtain.fadeOut();
+            music.stop();
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
-                    music.stop();
                     clearTweens();
                     GameScene.depth = 1;
                     Tutorial.messageNum = 1;
