@@ -6,6 +6,7 @@ import haxepunk.utils.*;
 import scenes.*;
 
 class Main extends Engine {
+    public static var music:Sfx;
     public static var gamepad:Gamepad;
     private static var delta:Float;
 

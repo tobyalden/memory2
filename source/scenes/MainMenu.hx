@@ -23,7 +23,6 @@ class MainMenu extends Scene {
     private static var hardModeUnlocked:Bool;
     private static var lastDailyAttempt:String;
     private static var lastDailyHardAttempt:String;
-    private static var music:Sfx;
 
     private var curtain:Curtain;
     private var controllerConnected:Spritemap;
@@ -35,13 +34,9 @@ class MainMenu extends Scene {
     private var bob:NumTween;
 
 	override public function begin() {
-        if(music != null) {
-            music.stop();
-            trace('stopping music at start');
-        }
-        music = new Sfx("audio/mainmenu.wav");
+        Main.music = new Sfx("audio/mainmenu.wav");
         trace('loading music');
-        music.loop();
+        Main.music.loop();
         trace('looping music');
         Data.load(SAVE_FILE_NAME);
         hardModeUnlocked = Data.read("hardModeUnlocked", false);
@@ -200,7 +195,7 @@ class MainMenu extends Scene {
                 }
             }
             curtain.fadeOut();
-            music.stop();
+            Main.music.stop();
             trace('stopping music');
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {

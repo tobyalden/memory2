@@ -40,7 +40,6 @@ class GameScene extends Scene {
 
     public static var depth:Int = 1;
 
-    public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
     private var map:Grid;
     private var player:Player;
@@ -93,9 +92,9 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        music = new Sfx('audio/music${depth}.wav');
-        music.volume = 0.6;
-        music.loop();
+        Main.music = new Sfx('audio/music${depth}.wav');
+        //Main.music = new Sfx('audio/silence.wav');
+        Main.music.loop();
 
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
@@ -136,8 +135,8 @@ class GameScene extends Scene {
         camera.y = allSegments[0].y;
         depthDisplay = new DepthDisplay(0, HXP.height/2);
         add(depthDisplay);
-        music = new Sfx('audio/boss.wav');
-        music.loop();
+        Main.music = new Sfx('audio/boss.wav');
+        Main.music.loop();
     }
 
     public function spawnRoboPlant() {
@@ -204,7 +203,7 @@ class GameScene extends Scene {
             stopAllSounds();
             HXP.scene = new MainMenu();
         });
-        music.stop();
+        Main.music.stop();
         addTween(resetTimer, true);
     }
 
@@ -216,7 +215,7 @@ class GameScene extends Scene {
             stopAllSounds();
             HXP.scene = new GameScene();
         });
-        music.stop();
+        Main.music.stop();
         addTween(resetTimer, true);
     }
 
@@ -231,7 +230,7 @@ class GameScene extends Scene {
         for(entity in entities) {
             cast(entity, MemoryEntity).stopSound();
         }
-        music.stop();
+        Main.music.stop();
     }
 
     private function loadMap(mapNumber:Int) {

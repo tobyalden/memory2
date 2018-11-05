@@ -61,7 +61,7 @@ class RoboPlant extends MemoryEntity {
         themeSong.volume = 1 - Math.min(
             distanceFrom(player, true), THEME_SONG_DISTANCE
         ) / THEME_SONG_DISTANCE;
-        cast(scene, GameScene).music.volume = 1 - themeSong.volume;
+        Main.music.volume = 1 - themeSong.volume;
 
         moveBy(velocity.x * Main.getDelta(), velocity.y * Main.getDelta());
 
