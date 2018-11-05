@@ -1,16 +1,16 @@
+- fix controller bug
 - polish final boss
-- fix main menu music bug
 - make new segments
 - spawn spikes in boss room in hard mode
-- disable up/down scroll keys in JS
-- remove debug controls
+- add arrows to boss room
 - credits roll
 - unlock hard mode
 - add sound to main menu
 - music
 - adjust sound levels
+
 - compress music
-- add crouch
-- fix controller bug
-- make it so you always find door first
-- flip segments horizontall
+- disable up/down scroll keys in JS
+- remove debug controls
+
+- flip segments horizontally

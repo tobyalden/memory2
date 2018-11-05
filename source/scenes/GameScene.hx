@@ -35,6 +35,7 @@ class GameScene extends Scene {
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
+    public static inline var TRAPS_IN_BOSS_ROOM = 6;
 
     public static var easyMode:Bool = true;
 
@@ -108,7 +109,8 @@ class GameScene extends Scene {
 
     private function removeEnemiesTooCloseToPlayer() {
         for(enemy in allEnemies) {
-            if(enemy.distanceFrom(player) < MIN_ENEMY_DISTANCE_FROM_PLAYER) {
+            var minDistance = depth == 7 ? 30 : MIN_ENEMY_DISTANCE_FROM_PLAYER;
+            if(enemy.distanceFrom(player) < minDistance) {
                 remove(enemy);
             }
         }
@@ -127,6 +129,10 @@ class GameScene extends Scene {
         );
         add(boss);
         add(boss.weakPoint);
+        if(!easyMode) {
+            addBossRoomSpikes();
+            removeEnemiesTooCloseToPlayer();
+        }
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
@@ -379,6 +385,123 @@ class GameScene extends Scene {
                 arrowPoint.point.x, arrowPoint.point.y, awayFromPlayer,
                 isVertical, true
             ));
+        }
+    }
+
+    private function addBossRoomSpikes() {
+        allEnemies = new Array<MemoryEntity>();
+        var numberOfTraps = TRAPS_IN_BOSS_ROOM;
+        var groundTrapPoints = new Array<SegmentPoint>();
+        var leftWallTrapPoints = new Array<SegmentPoint>();
+        var rightWallTrapPoints = new Array<SegmentPoint>();
+        var existingPoints:Array<SegmentPoint> = [];
+        for(i in 0...numberOfTraps) {
+            var trapType = ["rightwall", "leftwall", "ground"][
+                Random.randInt(3)
+            ];
+            existingPoints = (
+                groundTrapPoints
+                .concat(leftWallTrapPoints)
+                .concat(rightWallTrapPoints)
+            );
+            if(trapType == "ground") {
+                groundTrapPoints.push(
+                    getEnemyPoint("ground", existingPoints, true)
+                );
+            }
+            else if(trapType == "leftwall") {
+                leftWallTrapPoints.push(
+                    getEnemyPoint("leftwall", existingPoints, true)
+                );
+            }
+            else if(trapType == "rightwall") {
+                rightWallTrapPoints.push(
+                    getEnemyPoint("rightwall", existingPoints, true)
+                );
+            }
+        }
+        for(enemyPoint in leftWallTrapPoints) {
+            var enemy = new LeftWallSpike(
+                enemyPoint.point.x, enemyPoint.point.y
+            );
+            if(enemy.type == "leftwallspike") {
+                var extendUp = Random.random < 0.5;
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendUp ? -i : i;
+                    var extraSpike = new LeftWallSpike(
+                        enemy.x, enemy.y + extendCount * Segment.TILE_SIZE
+                    );
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX - 1, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                    allEnemies.push(extraSpike);
+                }
+            }
+            add(enemy);
+            allEnemies.push(enemy);
+        }
+        for(enemyPoint in rightWallTrapPoints) {
+            var enemy = new RightWallSpike(
+                enemyPoint.point.x, enemyPoint.point.y
+            );
+            if(enemy.type == "rightwallspike") {
+                var extendUp = Random.random < 0.5;
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendUp ? -i : i;
+                    var extraSpike = new RightWallSpike(
+                        enemy.x, enemy.y + extendCount * Segment.TILE_SIZE
+                    );
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + 1, enemyPoint.tileY + extendCount
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                    allEnemies.push(extraSpike);
+                }
+            }
+            add(enemy);
+            allEnemies.push(enemy);
+        }
+        for(enemyPoint in groundTrapPoints) {
+            var enemy = new FloorSpike(enemyPoint.point.x, enemyPoint.point.y);
+            enemy.y += Segment.TILE_SIZE - enemy.height;
+            if(enemy.type == "floorspike") {
+                var extendLeft = Random.random < 0.5;
+                for(i in 1...Random.randInt(MAX_CONSECUTIVE_SPIKES)) {
+                    var extendCount = extendLeft ? -i : i;
+                    var extraSpike = new FloorSpike(
+                        enemy.x + extendCount * Segment.TILE_SIZE, enemy.y
+                    );
+                    if(!enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + extendCount, enemyPoint.tileY + 1
+                    )) {
+                        break;
+                    }
+                    if(enemyPoint.segment.walls.getTile(
+                        enemyPoint.tileX + extendCount, enemyPoint.tileY
+                    )) {
+                        break;
+                    }
+                    add(extraSpike);
+                    allEnemies.push(extraSpike);
+                }
+            }
+            add(enemy);
+            allEnemies.push(enemy);
         }
     }
 
@@ -664,7 +787,8 @@ class GameScene extends Scene {
     }
 
     private function getEnemyPoint(
-        enemyType:String, existingPoints:Array<SegmentPoint>
+        enemyType:String, existingPoints:Array<SegmentPoint>,
+        ignoreDistanceRequirement:Bool = false
     ) {
         var playerPoint = new Vector2(player.x, player.y);
         var isValid = false;
@@ -686,20 +810,22 @@ class GameScene extends Scene {
                 enemyPoint = getRandomOpenPoint();
             }
 
-            var distanceFromPlayer = enemyPoint.point.distance(playerPoint);
-            var distanceFromDoor = door.distanceToPoint(
-                enemyPoint.point.x, enemyPoint.point.y, true
-            );
-            var distanceFromKey = key.distanceToPoint(
-                enemyPoint.point.x, enemyPoint.point.y, true
-            );
-            if(
-                distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER
-                || distanceFromDoor < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
-                || distanceFromKey < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
-            ) {
-                isValid = false;
-                continue;
+            if(!ignoreDistanceRequirement) {
+                var distanceFromPlayer = enemyPoint.point.distance(playerPoint);
+                var distanceFromDoor = door.distanceToPoint(
+                    enemyPoint.point.x, enemyPoint.point.y, true
+                );
+                var distanceFromKey = key.distanceToPoint(
+                    enemyPoint.point.x, enemyPoint.point.y, true
+                );
+                if(
+                    distanceFromPlayer < MIN_ENEMY_DISTANCE_FROM_PLAYER
+                    || distanceFromDoor < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
+                    || distanceFromKey < MIN_ENEMY_DISTANCE_FROM_EACHOTHER
+                ) {
+                    isValid = false;
+                    continue;
+                }
             }
             if(enemyType == "ground") {
                 if(enemyPoint.point.y + Segment.TILE_SIZE == player.bottom) {

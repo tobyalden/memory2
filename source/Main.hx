@@ -10,6 +10,8 @@ class Main extends Engine {
     public static var gamepad:Gamepad;
     private static var delta:Float;
 
+    private static var previousJumpHeld:Bool = false;
+
     public static function getDelta() {
         return delta;
     }
@@ -23,7 +25,7 @@ class Main extends Engine {
         Console.enable();
 #end
         HXP.screen.color = 0x000000;
-        HXP.scene = new MainMenu();
+        HXP.scene = new GameScene();
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
         Key.define("right", [Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
@@ -43,6 +45,9 @@ class Main extends Engine {
     override public function update() {
         delta = HXP.elapsed * 60;
         super.update();
+        if(gamepad != null) {
+            previousJumpHeld = gamepad.check(XboxGamepad.A_BUTTON);
+        }
     }
 
     public static function inputPressed(inputName:String) {
@@ -50,7 +55,10 @@ class Main extends Engine {
             return Input.pressed(inputName);
         }
         if(inputName == "jump") {
-            return gamepad.pressed(XboxGamepad.A_BUTTON);
+            if(!previousJumpHeld && gamepad.check(XboxGamepad.A_BUTTON)) {
+                trace("jump pressed");
+                return true;
+            }
         }
         if(inputName == "act") {
             return gamepad.pressed(XboxGamepad.X_BUTTON);
@@ -63,7 +71,10 @@ class Main extends Engine {
             return Input.released(inputName);
         }
         if(inputName == "jump") {
-            return gamepad.released(XboxGamepad.A_BUTTON);
+            if(previousJumpHeld && !gamepad.check(XboxGamepad.A_BUTTON)) {
+                trace("jump released");
+                return true;
+            }
         }
         if(inputName == "act") {
             return gamepad.released(XboxGamepad.X_BUTTON);
