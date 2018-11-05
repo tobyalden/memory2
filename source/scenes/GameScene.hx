@@ -93,7 +93,7 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        music = new Sfx('audio/silence.wav');
+        music = new Sfx('audio/music${depth}.wav');
         music.volume = 0.6;
         music.loop();
 

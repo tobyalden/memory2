@@ -8,4 +8,9 @@
 - unlock hard mode
 - add sound to main menu
 - music
-- levels, compress music
+- adjust sound levels
+- compress music
+- add crouch
+- fix controller bug
+- make it so you always find door first
+- flip segments horizontall

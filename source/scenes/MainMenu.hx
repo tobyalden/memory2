@@ -23,11 +23,11 @@ class MainMenu extends Scene {
     private static var hardModeUnlocked:Bool;
     private static var lastDailyAttempt:String;
     private static var lastDailyHardAttempt:String;
+    private static var music:Sfx;
 
     private var curtain:Curtain;
     private var controllerConnected:Spritemap;
     private var gradient:Entity;
-    private var music:Sfx;
     private var menu:Array<Spritemap>;
     private var cursor:Entity;
     private var cursorPosition:Int;
@@ -35,16 +35,29 @@ class MainMenu extends Scene {
     private var bob:NumTween;
 
 	override public function begin() {
+        if(music != null) {
+            music.stop();
+            trace('stopping music at start');
+        }
+        music = new Sfx("audio/mainmenu.wav");
+        trace('loading music');
+        music.loop();
+        trace('looping music');
         Data.load(SAVE_FILE_NAME);
         hardModeUnlocked = Data.read("hardModeUnlocked", false);
         lastDailyAttempt = Data.read("lastDailyAttempt", "");
         lastDailyHardAttempt = Data.read("lastDailyHardAttempt", "");
 
         gradient = new Entity(0, 0, new Backdrop("graphics/gradient.png"));
+        gradient.graphic.smooth = false;
+        gradient.graphic.pixelSnapping = true;
         gradient.layer = 100;
         add(gradient);
 
-        addGraphic(new Image("graphics/mainmenu.png"));
+        var mainMenu = new Image("graphics/mainmenu.png");
+        mainMenu.smooth = false;
+        mainMenu.pixelSnapping = true;
+        addGraphic(mainMenu);
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
@@ -56,6 +69,7 @@ class MainMenu extends Scene {
             startHard.play("idle");
             menu.push(startHard);
             var dailyHard = new Spritemap("graphics/menuselection.png", 412, 41);
+            startHard.pixelSnapping = true;
             dailyHard.add("idle", [3]);
             dailyHard.play("idle");
             if(lastDailyHardAttempt == getDailyStamp()) {
@@ -90,6 +104,8 @@ class MainMenu extends Scene {
 
         var count = 0;
         for(menuItem in menu) {
+            menuItem.smooth = false;
+            menuItem.pixelSnapping = true;
             addGraphic(menuItem, 0, 30, 100 + MENU_SPACING * count);
             count++;
         }
@@ -97,11 +113,11 @@ class MainMenu extends Scene {
         controllerConnected = new Spritemap(
             "graphics/controllerconnected.png", 412, 41
         );
+        controllerConnected.smooth = false;
+        controllerConnected.pixelSnapping = true;
         controllerConnected.add("nocontroller", [0]);
         controllerConnected.add("controller", [1]);
         add(new Entity(30, 315, controllerConnected));
-        music = new Sfx("audio/mainmenu.wav");
-        music.loop();
     }
 
     public override function update() {
@@ -185,6 +201,7 @@ class MainMenu extends Scene {
             }
             curtain.fadeOut();
             music.stop();
+            trace('stopping music');
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
                     clearTweens();

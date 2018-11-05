@@ -30,6 +30,7 @@ class Player extends MemoryEntity {
     public static inline var CROUCH_DEPTH = 5;
 
     // Animation constants
+    public static inline var CROUCH_SQUASH = 0.85;
     public static inline var LAND_SQUASH = 0.5;
     public static inline var SQUASH_RECOVERY = 0.05;
     public static inline var HORIZONTAL_SQUASH_RECOVERY = 0.08;
@@ -43,6 +44,7 @@ class Player extends MemoryEntity {
     public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
     private var isCrouching:Bool;
+    private var wasCrouching:Bool;
     private var isTurning:Bool;
     private var wasOnGround:Bool;
     private var wasOnWall:Bool;
@@ -61,7 +63,7 @@ class Player extends MemoryEntity {
         MemoryEntity.loadSfx([
             "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw",
             "outofarrows", "playerdeath", "runloop", "walkloop", "slide",
-            "jump", "land", "arrowpickup", "skid"
+            "jump", "land", "arrowpickup", "skid", "crouch"
         ]);
         type = "player";
         name = "player";
@@ -113,6 +115,7 @@ class Player extends MemoryEntity {
         isTurning = false;
         wasOnGround = false;
         wasOnWall = false;
+        wasCrouching = false;
         lastWallWasRight = false;
         canMove = true;
         quiver = MAX_ARROWS;
@@ -194,6 +197,7 @@ class Player extends MemoryEntity {
             shooting();
         }
         animation();
+        wasCrouching = isCrouching;
         super.update();
     }
 
@@ -541,6 +545,10 @@ class Player extends MemoryEntity {
             return;
         }
 
+        if(!wasCrouching && isCrouching) {
+            scaleY(CROUCH_SQUASH);
+            MemoryEntity.allSfx["crouch"].play();
+        }
         if(!wasOnGround && isOnGround()) {
             scaleY(LAND_SQUASH);
             makeDustAtFeet();
