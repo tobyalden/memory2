@@ -9,7 +9,7 @@ import scenes.*;
 
 class Roombad extends MemoryEntity {
     public static inline var IDLE_SPEED = 2;
-    public static inline var CHASE_SPEED = 4;
+    public static inline var CHASE_SPEED = 3.5;
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var SFX_DISTANCE = 280;
     //public static inline var TIME_BETWEEN_LOBS = 1;

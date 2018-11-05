@@ -27,6 +27,7 @@ class Player extends MemoryEntity {
     public static inline var MAX_FALL_VELOCITY = 6;
     public static inline var MAX_WALL_VELOCITY = 4;
     public static inline var WALL_STICK_VELOCITY = 2;
+    public static inline var CROUCH_DEPTH = 5;
 
     // Animation constants
     public static inline var LAND_SQUASH = 0.5;
@@ -41,6 +42,7 @@ class Player extends MemoryEntity {
     public static inline var MAX_ARROWS = 6;
     public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
+    private var isCrouching:Bool;
     private var isTurning:Bool;
     private var wasOnGround:Bool;
     private var wasOnWall:Bool;
@@ -72,6 +74,7 @@ class Player extends MemoryEntity {
         sprite.add("rightwall", [12]);
         sprite.add("leftwall", [13]);
         sprite.add("skid", [14]);
+        sprite.add("crouch", [15]);
         sprite.play("idle");
         sprite.y = -8;
         addGraphic(sprite);
@@ -102,6 +105,7 @@ class Player extends MemoryEntity {
         armsAndBow.add("fall_up", [16]);
         armsAndBow.add("fall_down", [17]);
         armsAndBow.add("empty", [18]);
+        armsAndBow.add("crouch", [19]);
         addGraphic(armsAndBow);
 
         velocity = new Vector2(0, 0);
@@ -325,8 +329,13 @@ class Player extends MemoryEntity {
         accel *= Main.getDelta();
         deccel *= Main.getDelta();
 
+        isCrouching = isOnGround() && Main.inputCheck("down");
+
         // Check if the player is moving left or right
-        if(Main.inputCheck("left")) {
+        if(isCrouching) {
+            velocity.x = 0;
+        }
+        else if(Main.inputCheck("left")) {
             velocity.x -= accel * accelMultiplier;
         }
         else if(Main.inputCheck("right")) {
@@ -477,6 +486,9 @@ class Player extends MemoryEntity {
                 else {
                     direction.x = sprite.flipX ? -1: 1;
                 }
+                if(isCrouching) {
+                    direction.y /= 1.5;
+                }
                 arrow = new Arrow(centerX, centerY, direction, false);
             }
             var kickback = direction.clone();
@@ -484,6 +496,10 @@ class Player extends MemoryEntity {
             kickback.y = kickback.y/2;
             if(isOnGround()) {
                 kickback.scale(0.75);
+            }
+            if(isCrouching) {
+                arrow.y += CROUCH_DEPTH;
+                kickback.scale(0);
             }
             velocity.subtract(kickback);
             scene.add(arrow);
@@ -579,8 +595,8 @@ class Player extends MemoryEntity {
                 }
             }
         }
-        else {
-            spriteAnimationName = "idle";
+        else if(isCrouching) {
+            spriteAnimationName = "crouch";
         }
 
         if(spriteAnimationName == "run") {
@@ -637,10 +653,15 @@ class Player extends MemoryEntity {
             || spriteAnimationName == "leftwall"
         ) {
             armsAndBow.play("empty");
+            armsAndBow.y = -8;
         }
         else if(Main.inputCheck("act") && quiver > 0) {
             var suffix:String;
-            if(
+            if(isCrouching) {
+                spriteAnimationName = "idle";
+                suffix = "_forward";
+            }
+            else if(
                 Main.inputCheck("up")
                 && !(Main.inputCheck("right") || Main.inputCheck("left"))
             ) {
@@ -662,9 +683,16 @@ class Player extends MemoryEntity {
             else {
                 suffix = "_forward";
             }
+            if(isCrouching) {
+                armsAndBow.y = -8 + CROUCH_DEPTH;
+            }
+            else {
+                armsAndBow.y = -8;
+            }
             armsAndBow.play(spriteAnimationName + suffix);
         }
         else {
+            armsAndBow.y = -8;
             armsAndBow.play(spriteAnimationName);
         }
 
