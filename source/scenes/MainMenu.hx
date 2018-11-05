@@ -32,13 +32,24 @@ class MainMenu extends Scene {
     private var cursorPosition:Int;
     private var cursorPause:Alarm;
     private var bob:NumTween;
+    private var selectSound:Sfx;
+    private var startSound:Sfx;
+    private var dailySound:Sfx;
+    private var noSound:Sfx;
+    private var controllerSfx:Sfx;
+    private var lastController:String;
 
 	override public function begin() {
         Main.music = new Sfx("audio/mainmenu.wav");
-        trace('loading music');
         Main.music.loop();
-        trace('looping music');
         Data.load(SAVE_FILE_NAME);
+        selectSound = new Sfx("audio/menuselect.wav");
+        startSound = new Sfx("audio/menustart.wav");
+        dailySound = new Sfx("audio/dailystart.wav");
+        noSound = new Sfx("audio/menuno.wav");
+        controllerSfx = new Sfx("audio/controllerconnected.wav");
+        lastController = Main.gamepad != null ? "controller" : "nocontroller";
+
         hardModeUnlocked = Data.read("hardModeUnlocked", false);
         lastDailyAttempt = Data.read("lastDailyAttempt", "");
         lastDailyHardAttempt = Data.read("lastDailyHardAttempt", "");
@@ -123,6 +134,7 @@ class MainMenu extends Scene {
                     cursorPosition = menu.length - 1;
                 }
                 cursorPause.start();
+                selectSound.play();
             }
         }
         else if(Main.inputCheck("down")) {
@@ -132,6 +144,7 @@ class MainMenu extends Scene {
                     cursorPosition = 0;
                 }
                 cursorPause.start();
+                selectSound.play();
             }
         }
         else {
@@ -140,9 +153,12 @@ class MainMenu extends Scene {
         cursor.y = 101 + cursorPosition * MENU_SPACING;
         cursor.x += bob.value;
 
-        controllerConnected.play(
-            Main.gamepad != null ? "controller" : "nocontroller"
-        );
+        var currentController = Main.gamepad != null ? "controller" : "nocontroller";
+        controllerConnected.play(currentController);
+        if(lastController != currentController) {
+            controllerSfx.play();
+        }
+        lastController = currentController;
 
         if(Main.inputPressed("jump") || Main.inputPressed("act")) {
             if(hardModeUnlocked) {
@@ -152,6 +168,7 @@ class MainMenu extends Scene {
                 }
                 else if(cursorPosition == 1) {
                     if(lastDailyHardAttempt == getDailyStamp()) {
+                        noSound.play();
                         super.update();
                         return;
                     }
@@ -167,6 +184,7 @@ class MainMenu extends Scene {
                 }
                 else if(cursorPosition == 3) {
                     if(lastDailyAttempt == getDailyStamp()) {
+                        noSound.play();
                         super.update();
                         return;
                     }
@@ -184,6 +202,7 @@ class MainMenu extends Scene {
                 }
                 else if(cursorPosition == 1) {
                     if(lastDailyAttempt == getDailyStamp()) {
+                        noSound.play();
                         super.update();
                         return;
                     }
@@ -196,7 +215,17 @@ class MainMenu extends Scene {
             }
             curtain.fadeOut();
             Main.music.stop();
-            trace('stopping music');
+            if(cursorPosition == 1 || cursorPosition == 3) {
+                dailySound.play();
+            }
+            else {
+                startSound.play();
+            }
+            var flasher = new Alarm(0.1, TweenType.Looping);
+            flasher.onComplete.bind(function() {
+                menu[cursorPosition].visible = !menu[cursorPosition].visible;
+            });
+            addTween(flasher, true);
             var resetTimer = new Alarm(1, TweenType.OneShot);
                 resetTimer.onComplete.bind(function() {
                     clearTweens();

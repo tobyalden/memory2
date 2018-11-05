@@ -1,15 +1,17 @@
+ACTUAL TODO:
 - fix controller bug
 - polish final boss
-- make new segments
-- add arrows to boss room
 - credits roll
 - unlock hard mode
 - add sound to main menu
 - music
 - adjust sound levels
 
+FINAL TOUCHES:
 - compress music
 - disable up/down scroll keys in JS
 - remove debug controls
 
+THINGS THAT WOULD BE NICE:
+- make new segments
 - flip segments horizontally

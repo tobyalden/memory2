@@ -25,7 +25,7 @@ class Main extends Engine {
         Console.enable();
 #end
         HXP.screen.color = 0x000000;
-        HXP.scene = new GameScene();
+        HXP.scene = new MainMenu();
 
         Key.define("left", [Key.LEFT, Key.LEFT_SQUARE_BRACKET]);
         Key.define("right", [Key.RIGHT, Key.RIGHT_SQUARE_BRACKET]);
