@@ -33,6 +33,7 @@ class DeathParticle extends MemoryEntity
         sprite.originX = 12;
         sprite.originY = 12;
         setGraphic(sprite);
+        layer = -999;
     }
 
     public override function update() {

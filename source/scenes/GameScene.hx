@@ -291,7 +291,7 @@ class GameScene extends Scene {
             disabledShaft.layer = 60;
         }
         else {
-            var disabledDoorImg = new Image("graphics/disableddoor.png");
+            var disabledDoorImg = new Image('graphics/disableddoor${getDepthBlock()}.png');
             disabledDoor.setGraphic(disabledDoorImg);
             disabledDoor.x -= (disabledDoorImg.width - Segment.TILE_SIZE)/2;
             disabledDoor.x += player.width/2;
@@ -299,7 +299,7 @@ class GameScene extends Scene {
             disabledDoor.layer = 40;
             var shaftHeight = 700 * 5;
             var disabledShaftImg = new TiledImage(
-                "graphics/elevatorshaft.png", 38, shaftHeight
+                'graphics/elevatorshaft${getDepthBlock()}.png', 38, shaftHeight
             );
             disabledShaft.setGraphic(disabledShaftImg);
             disabledShaft.x -= (disabledShaftImg.width - Segment.TILE_SIZE)/2;
@@ -319,7 +319,7 @@ class GameScene extends Scene {
         var playerPoint = new Vector2(player.x, player.y);
         for (i in 0...500) {
             var newKeyPoint = getRandomOpenGroundPoint();
-            var newDoorPoint = getRandomOpenGroundPoint();
+            var newDoorPoint = getRandomOpenGroundPoint(3);
             if(
                 newKeyPoint.point.distance(newDoorPoint.point)
                 > keyPoint.point.distance(doorPoint.point)
@@ -346,7 +346,7 @@ class GameScene extends Scene {
         );
         var shaftHeight = 700 * 5;
         var shaftImg = new TiledImage(
-            "graphics/elevatorshaft.png", 38, shaftHeight
+            'graphics/elevatorshaft${getDepthBlock()}.png', 38, shaftHeight
         );
         shaft.setGraphic(shaftImg);
         shaft.y += Segment.TILE_SIZE - door.height;
@@ -354,7 +354,7 @@ class GameScene extends Scene {
         shaft.layer = 60;
         add(shaft);
         var shaftTop = new MemoryEntity(shaft.x, shaft.y);
-        shaftTop.setGraphic(new Image("graphics/shafttop.png"));
+        shaftTop.setGraphic(new Image('graphics/shafttop${getDepthBlock()}.png'));
         shaftTop.layer = 59;
         add(shaftTop);
 
@@ -912,6 +912,15 @@ class GameScene extends Scene {
         if(Key.pressed(Key.R)) {
             stopAllSounds();
             HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.N)) {
+            depth++;
+            stopAllSounds();
+            HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.D)) {
+            player.x = door.x;
+            player.y = door.y;
         }
         if(Key.pressed(Key.P)) {
             for(segment in allSegments) {

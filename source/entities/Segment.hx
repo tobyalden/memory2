@@ -160,7 +160,7 @@ class Segment extends MemoryEntity {
         var randomTile:OpenPoint = openGroundPoints[
             Random.randInt(openGroundPoints.length)
         ];
-        for(checkX in -1...2) {
+        for(checkX in -(1 - extraSpace)...(2 + extraSpace)) {
             for(checkY in -2...1) {
                 if(
                     walls.getTile(randomTile.tileX + checkX, randomTile.tileY + checkY)
