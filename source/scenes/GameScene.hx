@@ -38,7 +38,7 @@ class GameScene extends Scene {
 
     public static var easyMode:Bool = true;
 
-    public static var depth:Int = 2;
+    public static var depth:Int = 1;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -278,7 +278,7 @@ class GameScene extends Scene {
             disabledDoor.setGraphic(disabledDoorImg);
             disabledDoor.x -= (disabledDoorImg.width - Segment.TILE_SIZE)/2;
             disabledDoor.x += player.width/2;
-            disabledDoor.y -= 100;
+            disabledDoor.y -= 70;
             disabledDoor.layer = 40;
             var shaftHeight = 700 * 5;
             var disabledShaftImg = new TiledImage(
@@ -315,7 +315,7 @@ class GameScene extends Scene {
 
     private function addKeyAndDoor() {
         var keyPoint = getRandomOpenGroundPoint();
-        var doorPoint = getRandomOpenGroundPoint();
+        var doorPoint = getRandomOpenGroundPoint(3);
         var playerPoint = new Vector2(player.x, player.y);
         for (i in 0...500) {
             var newKeyPoint = getRandomOpenGroundPoint();
@@ -340,6 +340,24 @@ class GameScene extends Scene {
         add(key);
         add(door);
         add(door.door);
+
+        var shaft = new MemoryEntity(
+            door.x, doorPoint.point.y
+        );
+        var shaftHeight = 700 * 5;
+        var shaftImg = new TiledImage(
+            "graphics/elevatorshaft.png", 38, shaftHeight
+        );
+        shaft.setGraphic(shaftImg);
+        shaft.y += Segment.TILE_SIZE - door.height;
+        shaft.y += 10;
+        shaft.layer = 60;
+        add(shaft);
+        var shaftTop = new MemoryEntity(shaft.x, shaft.y);
+        shaftTop.setGraphic(new Image("graphics/shafttop.png"));
+        shaftTop.layer = 59;
+        add(shaftTop);
+
         return [keyPoint, doorPoint];
     }
 
