@@ -1,7 +1,6 @@
 - fix controller bug
 - polish final boss
 - make new segments
-- spawn spikes in boss room in hard mode
 - add arrows to boss room
 - credits roll
 - unlock hard mode

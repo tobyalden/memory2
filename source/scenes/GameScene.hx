@@ -133,6 +133,33 @@ class GameScene extends Scene {
             addBossRoomSpikes();
             removeEnemiesTooCloseToPlayer();
         }
+
+        var arrowPoints = new Array<SegmentPoint>();
+        for(i in 0...10) {
+            arrowPoints.push(
+                getEnemyPoint(
+                    ["leftwall", "rightwall"][Random.randInt(2)],
+                    arrowPoints,
+                    true
+                )
+            );
+        }
+        for(arrowPoint in arrowPoints) {
+            var awayFromPlayer = new Vector2(
+                player.centerX - arrowPoint.point.x,
+                player.centerY - arrowPoint.point.y
+            );
+            awayFromPlayer.inverse();
+            awayFromPlayer.normalize(Arrow.INITIAL_VELOCITY);
+            var isVertical = (
+                Math.abs(awayFromPlayer.y) > Math.abs(awayFromPlayer.x)
+            );
+            add(new Arrow(
+                arrowPoint.point.x, arrowPoint.point.y, awayFromPlayer,
+                isVertical, true
+            ));
+        }
+
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
