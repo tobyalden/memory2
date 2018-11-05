@@ -38,7 +38,7 @@ class GameScene extends Scene {
 
     public static var easyMode:Bool = true;
 
-    public static var depth:Int = 7;
+    public static var depth:Int = 2;
 
     public var music(default, null):Sfx;
     private var mapBlueprint:Grid;
@@ -260,7 +260,7 @@ class GameScene extends Scene {
     }
 
     private function addPlayer() {
-        var playerStart = getRandomOpenGroundPoint();
+        var playerStart = getRandomOpenGroundPoint(3);
         player = new Player(playerStart.point.x, playerStart.point.y);
         player.x += 3;
         player.y += Segment.TILE_SIZE - player.height;
@@ -268,10 +268,48 @@ class GameScene extends Scene {
         var disabledDoor = new MemoryEntity(
             playerStart.point.x, playerStart.point.y
         );
-        disabledDoor.setGraphic(new Image("graphics/disableddoor.png"));
-        disabledDoor.y += Segment.TILE_SIZE - 42;
-        disabledDoor.layer = 50;
+        var disabledShaft = new MemoryEntity(
+            playerStart.point.x, playerStart.point.y
+        );
+
+        // Add disabled door and shaft
+        if(depth == 1) {
+            var disabledDoorImg = new Image("graphics/drain.png");
+            disabledDoor.setGraphic(disabledDoorImg);
+            disabledDoor.x -= (disabledDoorImg.width - Segment.TILE_SIZE)/2;
+            disabledDoor.x += player.width/2;
+            disabledDoor.y -= 100;
+            disabledDoor.layer = 40;
+            var shaftHeight = 700 * 5;
+            var disabledShaftImg = new TiledImage(
+                "graphics/fatshaft.png", 90, shaftHeight
+            );
+            disabledShaft.setGraphic(disabledShaftImg);
+            disabledShaft.x -= (disabledShaftImg.width - Segment.TILE_SIZE)/2;
+            disabledShaft.x += player.width/2;
+            disabledShaft.y += Segment.TILE_SIZE - shaftHeight;
+            disabledShaft.layer = 60;
+        }
+        else {
+            var disabledDoorImg = new Image("graphics/disableddoor.png");
+            disabledDoor.setGraphic(disabledDoorImg);
+            disabledDoor.x -= (disabledDoorImg.width - Segment.TILE_SIZE)/2;
+            disabledDoor.x += player.width/2;
+            disabledDoor.y += Segment.TILE_SIZE - disabledDoorImg.height;
+            disabledDoor.layer = 40;
+            var shaftHeight = 700 * 5;
+            var disabledShaftImg = new TiledImage(
+                "graphics/elevatorshaft.png", 38, shaftHeight
+            );
+            disabledShaft.setGraphic(disabledShaftImg);
+            disabledShaft.x -= (disabledShaftImg.width - Segment.TILE_SIZE)/2;
+            disabledShaft.x += player.width/2;
+            disabledShaft.y += Segment.TILE_SIZE - shaftHeight;
+            disabledShaft.layer = 60;
+        }
         add(disabledDoor);
+        add(disabledShaft);
+
         return [playerStart];
     }
 
@@ -739,13 +777,13 @@ class GameScene extends Scene {
         return openPoint;
     }
 
-    private function getRandomOpenGroundPoint() {
+    private function getRandomOpenGroundPoint(extraSpace:Int = 0) {
         var weightedSegments = getWeightedSegments();
         var segment = weightedSegments[Random.randInt(weightedSegments.length)];
-        var randomTile = segment.getRandomOpenGroundTile();
+        var randomTile = segment.getRandomOpenGroundTile(extraSpace);
         while(randomTile == null) {
             segment = weightedSegments[Random.randInt(weightedSegments.length)];
-            randomTile = segment.getRandomOpenGroundTile();
+            randomTile = segment.getRandomOpenGroundTile(extraSpace);
         }
         var openGroundPoint:SegmentPoint = {
             point: new Vector2(

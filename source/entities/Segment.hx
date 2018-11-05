@@ -156,7 +156,7 @@ class Segment extends MemoryEntity {
         return {tileX: randomTile.tileX, tileY: randomTile.tileY};
     }
 
-    public function getRandomOpenGroundTile() {
+    public function getRandomOpenGroundTile(extraSpace:Int = 0) {
         var randomTile:OpenPoint = openGroundPoints[
             Random.randInt(openGroundPoints.length)
         ];
@@ -169,7 +169,7 @@ class Segment extends MemoryEntity {
                 }
             }
         }
-        for(checkX in -1...2) {
+        for(checkX in (-1 - extraSpace)...(2 + extraSpace)) {
             if(!walls.getTile(randomTile.tileX + checkX, randomTile.tileY + 1)) {
                 return null;
             }
