@@ -11,17 +11,25 @@ class DeathParticle extends MemoryEntity
 {
     private var sprite:Spritemap;
     private var velocity:Vector2;
+    private var goSlowly:Bool;
 
     public function new(
-        x:Float, y:Float, velocity:Vector2, goQuickly:Bool = false
+        x:Float, y:Float, velocity:Vector2, goQuickly:Bool = false,
+        goSlowly:Bool = false
     )
     {
 	    super(x, y);
         this.velocity = velocity;
+        this.goSlowly = goSlowly;
         sprite = new Spritemap("graphics/explosion.png", 24, 24);
         if(goQuickly) {
             sprite.add(
                 "idle", [0, 1, 2, 3], Std.int(Math.random() * 4 + 4), false
+            );
+        }
+        else if(goSlowly) {
+            sprite.add(
+                "idle", [0, 1, 2, 3], Std.int(Math.random() * 2 + 1), false
             );
         }
         else {
@@ -46,7 +54,7 @@ class DeathParticle extends MemoryEntity
             (1 - (Math.abs(velocity.x) + Math.abs(velocity.y)))
             * Main.getDelta() * 0.003
         );
-        if(sprite.complete) {
+        if(sprite.complete && !goSlowly) {
             scene.remove(this);
         }
     }

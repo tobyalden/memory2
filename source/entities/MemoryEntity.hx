@@ -106,7 +106,10 @@ class MemoryEntity extends Entity {
         return arrows;
     }
 
-    private function explode(numExplosions:Int = 15, speed:Float = 0.4) {
+    private function explode(
+        numExplosions:Int = 15, speed:Float = 0.4, goQuickly:Bool = true,
+        goSlowly:Bool = false
+    ) {
         var directions = new Array<Vector2>();
         for(i in 0...numExplosions) {
             var angle = (2/numExplosions) * i;
@@ -122,7 +125,7 @@ class MemoryEntity extends Entity {
                 Math.max(0.1 + 0.2 * Math.random(), direction.length)
             );
             var explosion = new DeathParticle(
-                centerX, centerY, directions[count], true
+                centerX, centerY, directions[count], goQuickly, goSlowly
             );
             explosion.layer = -99;
             scene.add(explosion);

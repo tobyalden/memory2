@@ -40,7 +40,7 @@ class GameScene extends Scene {
     public static var easyMode:Bool = true;
     public static var lastMusicChoice:Int = -1;
 
-    public static var depth:Int = 1;
+    public static var depth:Int = 7;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -274,6 +274,21 @@ class GameScene extends Scene {
         resetTimer.onComplete.bind(function() {
             stopAllSounds();
             HXP.scene = new GameScene();
+        });
+        Main.music.stop();
+        addTween(resetTimer, true);
+    }
+
+    public function win() {
+        var resetTimer = new Alarm(3, TweenType.OneShot);
+        resetTimer.onComplete.bind(function() {
+            curtain.fadeOut(Curtain.FADE_SPEED / 5);
+            stopAllSounds();
+            var resetTimer2 = new Alarm(6, TweenType.OneShot);
+            resetTimer2.onComplete.bind(function() {
+                HXP.scene = new MainMenu();
+            });
+            addTween(resetTimer2, true);
         });
         Main.music.stop();
         addTween(resetTimer, true);
@@ -1119,6 +1134,14 @@ class GameScene extends Scene {
         var updateFirst = new Array<Entity>();
         for(e in _update) {
             if(Type.getClass(e) == RoboPlant) {
+                _update.remove(e);
+                updateFirst.push(e);
+            }
+            if(Type.getClass(e) == Boss) {
+                _update.remove(e);
+                updateFirst.push(e);
+            }
+            if(Type.getClass(e) == BossWeakPoint) {
                 _update.remove(e);
                 updateFirst.push(e);
             }

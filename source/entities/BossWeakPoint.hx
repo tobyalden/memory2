@@ -3,6 +3,7 @@ package entities;
 import haxepunk.*;
 import haxepunk.graphics.*;
 import haxepunk.math.*;
+import scenes.*;
 
 class BossWeakPoint extends MemoryEntity {
     private var sprite:Spritemap;
@@ -17,21 +18,27 @@ class BossWeakPoint extends MemoryEntity {
         sprite.play("idle");
         setGraphic(sprite);
         setHitbox(40, 40);
-        health = 3;
+        health = Boss.HEALTH;
+    }
+
+    public function positionOnBoss() {
+        x = boss.centerX - width/2;
+        y = boss.top - height;
     }
 
     override public function update() {
-        x = boss.centerX - width/2;
-        y = boss.top - height;
+        positionOnBoss();
         super.update();
     }
 
     override public function takeHit(arrow:Arrow) {
+        boss.takeHit(arrow);
         super.takeHit(arrow);
     }
 
     override private function die() {
         boss.die();
+        cast(scene, GameScene).win();
         super.die();
     }
 }

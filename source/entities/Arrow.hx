@@ -16,11 +16,16 @@ class Arrow extends MemoryEntity {
     public static inline var DISAPPEAR_DELAY = 5;
 
     public var velocity(default, null):Vector2;
+    public var silent(default, null):Bool;
     public var landed(default, null):Bool;
     public var isScattered(default, null):Bool;
     private var sprite:Image;
     private var isVertical:Bool;
     private var disappearTimer:Alarm;
+
+    public function silence() {
+        silent = true;
+    }
 
     public function setLanded(newLanded:Bool, disappear:Bool = false) {
         landed = newLanded;
@@ -63,6 +68,7 @@ class Arrow extends MemoryEntity {
             scene.remove(this);
         });
         addTween(disappearTimer);
+        silent = false;
     }
 
     public override function update() {
