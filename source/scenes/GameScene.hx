@@ -38,6 +38,7 @@ class GameScene extends Scene {
     public static inline var TRAPS_IN_BOSS_ROOM = 6;
 
     public static var easyMode:Bool = true;
+    public static var lastMusicChoice:Int = -1;
 
     public static var depth:Int = 1;
 
@@ -93,9 +94,7 @@ class GameScene extends Scene {
         curtain.fadeIn();
         camera.pixelSnapping = true;
 
-        Main.music = new Sfx('audio/music${depth}.wav');
-        //Main.music = new Sfx('audio/silence.wav');
-        Main.music.loop();
+        playMusic();
 
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
@@ -105,6 +104,34 @@ class GameScene extends Scene {
         }
 
         removeEnemiesTooCloseToPlayer();
+    }
+
+    private function playMusic() {
+        //Main.music = new Sfx('audio/silence.wav');
+        var numSongs:Int;
+        var floorName:String;
+        if(depth > 4) {
+            numSongs = 4;
+            floorName = "control";
+        }
+        else if(depth > 2) {
+            numSongs = 5;
+            floorName = "residential";
+        }
+        else {
+            numSongs = 6;
+            floorName = "office";
+        }
+        var musicChoice = lastMusicChoice == -1 ? 1 : Std.random(numSongs) + 1;
+        while(
+            musicChoice == lastMusicChoice
+            || depth < 3 && musicChoice == 1 && lastMusicChoice != -1
+        ) {
+            musicChoice = Std.random(numSongs) + 1;
+        }
+        Main.music = new Sfx('audio/${floorName}${musicChoice}.wav');
+        Main.music.loop();
+        lastMusicChoice = musicChoice;
     }
 
     private function removeEnemiesTooCloseToPlayer() {
