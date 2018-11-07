@@ -280,6 +280,9 @@ class GameScene extends Scene {
     }
 
     public function win() {
+        Data.load(MainMenu.SAVE_FILE_NAME);
+        Data.write("hardModeUnlocked", true);
+        Data.save(MainMenu.SAVE_FILE_NAME);
         var resetTimer = new Alarm(3, TweenType.OneShot);
         resetTimer.onComplete.bind(function() {
             curtain.fadeOut(Curtain.FADE_SPEED / 5);

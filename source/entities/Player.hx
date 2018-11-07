@@ -43,6 +43,9 @@ class Player extends MemoryEntity {
     public static inline var MAX_ARROWS = 6;
     public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
+    public static inline var STARTING_HEALTH = 3;
+    public static inline var HIT_KNOCKBACK = 5;
+
     private var isCrouching:Bool;
     private var wasCrouching:Bool;
     private var isTurning:Bool;
@@ -63,7 +66,8 @@ class Player extends MemoryEntity {
         MemoryEntity.loadSfx([
             "arrowshoot1", "arrowshoot2", "arrowshoot3", "arrowdraw",
             "outofarrows", "playerdeath", "runloop", "walkloop", "slide",
-            "jump", "land", "arrowpickup", "skid", "crouch"
+            "jump", "land", "arrowpickup", "skid", "crouch", "playerhit1",
+            "playerhit2", "playerhit3"
         ]);
         type = "player";
         name = "player";
@@ -110,6 +114,8 @@ class Player extends MemoryEntity {
         armsAndBow.add("crouch", [19]);
         addGraphic(armsAndBow);
 
+        health = STARTING_HEALTH;
+
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -6, 0);
         isTurning = false;
@@ -123,6 +129,13 @@ class Player extends MemoryEntity {
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
         updateQuiverDisplay();
+
+        stopFlasher = new Alarm(MemoryEntity.FLASH_TIME * 4, TweenType.Persist);
+        stopFlasher.onComplete.bind(function() {
+            visible = true;
+            isFlashing = false;
+        });
+        addTween(stopFlasher, false);
     }
 
     private function updateQuiverDisplay() {
@@ -192,13 +205,48 @@ class Player extends MemoryEntity {
 
     public override function update() {
         collisions();
-        if(canMove) {
+        if(isFlashing && stopFlasher.percent < 0.25/4) {
+            wasOnGround = isOnGround();
+            wasOnWall = isOnWall();
+            moveBy(
+                velocity.x * Main.getDelta(), velocity.y * Main.getDelta(),
+                "walls"
+            );
+        }
+        else if(canMove) {
             movement();
             shooting();
         }
+
         animation();
         wasCrouching = isCrouching;
         super.update();
+    }
+
+    private function takeDamage(damageSource:Entity) {
+        if(isFlashing) {
+            return;
+        }
+        var knockback = new Vector2(
+            damageSource.centerX - centerX, damageSource.centerY - centerY
+        );
+        knockback.normalize(HIT_KNOCKBACK);
+        knockback.inverse();
+        if(
+            bottom == damageSource.bottom
+            || knockback.y > 0
+        ) {
+            knockback.y = -HIT_KNOCKBACK / 2;
+        }
+        velocity = knockback;
+        visible = false;
+        isFlashing = true;
+        stopFlasher.start();
+        health -= 1;
+        MemoryEntity.allSfx['playerhit${HXP.choose(1, 2, 3)}'].play();
+        if(health <= 0) {
+            //die();
+        }
     }
 
     private function collisions() {
@@ -219,7 +267,7 @@ class Player extends MemoryEntity {
         ]) {
             var hazard = collide(hazardType, x, y);
             if(hazard != null) {
-                die();
+                takeDamage(hazard);
                 if(hazardType == "mine") {
                     cast(hazard, Mine).detonate();
                 }
@@ -228,19 +276,19 @@ class Player extends MemoryEntity {
         var floorSpike = collide("floorspike", x, y);
         if(floorSpike != null) {
             if(cast(floorSpike, FloorSpike).isActive) {
-                die();
+                takeDamage(floorSpike);
             }
         }
         var leftWallSpike = collide("leftwallspike", x, y);
         if(leftWallSpike != null) {
             if(cast(leftWallSpike, LeftWallSpike).isActive) {
-                die();
+                takeDamage(leftWallSpike);
             }
         }
         var rightWallSpike = collide("rightwallspike", x, y);
         if(rightWallSpike != null) {
             if(cast(rightWallSpike, RightWallSpike).isActive) {
-                die();
+                takeDamage(rightWallSpike);
             }
         }
         var arrow = collide("arrow", x, y);
