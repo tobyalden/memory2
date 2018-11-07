@@ -45,6 +45,7 @@ class Player extends MemoryEntity {
 
     public static inline var STARTING_HEALTH = 3;
     public static inline var HIT_KNOCKBACK = 5;
+    public static inline var INVINCIBILITY_TIME = 1.5;
 
     private var isCrouching:Bool;
     private var wasCrouching:Bool;
@@ -55,8 +56,10 @@ class Player extends MemoryEntity {
 
     private var canMove:Bool;
 
-    private var sprite:Spritemap;
-    private var armsAndBow:Spritemap;
+    // Making these public for the flasher tween in MemoryEntity
+    public var sprite:Spritemap;
+    public var armsAndBow:Spritemap;
+
     private var velocity:Vector2;
     private var quiver:Int;
     private var quiverDisplay:Graphiclist;
@@ -129,13 +132,6 @@ class Player extends MemoryEntity {
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
         updateQuiverDisplay();
-
-        stopFlasher = new Alarm(MemoryEntity.FLASH_TIME * 4, TweenType.Persist);
-        stopFlasher.onComplete.bind(function() {
-            visible = true;
-            isFlashing = false;
-        });
-        addTween(stopFlasher, false);
     }
 
     private function updateQuiverDisplay() {
@@ -206,6 +202,7 @@ class Player extends MemoryEntity {
     public override function update() {
         collisions();
         if(isFlashing && stopFlasher.percent < 0.25/4) {
+            quiverDisplay.visible = true;
             wasOnGround = isOnGround();
             wasOnWall = isOnWall();
             moveBy(
@@ -239,9 +236,10 @@ class Player extends MemoryEntity {
             knockback.y = -HIT_KNOCKBACK / 2;
         }
         velocity = knockback;
-        visible = false;
+        sprite.visible = false;
+        armsAndBow.visible = false;
         isFlashing = true;
-        stopFlasher.start();
+        stopFlasher.reset(INVINCIBILITY_TIME);
         health -= 1;
         MemoryEntity.allSfx['playerhit${HXP.choose(1, 2, 3)}'].play();
         if(health <= 0) {

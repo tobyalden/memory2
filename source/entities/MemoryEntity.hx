@@ -58,14 +58,28 @@ class MemoryEntity extends Entity {
         flasher = new Alarm(0.05, TweenType.Looping);
         flasher.onComplete.bind(function() {
             if(isFlashing) {
-                visible = !visible;
+                if(type == "player") {
+                    var player = cast(this, Player);
+                    player.sprite.visible = !player.sprite.visible;
+                    player.armsAndBow.visible = !player.armsAndBow.visible;
+                }
+                else {
+                    visible = !visible;
+                }
             }
         });
         addTween(flasher, true);
 
         stopFlasher = new Alarm(FLASH_TIME, TweenType.Persist);
         stopFlasher.onComplete.bind(function() {
-            visible = true;
+            if(type == "player") {
+                var player = cast(this, Player);
+                player.sprite.visible = true;
+                player.armsAndBow.visible = true;
+            }
+            else {
+                visible = true;
+            }
             isFlashing = false;
         });
         addTween(stopFlasher, false);
