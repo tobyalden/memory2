@@ -43,7 +43,7 @@ class Player extends MemoryEntity {
     public static inline var MAX_ARROWS = 6;
     public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
-    public static inline var STARTING_HEALTH = 3;
+    public static inline var MAX_HEALTH = 3;
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var INVINCIBILITY_TIME = 1.5;
 
@@ -63,6 +63,7 @@ class Player extends MemoryEntity {
     private var velocity:Vector2;
     private var quiver:Int;
     private var quiverDisplay:Graphiclist;
+    private var heartDisplay:Graphiclist;
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
@@ -117,8 +118,6 @@ class Player extends MemoryEntity {
         armsAndBow.add("crouch", [19]);
         addGraphic(armsAndBow);
 
-        health = STARTING_HEALTH;
-
         velocity = new Vector2(0, 0);
         setHitbox(12, 24, -6, 0);
         isTurning = false;
@@ -127,11 +126,41 @@ class Player extends MemoryEntity {
         wasCrouching = false;
         lastWallWasRight = false;
         canMove = true;
+
         quiver = MAX_ARROWS;
         quiverDisplay = new Graphiclist();
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
+
+        health = MAX_HEALTH;
+        heartDisplay = new Graphiclist();
+        heartDisplay.y = -30;
+        addGraphic(heartDisplay);
+
         updateQuiverDisplay();
+        updateHeartDisplay();
+    }
+
+    private function updateHeartDisplay() {
+        heartDisplay.removeAll();
+        for(i in 0...health) {
+            var heart = new Image("graphics/heart.png");
+            heart.smooth = false;
+            heart.pixelSnapping = true;
+            heart.x = i * heart.width;
+            heartDisplay.add(heart);
+        }
+        var heart = new Image("graphics/heart.png");
+        heartDisplay.x = (
+            width/2 - (health * heart.width / 2) - originX/2 + 1.5
+        );
+        if(health >= MAX_HEALTH) {
+            heartDisplay.color = 0xf4428c;
+        }
+        else {
+            heartDisplay.color = 0xFFFFFF66;
+        }
+        updateDisplayHeights();
     }
 
     private function updateQuiverDisplay() {
@@ -152,6 +181,16 @@ class Player extends MemoryEntity {
         }
         else {
             quiverDisplay.color = 0xFFFFFF66;
+        }
+        updateDisplayHeights();
+    }
+
+    private function updateDisplayHeights() {
+        if(quiver > 0) {
+            heartDisplay.y = -30;
+        }
+        else {
+            heartDisplay.y = -15;
         }
     }
 
@@ -241,9 +280,10 @@ class Player extends MemoryEntity {
         isFlashing = true;
         stopFlasher.reset(INVINCIBILITY_TIME);
         health -= 1;
+        updateHeartDisplay();
         MemoryEntity.allSfx['playerhit${HXP.choose(1, 2, 3)}'].play();
         if(health <= 0) {
-            //die();
+            die();
         }
     }
 
