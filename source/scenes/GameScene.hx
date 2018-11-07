@@ -40,7 +40,7 @@ class GameScene extends Scene {
     public static var easyMode:Bool = true;
     public static var lastMusicChoice:Int = -1;
 
-    public static var depth:Int = 1;
+    public static var depth:Int = 7;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -289,7 +289,7 @@ class GameScene extends Scene {
             stopAllSounds();
             var resetTimer2 = new Alarm(6, TweenType.OneShot);
             resetTimer2.onComplete.bind(function() {
-                HXP.scene = new MainMenu();
+                HXP.scene = new Credits();
             });
             addTween(resetTimer2, true);
         });
