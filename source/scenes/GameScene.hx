@@ -40,7 +40,7 @@ class GameScene extends Scene {
     public static var easyMode:Bool = true;
     public static var lastMusicChoice:Int = -1;
 
-    public static var depth:Int = 7;
+    public static var depth:Int = 1;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -394,7 +394,7 @@ class GameScene extends Scene {
         var keyPoint = getRandomOpenGroundPoint();
         var doorPoint = getRandomOpenGroundPoint(3);
         var playerPoint = new Vector2(player.x, player.y);
-        for (i in 0...500) {
+        for (i in 0...MAX_PLACEMENT_RETRIES) {
             var newKeyPoint = getRandomOpenGroundPoint();
             var newDoorPoint = getRandomOpenGroundPoint(3);
             if(

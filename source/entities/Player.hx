@@ -309,6 +309,9 @@ class Player extends MemoryEntity {
                 if(hazardType == "mine") {
                     cast(hazard, Mine).detonate();
                 }
+                else if(hazardType == "grenade") {
+                    cast(hazard, Grenade).detonate();
+                }
             }
         }
         var floorSpike = collide("floorspike", x, y);

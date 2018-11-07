@@ -1,12 +1,10 @@
 ACTUAL TODO:
-- fix controller bug
 - polish final boss
 - credits roll
-- unlock hard mode
-- music
-- adjust sound levels
+- unlock hard modes
 
 FINAL TOUCHES:
+- adjust sound levels
 - compress music
 - disable up/down scroll keys in JS
 - remove debug controls

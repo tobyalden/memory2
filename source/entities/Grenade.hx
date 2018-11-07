@@ -33,9 +33,7 @@ class Grenade extends MemoryEntity {
         setGraphic(sprite);
         explodeTimer = new Alarm(1, TweenType.OneShot);
         explodeTimer.onComplete.bind(function() {
-            scene.remove(this);
-            scene.add(new Explosion(centerX - 72, centerY - 72));
-            explodeSfx.play();
+            detonate();
         });
         addTween(explodeTimer, true);
         bounceSfxs = new Array<Sfx>();
@@ -48,6 +46,12 @@ class Grenade extends MemoryEntity {
         colorTween = new ColorTween(TweenType.OneShot);
         colorTween.tween(1, 0xFF0000, 0xffff89, 1, 1, Ease.sineIn);
         addTween(colorTween, true);
+    }
+
+    public function detonate() {
+        scene.remove(this);
+        scene.add(new Explosion(centerX - 72, centerY - 72));
+        explodeSfx.play();
     }
 
     override public function update() {
