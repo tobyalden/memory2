@@ -32,7 +32,7 @@ class Heart extends MemoryEntity {
     public override function update() {
         y += bob.value;
         if(Player.playerHealth == Player.maxHealth) {
-            sprite.alpha = 0.5;
+            sprite.alpha = 0.33;
         }
         else {
             sprite.alpha = 1;

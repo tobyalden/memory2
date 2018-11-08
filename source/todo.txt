@@ -1,9 +1,6 @@
 ACTUAL TODO:
 - integer scaling
-- tweak roboplant theme distance
-- dont replenish health every level
 - dont replenish arrows on plusplus
-- add health pickups
 
 FINAL TOUCHES:
 - compress music

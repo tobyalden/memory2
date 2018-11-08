@@ -19,6 +19,12 @@ class BossWeakPoint extends MemoryEntity {
         setGraphic(sprite);
         setHitbox(40, 40);
         health = Boss.HEALTH;
+        if(GameScene.difficulty == GameScene.PLUSPLUS) {
+            health += 4;
+        }
+        else if(GameScene.difficulty == GameScene.PLUS) {
+            health += 2;
+        }
     }
 
     public function positionOnBoss() {

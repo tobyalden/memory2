@@ -3,6 +3,7 @@ import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
 import haxepunk.utils.*;
+import openfl.ui.Mouse;
 import scenes.*;
 
 class Main extends Engine {
@@ -24,6 +25,7 @@ class Main extends Engine {
 #if debug
         Console.enable();
 #end
+        Mouse.hide();
         HXP.screen.color = 0x000000;
         HXP.scene = new MainMenu();
 

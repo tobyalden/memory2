@@ -20,7 +20,7 @@ class Boss extends MemoryEntity {
     public static inline var MAX_JUMP_VEL_X = 7;
     public static inline var JUMP_VEL_Y = 6.3;
     public static inline var ARROW_DEFLECT_FACTOR = 1;
-    public static inline var HEALTH = 7;
+    public static inline var HEALTH = 5;
 
     public var weakPoint(default, null):BossWeakPoint;
     private var sprite:Spritemap;

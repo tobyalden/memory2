@@ -44,7 +44,7 @@ class GameScene extends Scene {
     public static var difficulty:Int = NORMAL;
     public static var lastMusicChoice:Int = -1;
 
-    public static var depth:Int = 1;
+    public static var depth:Int = 7;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -800,10 +800,7 @@ class GameScene extends Scene {
         if(difficulty == PLUSPLUS) {
             return;
         }
-        else if(difficulty == PLUS && depth % 3 != 0) {
-            return;
-        }
-        else if(difficulty == NORMAL && depth % 2 != 0) {
+        else if(difficulty == PLUS && depth % 2 != 0) {
             return;
         }
         var heartPoint = getEnemyPoint("ground", enemyPoints);
