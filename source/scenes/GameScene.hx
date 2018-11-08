@@ -823,12 +823,17 @@ class GameScene extends Scene {
                 new Rectangle(decorationNum * 30, 0, 30, 30)
             );
             decoration.flipX = Random.random < 0.5;
-            addGraphic(
-                decoration,
-                1,
-                decorationPoint.point.x,
-                decorationPoint.point.y + Segment.TILE_SIZE - 30
+            var distanceFromDoor = door.distanceToPoint(
+                decorationPoint.point.x, decorationPoint.point.y
             );
+            if(distanceFromDoor > 50) {
+                addGraphic(
+                    decoration,
+                    1,
+                    decorationPoint.point.x,
+                    decorationPoint.point.y + Segment.TILE_SIZE - 30
+                );
+            }
         }
 
         // Add more skeletons at lower depths
@@ -848,12 +853,17 @@ class GameScene extends Scene {
                 new Rectangle(skeletonNum * 30, 0, 30, 30)
             );
             skeleton.flipX = Random.random < 0.5;
-            addGraphic(
-                skeleton,
-                1,
-                skeletonPoint.point.x,
-                skeletonPoint.point.y + Segment.TILE_SIZE - 30
+            var distanceFromDoor = door.distanceToPoint(
+                skeletonPoint.point.x, skeletonPoint.point.y
             );
+            if(distanceFromDoor > 50) {
+                addGraphic(
+                    skeleton,
+                    1,
+                    skeletonPoint.point.x,
+                    skeletonPoint.point.y + Segment.TILE_SIZE - 30
+                );
+            }
         }
 
         // Add more plants at lower depths
@@ -876,12 +886,17 @@ class GameScene extends Scene {
                 new Rectangle(plantNum * 30, 0, 30, 30)
             );
             plant.flipX = Random.random < 0.5;
-            addGraphic(
-                plant,
-                1,
-                plantPoint.point.x,
-                plantPoint.point.y + Segment.TILE_SIZE - 30
+            var distanceFromDoor = door.distanceToPoint(
+                plantPoint.point.x, plantPoint.point.y
             );
+            if(distanceFromDoor > 50) {
+                addGraphic(
+                    plant,
+                    1,
+                    plantPoint.point.x,
+                    plantPoint.point.y + Segment.TILE_SIZE - 30
+                );
+            }
         }
     }
 

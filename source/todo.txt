@@ -1,6 +1,5 @@
 ACTUAL TODO:
 - integer scaling
-- dont replenish arrows on plusplus
 
 FINAL TOUCHES:
 - compress music
