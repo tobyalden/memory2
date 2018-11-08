@@ -43,7 +43,7 @@ class Player extends MemoryEntity {
     public static inline var MAX_ARROWS = 6;
     public static inline var QUIVER_DISPLAY_FADE_SPEED = 0.05;
 
-    public static inline var MAX_HEALTH = 3;
+    public static inline var NORMAL_MAX_HEALTH = 3;
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var INVINCIBILITY_TIME = 1.5;
 
@@ -64,6 +64,7 @@ class Player extends MemoryEntity {
     private var quiver:Int;
     private var quiverDisplay:Graphiclist;
     private var heartDisplay:Graphiclist;
+    private var maxHealth:Int;
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
@@ -132,7 +133,14 @@ class Player extends MemoryEntity {
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
 
-        health = MAX_HEALTH;
+        maxHealth = NORMAL_MAX_HEALTH;
+        if(GameScene.difficulty == GameScene.PLUSPLUS) {
+            maxHealth -= 2;
+        }
+        else if(GameScene.difficulty == GameScene.PLUS) {
+            maxHealth -= 1;
+        }
+        health = maxHealth;
         heartDisplay = new Graphiclist();
         heartDisplay.y = -30;
         addGraphic(heartDisplay);
@@ -154,7 +162,7 @@ class Player extends MemoryEntity {
         heartDisplay.x = (
             width/2 - (health * heart.width / 2) - originX/2 + 1.5
         );
-        if(health >= MAX_HEALTH) {
+        if(health >= maxHealth) {
             heartDisplay.color = 0xf4428c;
         }
         else {
