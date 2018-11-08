@@ -169,7 +169,7 @@ class MainMenu extends Scene {
         else {
             cursorPause.cancel();
         }
-        cursor.y = 99 + cursorPosition * MENU_SPACING;
+        cursor.y = 100 + cursorPosition * MENU_SPACING;
         cursor.x += bob.value;
 
         var currentController = Main.gamepad != null ? "controller" : "nocontroller";

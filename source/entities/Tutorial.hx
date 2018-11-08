@@ -16,6 +16,7 @@ class Tutorial extends MemoryEntity {
     public static inline var MESSAGE_DELAY = 3;
     public static inline var MESSAGE_TIME = 2;
     public static inline var MESSAGE_FADE_TIME = 1;
+    public static inline var NUM_MESSAGES = 5;
 
     public static var messageNum:Int = 1;
 
@@ -34,6 +35,8 @@ class Tutorial extends MemoryEntity {
         message.add("controller3", [5]);
         message.add("4", [6]);
         message.add("controller4", [6]);
+        message.add("5", [7]);
+        message.add("controller5", [7]);
 
         message.play(getMessageName());
         message.alpha = 0;
@@ -56,7 +59,7 @@ class Tutorial extends MemoryEntity {
                     fadeOut.onComplete.bind(function() {
                         scene.remove(this);
                         messageNum++;
-                        if(messageNum <= 4) {
+                        if(messageNum <= NUM_MESSAGES) {
                             scene.add(new Tutorial());
                         }
                     });
@@ -68,7 +71,7 @@ class Tutorial extends MemoryEntity {
         });
         addTween(fadeInDelay, true);
 
-        if(messageNum > 4) {
+        if(messageNum > NUM_MESSAGES) {
             enabled = false;
         }
     }

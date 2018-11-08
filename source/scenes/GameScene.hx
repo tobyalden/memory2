@@ -109,7 +109,7 @@ class GameScene extends Scene {
         depthDisplay = new DepthDisplay();
         add(depthDisplay);
 
-        if(depth == 1) {
+        if(depth == 1 && difficulty == NORMAL) {
             add(new Tutorial());
         }
 
