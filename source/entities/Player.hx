@@ -49,6 +49,7 @@ class Player extends MemoryEntity {
 
     public static var playerHealth:Int;
     public static var maxHealth:Int;
+    public static var quiver:Int;
 
     private var isCrouching:Bool;
     private var wasCrouching:Bool;
@@ -64,7 +65,6 @@ class Player extends MemoryEntity {
     public var armsAndBow:Spritemap;
 
     private var velocity:Vector2;
-    private var quiver:Int;
     private var quiverDisplay:Graphiclist;
     private var heartDisplay:Graphiclist;
 
@@ -149,7 +149,12 @@ class Player extends MemoryEntity {
         lastWallWasRight = false;
         canMove = true;
 
-        quiver = MAX_ARROWS;
+        if(
+            GameScene.difficulty == GameScene.PLUSPLUS && GameScene.depth == 1
+            || GameScene.difficulty != GameScene.PLUSPLUS
+        ) {
+            quiver = MAX_ARROWS;
+        }
         quiverDisplay = new Graphiclist();
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
