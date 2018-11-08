@@ -19,6 +19,7 @@ class Credits extends Scene {
     private var unlockDisplay:MemoryEntity;
     private var unlockSfx:Sfx;
     private var isDoneScrolling:Bool;
+    private var showUnlock:Bool;
     private var curtain:Curtain;
 
 	override public function begin() {
@@ -33,7 +34,16 @@ class Credits extends Scene {
         add(creditsScroll);
 
         unlockDisplay = new MemoryEntity(0, 0);
-        var unlockDisplayImage = new Image("graphics/unlockdisplay1.png");
+        var unlockDisplayImage;
+        if(GameScene.difficulty == GameScene.PLUSPLUS) {
+            unlockDisplayImage = new Image("graphics/unlockdisplay3.png");
+        }
+        else if(GameScene.difficulty == GameScene.PLUS) {
+            unlockDisplayImage = new Image("graphics/unlockdisplay2.png");
+        }
+        else {
+            unlockDisplayImage = new Image("graphics/unlockdisplay1.png");
+        }
         unlockDisplay.setGraphic(unlockDisplayImage);
         unlockDisplay.visible = false;
         add(unlockDisplay);
@@ -43,6 +53,29 @@ class Credits extends Scene {
 
         unlockSfx = new Sfx("audio/unlockmode.wav");
         isDoneScrolling = false;
+
+        Data.load(MainMenu.SAVE_FILE_NAME);
+        var plusModeUnlocked = Data.read("plusModeUnlocked", false);
+        var plusPlusModeUnlocked = Data.read("plusPlusModeUnlocked", false);
+        if(
+            GameScene.difficulty == GameScene.PLUSPLUS
+            || GameScene.difficulty == GameScene.PLUS && !plusPlusModeUnlocked
+            || GameScene.difficulty == GameScene.NORMAL && !plusModeUnlocked
+        ) {
+            showUnlock = true;
+        }
+        else {
+            showUnlock = false;
+        }
+
+        // Unlock difficulty modes
+        if(GameScene.difficulty == GameScene.NORMAL) {
+            Data.write("plusModeUnlocked", true);
+        }
+        else if(GameScene.difficulty == GameScene.PLUS) {
+            Data.write("plusPlusModeUnlocked", true);
+        }
+        Data.save(MainMenu.SAVE_FILE_NAME);
     }
 
     public override function update() {
@@ -51,9 +84,14 @@ class Credits extends Scene {
         if(creditsScroll.y < -1700) {
             if(!isDoneScrolling) {
                 Main.music.stop();
-                unlockDisplay.visible = true;
-                unlockSfx.play();
-                fadeToMenu(5);
+                if(showUnlock) {
+                    unlockDisplay.visible = true;
+                    unlockSfx.play();
+                    fadeToMenu(5);
+                }
+                else {
+                    fadeToMenu(1);
+                }
             }
             isDoneScrolling = true;
         }

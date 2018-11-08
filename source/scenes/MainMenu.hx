@@ -20,7 +20,8 @@ class MainMenu extends Scene {
     public static inline var BOB_AMOUNT = 0.25;
     public static inline var BOB_SPEED = 0.75;
 
-    private static var hardModeUnlocked:Bool;
+    private static var plusModeUnlocked:Bool;
+    private static var plusPlusModeUnlocked:Bool;
     private static var lastDailyAttempt:String;
     private static var lastDailyHardAttempt:String;
 
@@ -50,7 +51,8 @@ class MainMenu extends Scene {
         controllerSfx = new Sfx("audio/controllerconnected.wav");
         lastController = Main.gamepad != null ? "controller" : "nocontroller";
 
-        hardModeUnlocked = Data.read("hardModeUnlocked", false);
+        plusModeUnlocked = Data.read("plusModeUnlocked", false);
+        plusPlusModeUnlocked = Data.read("plusPlusModeUnlocked", false);
         lastDailyAttempt = Data.read("lastDailyAttempt", "");
         lastDailyHardAttempt = Data.read("lastDailyHardAttempt", "");
 
@@ -69,14 +71,28 @@ class MainMenu extends Scene {
         curtain.fadeIn();
 
         menu = new Array<Spritemap>();
-        if(hardModeUnlocked) {
+        if(plusPlusModeUnlocked) {
             var startHard = new Spritemap("graphics/menuselection.png", 412, 41);
             startHard.add("idle", [2]);
             startHard.play("idle");
             menu.push(startHard);
             var dailyHard = new Spritemap("graphics/menuselection.png", 412, 41);
             startHard.pixelSnapping = true;
-            dailyHard.add("idle", [3]);
+            dailyHard.add("idle", [5]);
+            dailyHard.play("idle");
+            if(lastDailyHardAttempt == getDailyStamp()) {
+                dailyHard.alpha = 0.5;
+            }
+            menu.push(dailyHard);
+        }
+        else if(plusModeUnlocked) {
+            var startHard = new Spritemap("graphics/menuselection.png", 412, 41);
+            startHard.add("idle", [1]);
+            startHard.play("idle");
+            menu.push(startHard);
+            var dailyHard = new Spritemap("graphics/menuselection.png", 412, 41);
+            startHard.pixelSnapping = true;
+            dailyHard.add("idle", [4]);
             dailyHard.play("idle");
             if(lastDailyHardAttempt == getDailyStamp()) {
                 dailyHard.alpha = 0.5;
@@ -88,7 +104,7 @@ class MainMenu extends Scene {
         start.play("idle");
         menu.push(start);
         var daily = new Spritemap("graphics/menuselection.png", 412, 41);
-        daily.add("idle", [1]);
+        daily.add("idle", [3]);
         daily.play("idle");
         if(lastDailyAttempt == getDailyStamp()) {
             daily.alpha = 0.5;
@@ -161,9 +177,14 @@ class MainMenu extends Scene {
         lastController = currentController;
 
         if(Main.inputPressed("jump") || Main.inputPressed("act")) {
-            if(hardModeUnlocked) {
+            if(plusModeUnlocked) {
                 if(cursorPosition == 0) {
-                    GameScene.easyMode = false;
+                    if(plusPlusModeUnlocked) {
+                        GameScene.difficulty = GameScene.PLUSPLUS;
+                    }
+                    else {
+                        GameScene.difficulty = GameScene.PLUS;
+                    }
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 1) {
@@ -172,14 +193,19 @@ class MainMenu extends Scene {
                         super.update();
                         return;
                     }
-                    GameScene.easyMode = false;
+                    if(plusPlusModeUnlocked) {
+                        GameScene.difficulty = GameScene.PLUSPLUS;
+                    }
+                    else {
+                        GameScene.difficulty = GameScene.PLUS;
+                    }
                     Random.randomSeed = getDailySeed();
                     lastDailyHardAttempt = getDailyStamp();
                     Data.write("lastDailyHardAttempt", lastDailyHardAttempt);
                     Data.save(SAVE_FILE_NAME);
                 }
                 else if(cursorPosition == 2) {
-                    GameScene.easyMode = true;
+                    GameScene.difficulty = GameScene.NORMAL;
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 3) {
@@ -188,7 +214,7 @@ class MainMenu extends Scene {
                         super.update();
                         return;
                     }
-                    GameScene.easyMode = true;
+                    GameScene.difficulty = GameScene.NORMAL;
                     Random.randomSeed = getDailySeed();
                     lastDailyAttempt = getDailyStamp();
                     Data.write("lastDailyAttempt", lastDailyAttempt);
@@ -197,7 +223,7 @@ class MainMenu extends Scene {
             }
             else {
                 if(cursorPosition == 0) {
-                    GameScene.easyMode = true;
+                    GameScene.difficulty = GameScene.NORMAL;
                     Random.randomizeSeed();
                 }
                 else if(cursorPosition == 1) {
@@ -206,7 +232,7 @@ class MainMenu extends Scene {
                         super.update();
                         return;
                     }
-                    GameScene.easyMode = true;
+                    GameScene.difficulty = GameScene.NORMAL;
                     Random.randomSeed = getDailySeed();
                     lastDailyAttempt = getDailyStamp();
                     Data.write("lastDailyAttempt", lastDailyAttempt);
@@ -250,9 +276,7 @@ class MainMenu extends Scene {
             (today.getDay() * 32 + today.getMonth()) * 13
             + today.getFullYear()
         );
-        if(!GameScene.easyMode) {
-            dailySeed += 666;
-        }
+        dailySeed += GameScene.difficulty * 97;
         return dailySeed;
     }
 

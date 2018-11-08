@@ -2,6 +2,10 @@ ACTUAL TODO:
 - polish final boss
 - credits roll
 - unlock hard modes
+- integer scaling
+- tweak roboplant theme distance
+- dont replenish health every level
+- dont replenish arrows on plusplus
 
 FINAL TOUCHES:
 - adjust sound levels

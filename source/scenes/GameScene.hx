@@ -37,7 +37,11 @@ class GameScene extends Scene {
     public static inline var NUMBER_OF_DECORATION_TYPES = 18;
     public static inline var TRAPS_IN_BOSS_ROOM = 6;
 
-    public static var easyMode:Bool = true;
+    public static inline var NORMAL = 0;
+    public static inline var PLUS = 1;
+    public static inline var PLUSPLUS = 2;
+
+    public static var difficulty:Int = NORMAL;
     public static var lastMusicChoice:Int = -1;
 
     public static var depth:Int = 7;
@@ -84,8 +88,11 @@ class GameScene extends Scene {
         );
 
         var numArrows = STARTING_SCATTERED_ARROWS - depth;
-        if(!easyMode) {
+        if(difficulty == PLUSPLUS) {
             numArrows -= 3;
+        }
+        else if(difficulty == PLUS) {
+            numArrows -= 1;
         }
         scatterArrows(numArrows);
 
@@ -156,7 +163,7 @@ class GameScene extends Scene {
         );
         add(boss);
         add(boss.weakPoint);
-        if(!easyMode) {
+        if(difficulty > NORMAL) {
             addBossRoomSpikes();
             removeEnemiesTooCloseToPlayer();
         }
@@ -280,9 +287,6 @@ class GameScene extends Scene {
     }
 
     public function win() {
-        Data.load(MainMenu.SAVE_FILE_NAME);
-        Data.write("hardModeUnlocked", true);
-        Data.save(MainMenu.SAVE_FILE_NAME);
         var resetTimer = new Alarm(3, TweenType.OneShot);
         resetTimer.onComplete.bind(function() {
             curtain.fadeOut(Curtain.FADE_SPEED / 5);
@@ -588,9 +592,13 @@ class GameScene extends Scene {
         var leftWallTrapPoints = new Array<SegmentPoint>();
         var rightWallTrapPoints = new Array<SegmentPoint>();
 
-        if(easyMode) {
+        if(difficulty == NORMAL) {
             numberOfEnemies = Std.int(Math.floor(numberOfEnemies / 2));
             numberOfTraps = Std.int(Math.floor(numberOfTraps / 2));
+        }
+        else if(difficulty == PLUS) {
+            numberOfEnemies = Std.int(Math.floor(numberOfEnemies / 1.5));
+            numberOfTraps = Std.int(Math.floor(numberOfTraps / 1.5));
         }
 
         numberOfEnemies += depth - 1;

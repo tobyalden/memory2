@@ -7,8 +7,9 @@ import scenes.*;
 
 class RoboPlant extends MemoryEntity {
     public static inline var ACCEL = 0.055;
-    public static inline var MAX_SPEED = 2.9;
-    public static inline var MAX_SPEED_EASY = 2;
+    public static inline var MAX_SPEED_PLUSPLUS = 2.9;
+    public static inline var MAX_SPEED_PLUS = 2;
+    public static inline var MAX_SPEED_NORMAL = 1.75;
     public static inline var ARROW_DEFLECT_FACTOR = 1.5;
     public static inline var THEME_SONG_DISTANCE = 310;
     public static inline var NUMBER_OF_FACES = 7;
@@ -53,7 +54,13 @@ class RoboPlant extends MemoryEntity {
         }
         towardsPlayer.normalize(accel * Main.getDelta());
         velocity.add(towardsPlayer);
-        var maxSpeed = GameScene.easyMode ? MAX_SPEED_EASY : MAX_SPEED;
+        var maxSpeed = MAX_SPEED_NORMAL;
+        if(GameScene.difficulty == GameScene.PLUS) {
+            maxSpeed = MAX_SPEED_PLUS;
+        }
+        else if(GameScene.difficulty == GameScene.PLUSPLUS) {
+            maxSpeed = MAX_SPEED_PLUSPLUS;
+        }
         if(velocity.length > maxSpeed) {
             velocity.normalize(maxSpeed);
         }
