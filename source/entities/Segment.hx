@@ -215,14 +215,18 @@ class Segment extends MemoryEntity {
     }
 
     public function updateGraphic() {
+        var tilesetName = 'tiles${GameScene.getDepthBlock()}';
+        if(GameScene.depth == 7) {
+            tilesetName = "bosstiles";
+        }
         tiles = new Tilemap(
-            'graphics/tiles${GameScene.getDepthBlock()}.png',
+            'graphics/${tilesetName}.png',
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
         );
         tiles.loadFromString(walls.saveToString(',', '\n', '1', '0'));
         setGraphic(tiles);
         edges = new Tilemap(
-            'graphics/tiles${GameScene.getDepthBlock()}.png',
+            'graphics/${tilesetName}.png',
             walls.width, walls.height, walls.tileWidth, walls.tileHeight
         );
         for(tileX in 0...walls.columns) {

@@ -30,11 +30,11 @@ class GameScene extends Scene {
     //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
     public static inline var STARTING_SCATTERED_ARROWS = 10;
     public static inline var NUMBER_OF_DECORATIONS = 10;
+    public static inline var NUMBER_OF_DECORATION_TYPES = 18;
     public static inline var MAX_PLACEMENT_RETRIES = 10000;
     public static inline var MIN_ENEMY_DISTANCE_FROM_PLAYER = 350;
     public static inline var MIN_ENEMY_DISTANCE_FROM_EACHOTHER = 200;
     public static inline var MAX_CONSECUTIVE_SPIKES = 10;
-    public static inline var NUMBER_OF_DECORATION_TYPES = 18;
     public static inline var TRAPS_IN_BOSS_ROOM = 6;
 
     public static inline var NORMAL = 0;
@@ -44,7 +44,7 @@ class GameScene extends Scene {
     public static var difficulty:Int = NORMAL;
     public static var lastMusicChoice:Int = -1;
 
-    public static var depth:Int = 7;
+    public static var depth:Int = 1;
 
     private var mapBlueprint:Grid;
     private var map:Grid;
@@ -193,6 +193,9 @@ class GameScene extends Scene {
                 isVertical, true
             ));
         }
+
+        var background = new Backdrop('graphics/bossbackground.png');
+        addGraphic(background, 1000);
 
         curtain = new Curtain(0, 0);
         add(curtain);

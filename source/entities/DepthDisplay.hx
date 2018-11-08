@@ -22,10 +22,10 @@ class DepthDisplay extends MemoryEntity {
         layer = -20;
 
         message = new Spritemap("graphics/depthdisplay.png", 640, 41);
-        for(i in 1...7) {
-            message.add('${i}F', [i-1]);
+        for(i in 0...7) {
+            message.add('${i+1}', [i]);
         }
-        message.play('${GameScene.depth}F');
+        message.play('${GameScene.depth}');
         setGraphic(message);
 
         var messageFade = new VarTween(TweenType.OneShot);
