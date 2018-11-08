@@ -42,7 +42,7 @@ class MainMenu extends Scene {
     private var canControl:Bool;
 
 	override public function begin() {
-        Main.music = new Sfx("audio/mainmenu.wav");
+        Main.music = new Sfx("audio/mainmenu.ogg");
         Main.music.loop();
         Data.load(SAVE_FILE_NAME);
         selectSound = new Sfx("audio/menuselect.wav");

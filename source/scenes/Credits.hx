@@ -48,7 +48,7 @@ class Credits extends Scene {
         unlockDisplay.visible = false;
         add(unlockDisplay);
 
-        Main.music = new Sfx("audio/credits.wav");
+        Main.music = new Sfx("audio/credits.ogg");
         Main.music.play();
 
         unlockSfx = new Sfx("audio/unlockmode.wav");

@@ -117,7 +117,6 @@ class GameScene extends Scene {
     }
 
     private function playMusic() {
-        //Main.music = new Sfx('audio/silence.wav');
         var numSongs:Int;
         var floorName:String;
         if(depth > 4) {
@@ -139,7 +138,7 @@ class GameScene extends Scene {
         ) {
             musicChoice = Std.random(numSongs) + 1;
         }
-        Main.music = new Sfx('audio/${floorName}${musicChoice}.wav');
+        Main.music = new Sfx('audio/${floorName}${musicChoice}.ogg');
         Main.music.loop();
         lastMusicChoice = musicChoice;
     }
@@ -208,7 +207,7 @@ class GameScene extends Scene {
         camera.y = allSegments[0].y;
         depthDisplay = new DepthDisplay(0, HXP.height/2);
         add(depthDisplay);
-        Main.music = new Sfx('audio/boss.wav');
+        Main.music = new Sfx('audio/boss.ogg');
         Main.music.loop();
     }
 

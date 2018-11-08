@@ -1,5 +1,4 @@
 ACTUAL TODO:
-- integer scaling
 
 FINAL TOUCHES:
 - compress music
