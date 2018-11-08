@@ -257,6 +257,7 @@ class MainMenu extends Scene {
                     clearTweens();
                     GameScene.depth = 1;
                     Tutorial.messageNum = 1;
+                    Player.resetPlayerHealth();
                     HXP.scene = new GameScene();
                 });
             addTween(resetTimer, true);

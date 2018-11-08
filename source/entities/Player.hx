@@ -47,6 +47,9 @@ class Player extends MemoryEntity {
     public static inline var HIT_KNOCKBACK = 5;
     public static inline var INVINCIBILITY_TIME = 1.5;
 
+    public static var playerHealth:Int;
+    public static var maxHealth:Int;
+
     private var isCrouching:Bool;
     private var wasCrouching:Bool;
     private var isTurning:Bool;
@@ -64,7 +67,17 @@ class Player extends MemoryEntity {
     private var quiver:Int;
     private var quiverDisplay:Graphiclist;
     private var heartDisplay:Graphiclist;
-    private var maxHealth:Int;
+
+    static public function resetPlayerHealth() {
+        maxHealth = NORMAL_MAX_HEALTH;
+        if(GameScene.difficulty == GameScene.PLUSPLUS) {
+            maxHealth -= 2;
+        }
+        else if(GameScene.difficulty == GameScene.PLUS) {
+            maxHealth -= 1;
+        }
+        playerHealth = maxHealth;
+    }
 
     public function new(x:Float, y:Float) {
 	    super(x, y);
@@ -133,14 +146,6 @@ class Player extends MemoryEntity {
         quiverDisplay.y = -20;
         addGraphic(quiverDisplay);
 
-        maxHealth = NORMAL_MAX_HEALTH;
-        if(GameScene.difficulty == GameScene.PLUSPLUS) {
-            maxHealth -= 2;
-        }
-        else if(GameScene.difficulty == GameScene.PLUS) {
-            maxHealth -= 1;
-        }
-        health = maxHealth;
         heartDisplay = new Graphiclist();
         heartDisplay.y = -30;
         addGraphic(heartDisplay);
@@ -151,7 +156,7 @@ class Player extends MemoryEntity {
 
     private function updateHeartDisplay() {
         heartDisplay.removeAll();
-        for(i in 0...health) {
+        for(i in 0...playerHealth) {
             var heart = new Image("graphics/heart.png");
             heart.smooth = false;
             heart.pixelSnapping = true;
@@ -160,9 +165,9 @@ class Player extends MemoryEntity {
         }
         var heart = new Image("graphics/heart.png");
         heartDisplay.x = (
-            width/2 - (health * heart.width / 2) - originX/2 + 1.5
+            width/2 - (playerHealth * heart.width / 2) - originX/2 + 1.5
         );
-        if(health >= maxHealth) {
+        if(playerHealth >= maxHealth) {
             heartDisplay.color = 0xf4428c;
         }
         else {
@@ -287,10 +292,10 @@ class Player extends MemoryEntity {
         armsAndBow.visible = false;
         isFlashing = true;
         stopFlasher.reset(INVINCIBILITY_TIME);
-        health -= 1;
+        playerHealth -= 1;
         updateHeartDisplay();
         MemoryEntity.allSfx['playerhit${HXP.choose(1, 2, 3)}'].play();
-        if(health <= 0) {
+        if(playerHealth <= 0) {
             die();
         }
     }
