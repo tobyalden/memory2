@@ -39,6 +39,7 @@ class MainMenu extends Scene {
     private var noSound:Sfx;
     private var controllerSfx:Sfx;
     private var lastController:String;
+    private var canControl:Bool;
 
 	override public function begin() {
         Main.music = new Sfx("audio/mainmenu.wav");
@@ -140,10 +141,12 @@ class MainMenu extends Scene {
         controllerConnected.add("nocontroller", [0]);
         controllerConnected.add("controller", [1]);
         add(new Entity(30, 315, controllerConnected));
+
+        canControl = true;
     }
 
     public override function update() {
-        if(Main.inputCheck("up")) {
+        if(canControl && Main.inputCheck("up")) {
             if(!cursorPause.active) {
                 cursorPosition--;
                 if(cursorPosition < 0) {
@@ -153,7 +156,7 @@ class MainMenu extends Scene {
                 selectSound.play();
             }
         }
-        else if(Main.inputCheck("down")) {
+        else if(canControl && Main.inputCheck("down")) {
             if(!cursorPause.active) {
                 cursorPosition++;
                 if(cursorPosition >= menu.length) {
@@ -261,6 +264,7 @@ class MainMenu extends Scene {
                     HXP.scene = new GameScene();
                 });
             addTween(resetTimer, true);
+            canControl = false;
         }
 
         gradient.y -= GRADIENT_SCROLL_SPEED * Main.getDelta();

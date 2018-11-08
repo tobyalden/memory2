@@ -58,24 +58,6 @@ class Roombad extends MemoryEntity {
         soundsStopped = false;
     }
 
-    //private function lob() {
-        //var player = scene.getInstance("player");
-        //if(!turretMode) {
-            //return;
-        //}
-        //var towardsPlayer = new Vector2(0, 0);
-        //towardsPlayer.x = (distanceFrom(player, true) / LOB_ACTIVATION_DISTANCE) * LOB_POWER;
-        //if(x > player.x) {
-            //towardsPlayer.x *= -1;
-        //}
-        //towardsPlayer.y = -LOB_POWER;
-        //if(y <= player.y) {
-            //towardsPlayer.y /= 2;
-        //}
-        //var grenade = new Grenade(centerX, top, towardsPlayer);
-        //scene.add(grenade);
-    //}
-
     override public function update() {
         var player = cast(scene.getInstance("player"), Player);
         if(bottom == player.bottom && player.isOnGround()) {

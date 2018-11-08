@@ -79,6 +79,14 @@ class Player extends MemoryEntity {
         playerHealth = maxHealth;
     }
 
+    public function pickUpHeart() {
+        playerHealth++;
+        if(playerHealth > maxHealth) {
+            playerHealth = maxHealth;
+        }
+        updateHeartDisplay();
+    }
+
     public function new(x:Float, y:Float) {
 	    super(x, y);
         MemoryEntity.loadSfx([

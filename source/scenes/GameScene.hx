@@ -83,6 +83,9 @@ class GameScene extends Scene {
         var playerPoint = addPlayer();
         var keyAndDoorPoints = addKeyAndDoor();
         var enemyPoints = addEnemies();
+        addHeart(
+            enemyPoints.concat(keyAndDoorPoints).concat(playerPoint)
+        );
         addDecorations(
             enemyPoints.concat(keyAndDoorPoints).concat(playerPoint)
         );
@@ -793,6 +796,22 @@ class GameScene extends Scene {
         return existingPoints;
     }
 
+    private function addHeart(enemyPoints:Array<SegmentPoint>) {
+        if(difficulty == PLUSPLUS) {
+            return;
+        }
+        else if(difficulty == PLUS && depth % 3 != 0) {
+            return;
+        }
+        else if(difficulty == NORMAL && depth % 2 != 0) {
+            return;
+        }
+        var heartPoint = getEnemyPoint("ground", enemyPoints);
+        add(new Heart(
+            heartPoint.point.x, heartPoint.point.y -= Segment.TILE_SIZE
+        ));
+    }
+
     private function addDecorations(enemyPoints:Array<SegmentPoint>) {
         var decorationPoints = new Array<SegmentPoint>();
         for(i in 0...NUMBER_OF_DECORATIONS) {
@@ -1120,6 +1139,15 @@ class GameScene extends Scene {
         if(Key.pressed(Key.R)) {
             stopAllSounds();
             HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.H)) {
+            if(getInstance("heart") == null) {
+                trace("no heart on this level");
+            }
+            else {
+                player.x = getInstance("heart").x + 30;
+                player.y = getInstance("heart").y - 40;
+            }
         }
         if(Key.pressed(Key.N)) {
             depth++;

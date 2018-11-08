@@ -174,7 +174,13 @@ class MemoryEntity extends Entity {
         stopFlasher.start();
         health -= 1;
         if(health <= 0) {
-            die();
+            if(arrow.isScattered) {
+                scene.remove(arrow);
+                health = 1;
+            }
+            else {
+                die();
+            }
         }
     }
 
