@@ -400,6 +400,11 @@ class Player extends MemoryEntity {
         MemoryEntity.allSfx["runloop"].stop();
     }
 
+    override public function stopSound() {
+        MemoryEntity.allSfx["slide"].stop();
+        MemoryEntity.allSfx["runloop"].stop();
+    }
+
     private function movement() {
         isTurning = (
             Main.inputCheck("left") && velocity.x > 0 ||

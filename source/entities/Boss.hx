@@ -45,8 +45,8 @@ class Boss extends MemoryEntity {
         startY = y;
         type = "boss";
         sprite = new Spritemap("graphics/boss.png", 100, 100);
-        sprite.add("idle", [0]);
-        sprite.add("stomp", [1]);
+        sprite.add("idle", [0, 1], 3);
+        sprite.add("stomp", [3]);
         sprite.add("hit", [2]);
         sprite.play("idle");
         lightning = new Spritemap("graphics/boss.png", 100, 100);
@@ -144,7 +144,7 @@ class Boss extends MemoryEntity {
 
     private function dropGrenade() {
         var grenade = new Grenade(centerX, bottom, new Vector2(0, 0));
-        grenade.x -= grenade.width/2;
+        grenade.x -= 6;
         scene.add(grenade);
         MemoryEntity.allSfx['turretshoot'].play();
     }
