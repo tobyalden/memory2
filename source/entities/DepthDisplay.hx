@@ -44,8 +44,10 @@ class DepthDisplay extends MemoryEntity {
     public override function update() {
         if(GameScene.depth < 7) {
             var player = scene.getInstance("player");
-            x = player.centerX - message.width / 2;
-            y = player.centerY - message.height / 2 - 80;
+            if(player != null) {
+                x = player.centerX - message.width / 2;
+                y = player.centerY - message.height / 2 - 80;
+            }
         }
         super.update();
     }

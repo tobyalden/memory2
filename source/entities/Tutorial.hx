@@ -84,8 +84,10 @@ class Tutorial extends MemoryEntity {
 
     public override function update() {
         var player = scene.getInstance("player");
-        x = player.centerX - message.width / 2;
-        y = player.centerY - message.height / 2 + 100;
+        if(player != null) {
+            x = player.centerX - message.width / 2;
+            y = player.centerY - message.height / 2 + 100;
+        }
         super.update();
     }
 }

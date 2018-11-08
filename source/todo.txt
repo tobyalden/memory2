@@ -1,5 +1,4 @@
 ACTUAL TODO:
-- polish final boss
 - integer scaling
 - tweak roboplant theme distance
 - dont replenish health every level
@@ -7,7 +6,6 @@ ACTUAL TODO:
 - add health pickups
 
 FINAL TOUCHES:
-- adjust sound levels
 - compress music
 - disable up/down scroll keys in JS
 - remove debug controls
@@ -15,4 +13,3 @@ FINAL TOUCHES:
 THINGS THAT WOULD BE NICE:
 - make new segments
 - flip segments horizontally
-- daily tombstones
