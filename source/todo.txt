@@ -2,6 +2,7 @@ ACTUAL TODO:
 
 FINAL TOUCHES:
 + disable up/down scroll keys in JS
++ remove debug controls
 - fix credits
 
 THINGS THAT WOULD BE NICE:
