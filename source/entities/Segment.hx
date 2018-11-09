@@ -15,7 +15,7 @@ typedef OpenPoint = {
 }
 
 class Segment extends MemoryEntity {
-    public static inline var NUMBER_OF_SEGMENTS = 9;
+    public static inline var NUMBER_OF_SEGMENTS = 12;
     public static inline var MIN_SEGMENT_WIDTH = 640;
     public static inline var MIN_SEGMENT_HEIGHT = 352;
     public static inline var MIN_SEGMENT_WIDTH_IN_TILES = 40;
@@ -41,16 +41,39 @@ class Segment extends MemoryEntity {
             number = Random.randInt(NUMBER_OF_SEGMENTS);
         }
         loadSegment(number);
+        if(Random.random < 0.5) {
+            flipHorizontally();
+        }
         updateGraphic();
         mask = walls;
+        findOpenPoints();
+    }
+
+    public function flipHorizontally() {
+        for(tileX in 0...Std.int(walls.columns / 2)) {
+            for(tileY in 0...walls.rows) {
+                var tempLeft:Bool = walls.getTile(tileX, tileY);
+                // For some reason getTile() returns null instead of false!
+                if(tempLeft == null) {
+                    tempLeft = false;
+                }
+                var tempRight:Bool = walls.getTile(
+                    walls.columns - tileX - 1, tileY
+                );
+                if(tempRight == null) {
+                    tempRight = false;
+                }
+                walls.setTile(tileX, tileY, tempRight);
+                walls.setTile(walls.columns - tileX - 1, tileY, tempLeft);
+            }
+        }
+    }
+
+    private function findOpenPoints() {
         openPoints = new Array<OpenPoint>();
         openGroundPoints = new Array<OpenPoint>();
         openLeftWallPoints = new Array<OpenPoint>();
         openRightWallPoints = new Array<OpenPoint>();
-        findOpenPoints();
-    }
-
-    private function findOpenPoints() {
         for(tileX in 0...walls.columns) {
             for(tileY in 0...walls.rows) {
                 if(

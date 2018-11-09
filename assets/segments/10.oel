@@ -1,0 +1,22 @@
+<level>
+  <width>640</width>
+  <height>352</height>
+  <walls>
+    <rect x="0" y="0" w="272" h="16"/>
+    <rect x="0" y="16" w="16" h="112"/>
+    <rect x="0" y="224" w="96" h="128"/>
+    <rect x="96" y="336" w="176" h="16"/>
+    <rect x="224" y="128" w="192" h="48"/>
+    <rect x="224" y="176" w="48" h="64"/>
+    <rect x="256" y="16" w="16" h="48"/>
+    <rect x="368" y="0" w="272" h="16"/>
+    <rect x="368" y="336" w="272" h="16"/>
+    <rect x="544" y="224" w="96" h="112"/>
+    <rect x="624" y="16" w="16" h="112"/>
+  </walls>
+  <optionalWalls>
+    <rect x="224" y="240" w="48" h="96"/>
+    <rect x="368" y="304" w="176" h="32"/>
+    <rect x="416" y="128" w="48" h="48"/>
+  </optionalWalls>
+</level>
