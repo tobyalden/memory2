@@ -80,7 +80,6 @@ class Credits extends Scene {
 
     public override function update() {
         creditsScroll.y -= CREDITS_SCROLL_SPEED * Main.getDelta();
-        trace(creditsScroll.y);
         if(creditsScroll.y < -1700) {
             if(!isDoneScrolling) {
                 Main.music.stop();
