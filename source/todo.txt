@@ -1,9 +1,8 @@
 ACTUAL TODO:
 
 FINAL TOUCHES:
-- compress music
-- disable up/down scroll keys in JS
-- remove debug controls
++ disable up/down scroll keys in JS
+- fix credits
 
 THINGS THAT WOULD BE NICE:
 - make new segments

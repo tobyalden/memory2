@@ -1147,39 +1147,39 @@ class GameScene extends Scene {
     }
 
     override public function update() {
-        if(Key.pressed(Key.R)) {
-            stopAllSounds();
-            HXP.scene = new GameScene();
-        }
-        if(Key.pressed(Key.H)) {
-            if(getInstance("heart") == null) {
-                trace("no heart on this level");
-            }
-            else {
-                player.x = getInstance("heart").x + 30;
-                player.y = getInstance("heart").y - 40;
-            }
-        }
-        if(Key.pressed(Key.N)) {
-            depth++;
-            stopAllSounds();
-            HXP.scene = new GameScene();
-        }
-        if(Key.pressed(Key.D)) {
-            player.x = door.x;
-            player.y = door.y;
-        }
-        if(Key.pressed(Key.P)) {
-            for(segment in allSegments) {
-                if(player.collideRect(
-                    player.x, player.y, segment.x, segment.y, segment.width,
-                    segment.height
-                )) {
-                    trace('player is in segment #${segment.number}');
-                    break;
-                }
-            }
-        }
+        //if(Key.pressed(Key.R)) {
+            //stopAllSounds();
+            //HXP.scene = new GameScene();
+        //}
+        //if(Key.pressed(Key.H)) {
+            //if(getInstance("heart") == null) {
+                //trace("no heart on this level");
+            //}
+            //else {
+                //player.x = getInstance("heart").x + 30;
+                //player.y = getInstance("heart").y - 40;
+            //}
+        //}
+        //if(Key.pressed(Key.N)) {
+            //depth++;
+            //stopAllSounds();
+            //HXP.scene = new GameScene();
+        //}
+        //if(Key.pressed(Key.D)) {
+            //player.x = door.x;
+            //player.y = door.y;
+        //}
+        //if(Key.pressed(Key.P)) {
+            //for(segment in allSegments) {
+                //if(player.collideRect(
+                    //player.x, player.y, segment.x, segment.y, segment.width,
+                    //segment.height
+                //)) {
+                    //trace('player is in segment #${segment.number}');
+                    //break;
+                //}
+            //}
+        //}
         if(curtain.graphic.alpha > 0.95) {
             centerCameraOnPlayer();
         }
