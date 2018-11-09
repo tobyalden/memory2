@@ -806,13 +806,21 @@ class GameScene extends Scene {
         if(difficulty == PLUSPLUS) {
             return;
         }
-        else if(difficulty == PLUS && depth % 2 != 0) {
-            return;
+        var numHearts = 2;
+        if(difficulty == PLUS) {
+            numHearts = 1;
         }
-        var heartPoint = getEnemyPoint("ground", enemyPoints);
-        add(new Heart(
-            heartPoint.point.x, heartPoint.point.y -= Segment.TILE_SIZE
-        ));
+        var heartPoints = new Array<SegmentPoint>();
+        for(i in 0...numHearts) {
+            heartPoints.push(
+                getEnemyPoint("ground", enemyPoints.concat(heartPoints)
+            ));
+        }
+        for(heartPoint in heartPoints) {
+            add(new Heart(
+                heartPoint.point.x, heartPoint.point.y -= Segment.TILE_SIZE
+            ));
+        }
     }
 
     private function addDecorations(enemyPoints:Array<SegmentPoint>) {
