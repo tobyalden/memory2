@@ -24,6 +24,7 @@ class Segment extends MemoryEntity {
 
     public var walls(default, null):Grid;
     public var number(default, null):Int;
+    public var flipped(default, null):Bool;
     private var tiles:Tilemap;
     private var edges:Tilemap;
     private var openPoints:Array<OpenPoint>;
@@ -43,6 +44,10 @@ class Segment extends MemoryEntity {
         loadSegment(number);
         if(Random.random < 0.5) {
             flipHorizontally();
+            flipped = true;
+        }
+        else {
+            flipped = false;
         }
         updateGraphic();
         mask = walls;
@@ -52,12 +57,12 @@ class Segment extends MemoryEntity {
     public function flipHorizontally() {
         for(tileX in 0...Std.int(walls.columns / 2)) {
             for(tileY in 0...walls.rows) {
-                var tempLeft:Bool = walls.getTile(tileX, tileY);
+                var tempLeft:Null<Bool> = walls.getTile(tileX, tileY);
                 // For some reason getTile() returns null instead of false!
                 if(tempLeft == null) {
                     tempLeft = false;
                 }
-                var tempRight:Bool = walls.getTile(
+                var tempRight:Null<Bool> = walls.getTile(
                     walls.columns - tileX - 1, tileY
                 );
                 if(tempRight == null) {

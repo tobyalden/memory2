@@ -78,6 +78,13 @@ class GameScene extends Scene {
 
         addBackgrounds();
         placeSegments();
+
+        //var segNums:Array<String> = [];
+        //for(segment in allSegments) {
+            //segNums.push('${segment.number}${segment.flipped ? 'F' : ''}');
+        //}
+        //trace(segNums);
+
         fillEmptySegments();
 
         var playerPoint = addPlayer();
@@ -1169,17 +1176,17 @@ class GameScene extends Scene {
             //player.x = door.x;
             //player.y = door.y;
         //}
-        //if(Key.pressed(Key.P)) {
-            //for(segment in allSegments) {
-                //if(player.collideRect(
-                    //player.x, player.y, segment.x, segment.y, segment.width,
-                    //segment.height
-                //)) {
-                    //trace('player is in segment #${segment.number}');
-                    //break;
-                //}
-            //}
-        //}
+        if(Key.pressed(Key.P)) {
+            for(segment in allSegments) {
+                if(player.collideRect(
+                    player.x, player.y, segment.x, segment.y, segment.width,
+                    segment.height
+                )) {
+                    trace('player is in segment #${segment.number}');
+                    break;
+                }
+            }
+        }
         if(curtain.graphic.alpha > 0.95) {
             centerCameraOnPlayer();
         }
