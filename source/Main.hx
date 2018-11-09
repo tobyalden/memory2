@@ -58,7 +58,6 @@ class Main extends Engine {
         }
         if(inputName == "jump") {
             if(!previousJumpHeld && gamepad.check(XboxGamepad.A_BUTTON)) {
-                trace("jump pressed");
                 return true;
             }
         }
@@ -74,7 +73,6 @@ class Main extends Engine {
         }
         if(inputName == "jump") {
             if(previousJumpHeld && !gamepad.check(XboxGamepad.A_BUTTON)) {
-                trace("jump released");
                 return true;
             }
         }
