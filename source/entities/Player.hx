@@ -150,6 +150,12 @@ class Player extends MemoryEntity {
         canMove = true;
 
         if(
+            GameScene.depth == 1
+            && GameScene.difficulty == GameScene.PLUSPLUS
+        ) {
+            quiver = 1;
+        }
+        else if(
             GameScene.difficulty == GameScene.PLUSPLUS && GameScene.depth == 1
             || GameScene.difficulty != GameScene.PLUSPLUS
         ) {

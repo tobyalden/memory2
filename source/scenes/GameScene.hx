@@ -178,7 +178,7 @@ class GameScene extends Scene {
         }
 
         var arrowPoints = new Array<SegmentPoint>();
-        for(i in 0...10) {
+        for(i in 0...20) {
             arrowPoints.push(
                 getEnemyPoint(
                     ["leftwall", "rightwall"][Random.randInt(2)],
@@ -1184,17 +1184,17 @@ class GameScene extends Scene {
             //player.x = door.x;
             //player.y = door.y;
         //}
-        if(Key.pressed(Key.P)) {
-            for(segment in allSegments) {
-                if(player.collideRect(
-                    player.x, player.y, segment.x, segment.y, segment.width,
-                    segment.height
-                )) {
-                    trace('player is in segment #${segment.number}');
-                    break;
-                }
-            }
-        }
+        //if(Key.pressed(Key.P)) {
+            //for(segment in allSegments) {
+                //if(player.collideRect(
+                    //player.x, player.y, segment.x, segment.y, segment.width,
+                    //segment.height
+                //)) {
+                    //trace('player is in segment #${segment.number}');
+                    //break;
+                //}
+            //}
+        //}
         if(curtain.graphic.alpha > 0.95) {
             centerCameraOnPlayer();
         }
