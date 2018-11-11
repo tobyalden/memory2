@@ -26,6 +26,7 @@ class Main extends Engine {
         Console.enable();
 #end
         Mouse.hide();
+        HXP.fullscreen = true;
         HXP.screen.color = 0x000000;
         HXP.scene = new MainMenu();
 

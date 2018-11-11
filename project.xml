@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<meta title="memory" package="com.example.app" version="1.0.0" company=""/>
+	<meta title="Memory" package="com.example.app" version="1.0.0" company="brlka"/>
 
 	<app file="Main" main="Main" path="export"/>
 	<icon path="HaxePunk-icon.svg"/>
