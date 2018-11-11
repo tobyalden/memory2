@@ -40,10 +40,17 @@ class MainMenu extends Scene {
     private var controllerSfx:Sfx;
     private var lastController:String;
     private var canControl:Bool;
+    private var tempMusic:Sfx;
 
 	override public function begin() {
-        Main.music = new Sfx("audio/mainmenu.ogg");
-        Main.music.loop();
+        if(GameScene.lastMusicChoice == -1) {
+            tempMusic = new Sfx("audio/mainmenu.ogg");
+            tempMusic.loop();
+        }
+        else {
+            Main.music = new Sfx("audio/mainmenu2.ogg");
+            Main.music.loop();
+        }
         Data.load(SAVE_FILE_NAME);
         selectSound = new Sfx("audio/menuselect.wav");
         startSound = new Sfx("audio/menustart.wav");
@@ -243,7 +250,14 @@ class MainMenu extends Scene {
                 }
             }
             curtain.fadeOut();
-            Main.music.stop();
+            if(GameScene.lastMusicChoice == -1) {
+                tempMusic.volume = 0;
+                tempMusic.stop();
+            }
+            else {
+                Main.music.volume = 0;
+                Main.music.stop();
+            }
             if(cursorPosition == 1 || cursorPosition == 3) {
                 dailySound.play();
             }
