@@ -1,3 +1,4 @@
+import flash.system.System;
 import haxepunk.*;
 import haxepunk.debug.Console;
 import haxepunk.input.*;
@@ -47,6 +48,9 @@ class Main extends Engine {
 
     override public function update() {
         delta = HXP.elapsed * 60;
+        if(Key.pressed(Key.ESCAPE)) {
+            System.exit(0);
+        }
         super.update();
         if(gamepad != null) {
             previousJumpHeld = gamepad.check(XboxGamepad.A_BUTTON);
