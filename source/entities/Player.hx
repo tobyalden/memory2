@@ -384,6 +384,7 @@ class Player extends MemoryEntity {
         armsAndBow.play("idle");
         collidable = false;
         quiverDisplay.visible = false;
+        heartDisplay.visible = false;
         canMove = false;
         cast(scene, GameScene).descend();
     }
