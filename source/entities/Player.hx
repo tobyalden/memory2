@@ -466,6 +466,10 @@ class Player extends MemoryEntity {
 
         isCrouching = isOnGround() && Main.inputCheck("down");
 
+        if(!isOnWall() || isOnGround()) {
+            detachDelay = DETACH_DELAY;
+        }
+
         // Check if the player is moving left or right
         if(isCrouching) {
             velocity.x = 0;
