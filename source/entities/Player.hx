@@ -28,6 +28,8 @@ class Player extends MemoryEntity {
     public static inline var MAX_WALL_VELOCITY = 4;
     public static inline var WALL_STICK_VELOCITY = 2;
     public static inline var CROUCH_DEPTH = 5;
+    public static inline var DETACH_DELAY = 10;
+    public static inline var DETACH_VELOCITY = 1;
 
     // Animation constants
     public static inline var CROUCH_SQUASH = 0.85;
@@ -57,6 +59,7 @@ class Player extends MemoryEntity {
     private var wasOnGround:Bool;
     private var wasOnWall:Bool;
     private var lastWallWasRight:Bool;
+    private var detachDelay:Float;
 
     private var canMove:Bool;
 
@@ -147,6 +150,7 @@ class Player extends MemoryEntity {
         wasOnWall = false;
         wasCrouching = false;
         lastWallWasRight = false;
+        detachDelay = DETACH_DELAY;
         canMove = true;
 
         if(
@@ -465,6 +469,23 @@ class Player extends MemoryEntity {
         // Check if the player is moving left or right
         if(isCrouching) {
             velocity.x = 0;
+        }
+        else if(isOnWall() && !isOnGround()) {
+            velocity.x = 0;
+            if(
+                isOnRightWall() && Main.inputCheck("left")
+                || isOnLeftWall() && Main.inputCheck("right")
+            ) {
+                detachDelay -= Main.getDelta();
+                if(detachDelay < 0) {
+                    velocity.x = (
+                        isOnLeftWall() ? DETACH_VELOCITY : -DETACH_VELOCITY
+                    );
+                }
+            }
+            else {
+                detachDelay = DETACH_DELAY;
+            }
         }
         else if(Main.inputCheck("left")) {
             velocity.x -= accel * accelMultiplier;
