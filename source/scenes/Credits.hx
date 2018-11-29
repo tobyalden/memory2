@@ -21,11 +21,15 @@ class Credits extends Scene {
     private var isDoneScrolling:Bool;
     private var showUnlock:Bool;
     private var curtain:Curtain;
+    private var letterbox:Letterbox;
 
 	override public function begin() {
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
+
+        letterbox = new Letterbox();
+        add(letterbox);
 
         creditsScroll = new MemoryEntity(0, 0);
         var creditsScrollImage = new Image("graphics/credits.png");
@@ -79,6 +83,10 @@ class Credits extends Scene {
     }
 
     public override function update() {
+        camera.x = -((HXP.width - Main.GAME_WIDTH) / 2);
+        camera.y = -((HXP.height - Main.GAME_HEIGHT) / 2);
+        letterbox.updatePosition();
+
         creditsScroll.y -= CREDITS_SCROLL_SPEED * Main.getDelta();
         if(creditsScroll.y < -1700) {
             if(!isDoneScrolling) {

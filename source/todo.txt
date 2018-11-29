@@ -1,5 +1,4 @@
 ACTUAL TODO:
-- Fix camera on credits
 - Fix main menu bug that allows you to press new game twice
 - Fix isOnScreen()
 - Only use letterbox on desktop
