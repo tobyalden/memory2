@@ -26,7 +26,7 @@ class Letterbox extends MemoryEntity
 
     public function updatePosition() {
         var player = scene.getInstance("player");
-        if(player == null) {
+        if(player == null || GameScene.depth == 7) {
             x = scene.camera.x + HXP.width / 2;
             y = scene.camera.y + HXP.height / 2;
         }

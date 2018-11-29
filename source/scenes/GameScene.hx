@@ -1165,39 +1165,7 @@ class GameScene extends Scene {
     }
 
     override public function update() {
-        //if(Key.pressed(Key.R)) {
-            //stopAllSounds();
-            //HXP.scene = new GameScene();
-        //}
-        //if(Key.pressed(Key.H)) {
-            //if(getInstance("heart") == null) {
-                //trace("no heart on this level");
-            //}
-            //else {
-                //player.x = getInstance("heart").x + 30;
-                //player.y = getInstance("heart").y - 40;
-            //}
-        //}
-        //if(Key.pressed(Key.N)) {
-            //depth++;
-            //stopAllSounds();
-            //HXP.scene = new GameScene();
-        //}
-        //if(Key.pressed(Key.D)) {
-            //player.x = door.x;
-            //player.y = door.y;
-        //}
-        //if(Key.pressed(Key.P)) {
-            //for(segment in allSegments) {
-                //if(player.collideRect(
-                    //player.x, player.y, segment.x, segment.y, segment.width,
-                    //segment.height
-                //)) {
-                    //trace('player is in segment #${segment.number}');
-                    //break;
-                //}
-            //}
-        //}
+        debugControls();
         if(curtain.graphic.alpha > 0.95) {
             centerCameraOnPlayer();
         }
@@ -1240,10 +1208,49 @@ class GameScene extends Scene {
 
     private function centerCameraOnPlayer() {
         if(depth == 7) {
-            return;
+            camera.x = -((HXP.width - Main.GAME_WIDTH) / 2);
+            camera.y = -((HXP.height - Main.GAME_HEIGHT) / 2);
         }
-        camera.x = Math.floor(player.centerX - HXP.width/2);
-        camera.y = Math.floor(player.centerY - HXP.height/2);
+        else {
+            camera.x = Math.floor(player.centerX - HXP.width/2);
+            camera.y = Math.floor(player.centerY - HXP.height/2);
+        }
         letterbox.updatePosition();
+    }
+
+    private function debugControls() {
+        if(Key.pressed(Key.R)) {
+            stopAllSounds();
+            HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.H)) {
+            if(getInstance("heart") == null) {
+                trace("no heart on this level");
+            }
+            else {
+                player.x = getInstance("heart").x + 30;
+                player.y = getInstance("heart").y - 40;
+            }
+        }
+        if(Key.pressed(Key.N)) {
+            depth++;
+            stopAllSounds();
+            HXP.scene = new GameScene();
+        }
+        if(Key.pressed(Key.D)) {
+            player.x = door.x;
+            player.y = door.y;
+        }
+        if(Key.pressed(Key.P)) {
+            for(segment in allSegments) {
+                if(player.collideRect(
+                    player.x, player.y, segment.x, segment.y, segment.width,
+                    segment.height
+                )) {
+                    trace('player is in segment #${segment.number}');
+                    break;
+                }
+            }
+        }
     }
 }
