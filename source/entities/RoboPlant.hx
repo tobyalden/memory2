@@ -7,7 +7,7 @@ import scenes.*;
 
 class RoboPlant extends MemoryEntity {
     public static inline var ACCEL = 0.055;
-    public static inline var MAX_SPEED_PLUSPLUS = 2.5;
+    public static inline var MAX_SPEED_PLUSPLUS = 2.7;
     public static inline var MAX_SPEED_PLUS = 1.7;
     public static inline var MAX_SPEED_NORMAL = 1.45;
     public static inline var ARROW_DEFLECT_FACTOR = 1.5;
