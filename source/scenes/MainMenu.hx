@@ -195,7 +195,10 @@ class MainMenu extends Scene {
         }
         lastController = currentController;
 
-        if(Main.inputPressed("jump") || Main.inputPressed("act")) {
+        if(
+            canControl
+            && (Main.inputPressed("jump") || Main.inputPressed("act"))
+        ) {
             if(plusModeUnlocked) {
                 if(cursorPosition == 0) {
                     if(plusPlusModeUnlocked) {
