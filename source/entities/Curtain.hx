@@ -11,11 +11,13 @@ class Curtain extends MemoryEntity
     public var isFadingIn(default, null):Bool;
     private var isFadingOut:Bool;
     private var fadeSpeed:Float;
+    private var curtainGraphic:ColoredRect;
 
     public function new(x:Float, y:Float) {
         super(x, y);
-        graphic = new ColoredRect(HXP.width, HXP.height, 0x000000);
-        graphic.alpha = 1;
+        curtainGraphic = new ColoredRect(HXP.width, HXP.height, 0x000000);
+        curtainGraphic.alpha = 1;
+        setGraphic(curtainGraphic);
         layer = -99999;
         isFadingIn = false;
         isFadingOut = false;
@@ -35,6 +37,8 @@ class Curtain extends MemoryEntity
     }
 
     override public function update() {
+        curtainGraphic.width = HXP.width;
+        curtainGraphic.height = HXP.height;
         x = scene.camera.x;
         y = scene.camera.y;
         if(isFadingIn) {

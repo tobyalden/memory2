@@ -3,11 +3,15 @@ import haxepunk.*;
 import haxepunk.debug.Console;
 import haxepunk.input.*;
 import haxepunk.input.gamepads.*;
+import haxepunk.screen.UniformScaleMode;
 import haxepunk.utils.*;
 import openfl.ui.Mouse;
 import scenes.*;
 
 class Main extends Engine {
+    public static inline var GAME_WIDTH = 640;
+    public static inline var GAME_HEIGHT = 360;
+
     public static var music:Sfx;
     public static var gamepad:Gamepad;
     private static var delta:Float;
@@ -27,7 +31,10 @@ class Main extends Engine {
         Console.enable();
 #end
         Mouse.hide();
-        HXP.fullscreen = true;
+        HXP.fullscreen = false;
+        HXP.screen.scaleMode = new UniformScaleMode(
+            UniformScaleType.Expand, true
+        );
         HXP.screen.color = 0x000000;
         HXP.scene = new MainMenu();
 

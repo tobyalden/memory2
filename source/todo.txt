@@ -1,9 +1,10 @@
 ACTUAL TODO:
+- Fix camera on final boss
+- Fix camera on credits
+- Fix main menu bug that allows you to press new game twice
+- Fix isOnScreen()
+- Only use letterbox on desktop
 
 FINAL TOUCHES:
 + disable up/down scroll keys in JS
 + remove debug controls
-
-THINGS THAT WOULD BE NICE:
-- make new segments
-- flip segments horizontally

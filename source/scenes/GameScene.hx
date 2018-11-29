@@ -52,6 +52,7 @@ class GameScene extends Scene {
     private var door:Door;
     private var key:DoorKey;
     private var curtain:Curtain;
+    private var letterbox:Letterbox;
     private var allSegments:Array<Segment>;
     private var allEnemies:Array<MemoryEntity>;
 
@@ -70,6 +71,8 @@ class GameScene extends Scene {
     }
 
 	override public function begin() {
+        letterbox = new Letterbox();
+        add(letterbox);
         if(depth == 7) {
             loadBossRoom();
             return;
@@ -1239,7 +1242,8 @@ class GameScene extends Scene {
         if(depth == 7) {
             return;
         }
-        camera.x = Math.floor(player.x - HXP.width/2);
-        camera.y = Math.floor(player.y - HXP.height/2);
+        camera.x = Math.floor(player.centerX - HXP.width/2);
+        camera.y = Math.floor(player.centerY - HXP.height/2);
+        letterbox.updatePosition();
     }
 }

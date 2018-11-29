@@ -26,6 +26,7 @@ class MainMenu extends Scene {
     private static var lastDailyHardAttempt:String;
 
     private var curtain:Curtain;
+    private var letterbox:Letterbox;
     private var controllerConnected:Spritemap;
     private var gradient:Entity;
     private var menu:Array<Spritemap>;
@@ -74,9 +75,13 @@ class MainMenu extends Scene {
         mainMenu.smooth = false;
         mainMenu.pixelSnapping = true;
         addGraphic(mainMenu);
+
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
+
+        letterbox = new Letterbox();
+        add(letterbox);
 
         menu = new Array<Spritemap>();
         if(plusPlusModeUnlocked) {
@@ -153,6 +158,10 @@ class MainMenu extends Scene {
     }
 
     public override function update() {
+        camera.x = -((HXP.width - Main.GAME_WIDTH) / 2);
+        camera.y = -((HXP.height - Main.GAME_HEIGHT) / 2);
+        letterbox.updatePosition();
+
         if(canControl && Main.inputCheck("up")) {
             if(!cursorPause.active) {
                 cursorPosition--;
