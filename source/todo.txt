@@ -1,5 +1,4 @@
 ACTUAL TODO:
-- Fix isOnScreen()
 - Only use letterbox on desktop
 
 FINAL TOUCHES:

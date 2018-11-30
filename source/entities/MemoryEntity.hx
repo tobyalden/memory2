@@ -231,9 +231,12 @@ class MemoryEntity extends Entity {
     }
 
     private function isOnScreen() {
-        return (
-            right > scene.camera.x && left < scene.camera.x + HXP.width
-            && bottom > scene.camera.y && top < scene.camera.y + HXP.height
+        var player = scene.getInstance("player");
+        return collideRect(
+            x, y,
+            player.centerX - Main.GAME_WIDTH / 2,
+            player.centerY - Main.GAME_HEIGHT / 2,
+            Main.GAME_WIDTH, Main.GAME_HEIGHT
         );
     }
 }
