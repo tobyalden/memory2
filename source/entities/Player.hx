@@ -160,8 +160,13 @@ class Player extends MemoryEntity {
             quiver = 1;
         }
         else if(
-            GameScene.difficulty == GameScene.PLUSPLUS && GameScene.depth == 1
-            || GameScene.difficulty != GameScene.PLUSPLUS
+            GameScene.depth == 1
+            && GameScene.difficulty == GameScene.PLUS
+        ) {
+            quiver = 3;
+        }
+        else if(
+            GameScene.difficulty == GameScene.NORMAL
         ) {
             quiver = MAX_ARROWS;
         }
