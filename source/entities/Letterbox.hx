@@ -13,10 +13,10 @@ class Letterbox extends MemoryEntity
 
     public function new() {
         super(0, 0);
-        letterboxTop = new ColoredRect(0, 0, 0x5ff442);
-        letterboxBottom = new ColoredRect(0, 0, 0xd62fac);
-        letterboxLeft = new ColoredRect(0, 0, 0xf4f142);
-        letterboxRight = new ColoredRect(0, 0, 0xaa00ff);
+        letterboxTop = new ColoredRect(0, 0, 0x000000);
+        letterboxBottom = new ColoredRect(0, 0, 0x000000);
+        letterboxLeft = new ColoredRect(0, 0, 0x000000);
+        letterboxRight = new ColoredRect(0, 0, 0x000000);
         addGraphic(letterboxTop);
         addGraphic(letterboxBottom);
         addGraphic(letterboxLeft);

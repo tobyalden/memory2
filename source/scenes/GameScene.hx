@@ -1167,7 +1167,7 @@ class GameScene extends Scene {
     }
 
     override public function update() {
-        debugControls();
+        //debugControls();
         if(curtain.graphic.alpha > 0.95) {
             centerCameraOnPlayer();
         }
