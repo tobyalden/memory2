@@ -76,6 +76,18 @@ class MainMenu extends Scene {
         mainMenu.pixelSnapping = true;
         addGraphic(mainMenu);
 
+        var versionNumber = new Image("graphics/versionnumber.png");
+        versionNumber.smooth = false;
+        versionNumber.pixelSnapping = true;
+        addGraphic(versionNumber);
+
+#if desktop
+        var fullscreenToggle = new Image("graphics/togglefullscreen.png");
+        fullscreenToggle.smooth = false;
+        fullscreenToggle.pixelSnapping = true;
+        addGraphic(fullscreenToggle);
+#end
+
         curtain = new Curtain(0, 0);
         add(curtain);
         curtain.fadeIn();
