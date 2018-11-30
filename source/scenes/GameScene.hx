@@ -71,8 +71,10 @@ class GameScene extends Scene {
     }
 
 	override public function begin() {
+#if desktop
         letterbox = new Letterbox();
         add(letterbox);
+#end
         if(depth == 7) {
             loadBossRoom();
             return;
@@ -1215,7 +1217,9 @@ class GameScene extends Scene {
             camera.x = Math.floor(player.centerX - HXP.width/2);
             camera.y = Math.floor(player.centerY - HXP.height/2);
         }
+#if desktop
         letterbox.updatePosition();
+#end
     }
 
     private function debugControls() {
