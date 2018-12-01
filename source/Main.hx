@@ -31,7 +31,11 @@ class Main extends Engine {
         Console.enable();
 #end
         Mouse.hide();
+#if desktop
+        HXP.fullscreen = true;
+#else
         HXP.fullscreen = false;
+#end
         HXP.screen.scaleMode = new UniformScaleMode(
             UniformScaleType.Expand, true
         );
