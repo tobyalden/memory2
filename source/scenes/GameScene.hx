@@ -209,6 +209,8 @@ class GameScene extends Scene {
         }
 
         var background = new Backdrop('graphics/bossbackground.png');
+        background.smooth = false;
+        background.pixelSnapping = true;
         addGraphic(background, 1000);
 
         curtain = new Curtain(0, 0);
@@ -235,6 +237,8 @@ class GameScene extends Scene {
         var distanceBackground = new Backdrop(
             'graphics/mapbackground${GameScene.getDepthBlock()}.png'
         );
+        distanceBackground.smooth = false;
+        distanceBackground.pixelSnapping = true;
         distanceBackground.scrollX = 0.25;
         distanceBackground.scrollY = 0.25;
         addGraphic(distanceBackground, 1000);
@@ -270,6 +274,8 @@ class GameScene extends Scene {
                         }.png',
                         clipRect
                     );
+                    segmentBackground.smooth = false;
+                    segmentBackground.pixelSnapping = true;
                     addGraphic(
                         segmentBackground, 100,
                         mapX * Segment.MIN_SEGMENT_WIDTH,
@@ -841,6 +847,8 @@ class GameScene extends Scene {
                 'graphics/decorations${GameScene.getDepthBlock()}.png',
                 new Rectangle(decorationNum * 30, 0, 30, 30)
             );
+            decoration.smooth = false;
+            decoration.pixelSnapping = true;
             decoration.flipX = Random.random < 0.5;
             var distanceFromDoor = door.distanceToPoint(
                 decorationPoint.point.x, decorationPoint.point.y
@@ -871,6 +879,8 @@ class GameScene extends Scene {
                 'graphics/decorations${GameScene.getDepthBlock()}.png',
                 new Rectangle(skeletonNum * 30, 0, 30, 30)
             );
+            skeleton.smooth = false;
+            skeleton.pixelSnapping = true;
             skeleton.flipX = Random.random < 0.5;
             var distanceFromDoor = door.distanceToPoint(
                 skeletonPoint.point.x, skeletonPoint.point.y
@@ -904,6 +914,8 @@ class GameScene extends Scene {
                 'graphics/decorations${GameScene.getDepthBlock()}.png',
                 new Rectangle(plantNum * 30, 0, 30, 30)
             );
+            plant.smooth = false;
+            plant.pixelSnapping = true;
             plant.flipX = Random.random < 0.5;
             var distanceFromDoor = door.distanceToPoint(
                 plantPoint.point.x, plantPoint.point.y
