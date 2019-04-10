@@ -24,7 +24,7 @@ class GameScene extends Scene {
     public static inline var TOTAL_NUMBER_OF_MAPS = 40;
 
     public static inline var CAMERA_FOLLOW_SPEED = 3.5;
-    public static inline var STARTING_NUMBER_OF_ENEMIES = 10;
+    public static inline var STARTING_NUMBER_OF_ENEMIES = 30;
     public static inline var STARTING_NUMBER_OF_TRAPS = 10;
     //public static inline var STARTING_NUMBER_OF_ENEMIES = 0;
     //public static inline var STARTING_NUMBER_OF_TRAPS = 0;
@@ -609,6 +609,7 @@ class GameScene extends Scene {
         var numberOfEnemies = STARTING_NUMBER_OF_ENEMIES;
         var enemyPoints = new Array<SegmentPoint>();
         var groundEnemyPoints = new Array<SegmentPoint>();
+        var ceilingEnemyPoints = new Array<SegmentPoint>();
 
         var numberOfTraps = STARTING_NUMBER_OF_TRAPS;
         var groundTrapPoints = new Array<SegmentPoint>();
@@ -654,8 +655,8 @@ class GameScene extends Scene {
             }
         }
         for(i in 0...numberOfEnemies) {
-            var enemyType = ["air", "ground"][Random.randInt(2)];
-            //var enemyType = "air";
+            //var enemyType = ["air", "ground"][Random.randInt(2)];
+            var enemyType = "ceiling";
             var existingPoints = (
                 enemyPoints
                 .concat(groundEnemyPoints)
@@ -666,6 +667,11 @@ class GameScene extends Scene {
             if(enemyType == "ground") {
                 groundEnemyPoints.push(
                     getEnemyPoint("ground", existingPoints)
+                );
+            }
+            else if(enemyType == "ceiling") {
+                ceilingEnemyPoints.push(
+                    getEnemyPoint("ceiling", existingPoints)
                 );
             }
             else {
@@ -686,15 +692,15 @@ class GameScene extends Scene {
             else {
                 enemy = new Ghost(enemyPoint.point.x, enemyPoint.point.y);
             }
-            add(enemy);
+            //add(enemy);
             allEnemies.push(enemy);
         }
         for(enemyPoint in groundEnemyPoints) {
             var choice = Random.randInt(3);
             var enemy:MemoryEntity;
-            //choice = 0;
+            choice = 0;
             if(choice == 0) {
-                enemy = new Turret(enemyPoint.point.x, enemyPoint.point.y);
+                enemy = new MissileTurret(enemyPoint.point.x, enemyPoint.point.y);
             }
             else if(choice == 1) {
                 enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y - 1);
@@ -703,6 +709,23 @@ class GameScene extends Scene {
                 enemy = new Roombad(enemyPoint.point.x, enemyPoint.point.y);
             }
             enemy.y += Segment.TILE_SIZE - enemy.height;
+            //add(enemy);
+            allEnemies.push(enemy);
+        }
+        for(enemyPoint in ceilingEnemyPoints) {
+            var choice = Random.randInt(3);
+            var enemy:MemoryEntity;
+            //choice = 0;
+            //if(choice == 0) {
+                enemy = new MissileTurret(enemyPoint.point.x, enemyPoint.point.y);
+            //}
+            //else if(choice == 1) {
+                //enemy = new Hopper(enemyPoint.point.x, enemyPoint.point.y - 1);
+            //}
+            //else {
+                //enemy = new Roombad(enemyPoint.point.x, enemyPoint.point.y);
+            //}
+            //enemy.y += Segment.TILE_SIZE - enemy.height;
             add(enemy);
             allEnemies.push(enemy);
         }
@@ -945,6 +968,9 @@ class GameScene extends Scene {
             if(enemyType == "ground") {
                 enemyPoint = getRandomOpenGroundPoint();
             }
+            else if(enemyType == "ceiling") {
+                enemyPoint = getRandomOpenCeilingPoint();
+            }
             else if(enemyType == "leftwall") {
                 enemyPoint = getRandomOpenLeftWallPoint();
             }
@@ -1083,6 +1109,26 @@ class GameScene extends Scene {
             tileY: randomTile.tileY
         };
         return openGroundPoint;
+    }
+
+    private function getRandomOpenCeilingPoint(extraSpace:Int = 0) {
+        var weightedSegments = getWeightedSegments();
+        var segment = weightedSegments[Random.randInt(weightedSegments.length)];
+        var randomTile = segment.getRandomOpenCeilingTile(extraSpace);
+        while(randomTile == null) {
+            segment = weightedSegments[Random.randInt(weightedSegments.length)];
+            randomTile = segment.getRandomOpenCeilingTile(extraSpace);
+        }
+        var openCeilingPoint:SegmentPoint = {
+            point: new Vector2(
+                segment.x + randomTile.tileX * Segment.TILE_SIZE,
+                segment.y + randomTile.tileY * Segment.TILE_SIZE
+            ),
+            segment: segment,
+            tileX: randomTile.tileX,
+            tileY: randomTile.tileY
+        };
+        return openCeilingPoint;
     }
 
     private function placeBossSegment() {

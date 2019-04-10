@@ -29,6 +29,7 @@ class Segment extends MemoryEntity {
     private var edges:Tilemap;
     private var openPoints:Array<OpenPoint>;
     private var openGroundPoints:Array<OpenPoint>;
+    private var openCeilingPoints:Array<OpenPoint>;
     private var openLeftWallPoints:Array<OpenPoint>;
     private var openRightWallPoints:Array<OpenPoint>;
 
@@ -77,6 +78,7 @@ class Segment extends MemoryEntity {
     private function findOpenPoints() {
         openPoints = new Array<OpenPoint>();
         openGroundPoints = new Array<OpenPoint>();
+        openCeilingPoints = new Array<OpenPoint>();
         openLeftWallPoints = new Array<OpenPoint>();
         openRightWallPoints = new Array<OpenPoint>();
         for(tileX in 0...walls.columns) {
@@ -86,6 +88,12 @@ class Segment extends MemoryEntity {
                     && walls.getTile(tileX, tileY + 1)
                 ) {
                     openGroundPoints.push({tileX: tileX, tileY: tileY});
+                }
+                if(
+                    !walls.getTile(tileX, tileY)
+                    && walls.getTile(tileX, tileY - 1)
+                ) {
+                    openCeilingPoints.push({tileX: tileX, tileY: tileY});
                 }
                 else if(
                     !walls.getTile(tileX, tileY)
@@ -199,6 +207,29 @@ class Segment extends MemoryEntity {
         }
         for(checkX in (-1 - extraSpace)...(2 + extraSpace)) {
             if(!walls.getTile(randomTile.tileX + checkX, randomTile.tileY + 1)) {
+                return null;
+            }
+        }
+        return {tileX: randomTile.tileX, tileY: randomTile.tileY};
+    }
+
+    public function getRandomOpenCeilingTile(extraSpace:Int = 0) {
+        var randomTile:OpenPoint = openCeilingPoints[
+            Random.randInt(openCeilingPoints.length)
+        ];
+        for(checkX in -2...3) {
+            if(
+                walls.getTile(
+                    randomTile.tileX + checkX, randomTile.tileY
+                )
+            ) {
+                return null;
+            }
+            if(
+                !walls.getTile(
+                    randomTile.tileX + checkX, randomTile.tileY - 1
+                )
+            ) {
                 return null;
             }
         }
